@@ -8,8 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ru.clonsaldafon.shoppinglistapp.presentation.signup.SignUpScreen
+import ru.clonsaldafon.shoppinglistapp.presentation.NavGraph
 import ru.clonsaldafon.shoppinglistapp.ui.theme.ShoppingListAppTheme
 
 @AndroidEntryPoint
@@ -17,13 +18,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             ShoppingListAppTheme {
+                val navController = rememberNavController()
+
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
                 ) { innerPadding ->
-                    SignUpScreen(
+                    NavGraph(
+                        navController = navController,
                         modifier = Modifier
                             .padding(innerPadding)
                     )

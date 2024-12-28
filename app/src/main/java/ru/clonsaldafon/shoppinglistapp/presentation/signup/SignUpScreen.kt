@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.presentation.UiState
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthOutlinedTextField
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthTitle
@@ -52,6 +53,7 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.observeAsState()
@@ -160,16 +162,5 @@ fun SignUpScreen(
                 }
             }
         }
-    }
-}
-
-@Preview(
-    showSystemUi = true,
-    showBackground = true
-)
-@Composable
-fun SignUpScreenPreview() {
-    ShoppingListAppTheme {
-        SignUpScreen()
     }
 }
