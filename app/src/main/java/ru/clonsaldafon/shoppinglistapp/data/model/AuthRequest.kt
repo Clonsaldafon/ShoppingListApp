@@ -1,6 +1,6 @@
 package ru.clonsaldafon.shoppinglistapp.data.model
 
-data class SignUpRequest(
+data class AuthRequest(
     val login: String?,
     val password: String?
 )

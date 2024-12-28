@@ -1,16 +1,14 @@
 package ru.clonsaldafon.shoppinglistapp.data.repository
 
-import retrofit2.HttpException
-import ru.clonsaldafon.shoppinglistapp.data.model.SignUpRequest
+import ru.clonsaldafon.shoppinglistapp.data.model.AuthRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.User
-import ru.clonsaldafon.shoppinglistapp.data.service.UserService
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     //private val service: UserService
 ) : UserRepository {
 
-    override suspend fun signup(request: SignUpRequest): Result<User?> {
+    override suspend fun signup(request: AuthRequest): Result<User?> {
 //        kotlin.runCatching {
 //            service.signup(request)
 //        }.fold(
@@ -24,6 +22,10 @@ class UserRepositoryImpl @Inject constructor(
 //            }
 //        )
         TODO("provide user service in network module")
+    }
+
+    override suspend fun login(request: AuthRequest): Result<User?> {
+        TODO("Not yet implemented")
     }
 
 }

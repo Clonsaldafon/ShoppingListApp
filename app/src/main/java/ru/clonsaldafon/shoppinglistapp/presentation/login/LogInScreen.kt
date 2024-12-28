@@ -1,4 +1,4 @@
-package ru.clonsaldafon.shoppinglistapp.presentation.signup
+package ru.clonsaldafon.shoppinglistapp.presentation.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -16,10 +15,6 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,13 +22,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +35,7 @@ import ru.clonsaldafon.shoppinglistapp.presentation.UiState
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthOutlinedTextField
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthTitle
 import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
+import ru.clonsaldafon.shoppinglistapp.presentation.signup.SignUpScreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
@@ -50,9 +43,9 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.ShoppingListAppTheme
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @Composable
-fun SignUpScreen(
+fun LogInScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignUpViewModel = hiltViewModel()
+    viewModel: LogInViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.observeAsState()
     val login by viewModel.login.observeAsState()
@@ -66,7 +59,7 @@ fun SignUpScreen(
             )
     ) {
         AuthTitle(
-            text = "Регистрация"
+            text = "Вход"
         )
 
         Column(
@@ -133,13 +126,13 @@ fun SignUpScreen(
                         )
                         .shadow(
                             elevation =
-                                if(!login.isNullOrEmpty() && !password.isNullOrEmpty()) 4.dp
-                                else 0.dp,
+                            if(!login.isNullOrEmpty() && !password.isNullOrEmpty()) 4.dp
+                            else 0.dp,
                             shape = RoundedCornerShape(12.dp)
                         ),
                     shape = RoundedCornerShape(12.dp),
                     onClick = {
-                        viewModel.signup()
+                        viewModel.login()
                     },
                     enabled = !login.isNullOrEmpty() && !password.isNullOrEmpty(),
                     colors = ButtonDefaults.buttonColors(
@@ -150,7 +143,7 @@ fun SignUpScreen(
                     )
                 ) {
                     Text(
-                        text = "Продолжить".uppercase(),
+                        text = "Войти".uppercase(),
                         style = TextStyle(
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
@@ -168,8 +161,8 @@ fun SignUpScreen(
     showBackground = true
 )
 @Composable
-fun SignUpScreenPreview() {
+fun LogInScreenPreview() {
     ShoppingListAppTheme {
-        SignUpScreen()
+        LogInScreen()
     }
 }

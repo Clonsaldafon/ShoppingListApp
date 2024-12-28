@@ -1,4 +1,4 @@
-package ru.clonsaldafon.shoppinglistapp.presentation.signup
+package ru.clonsaldafon.shoppinglistapp.presentation.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,14 +8,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.clonsaldafon.shoppinglistapp.data.model.AuthRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.User
-import ru.clonsaldafon.shoppinglistapp.domain.SignUpUseCase
+import ru.clonsaldafon.shoppinglistapp.domain.LogInUseCase
 import ru.clonsaldafon.shoppinglistapp.presentation.UiState
 import ru.clonsaldafon.shoppinglistapp.presentation.toUiState
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(
-    private val signUpUseCase: SignUpUseCase
+class LogInViewModel @Inject constructor(
+    private val logInUseCase: LogInUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData<UiState<User?>>()
@@ -38,11 +38,11 @@ class SignUpViewModel @Inject constructor(
         _password.postValue(value)
     }
 
-    fun signup() {
+    fun login() {
         viewModelScope.launch {
             _uiState.postValue(UiState.Loading)
             val request = AuthRequest(_login.value, _password.value)
-            _uiState.postValue(signUpUseCase(request).toUiState())
+            _uiState.postValue(logInUseCase(request).toUiState())
         }
     }
 

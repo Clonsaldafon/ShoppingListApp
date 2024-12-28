@@ -5,11 +5,11 @@ import ru.clonsaldafon.shoppinglistapp.data.model.User
 import ru.clonsaldafon.shoppinglistapp.data.repository.UserRepository
 import javax.inject.Inject
 
-class SignUpUseCaseImpl @Inject constructor(
+class LogInUseCaseImpl @Inject constructor(
     private val repository: UserRepository
-) : SignUpUseCase {
+) : LogInUseCase {
 
     override suspend fun invoke(request: AuthRequest): Result<User?> =
-        repository.signup(request)
+        repository.login(request)
 
 }
