@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.2"
+agp = "8.6.1"
 hiltAndroid = "2.53.1"
 hiltAndroidGradlePlugin = "2.44"
 kotlin = "2.0.0"

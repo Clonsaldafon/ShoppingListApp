@@ -16,6 +16,7 @@ val Red = Color(0xFFD23535)
 
 val Green = Color(0xFF606C38)
 val DarkGreen = Color(0xFF283618)
+val LightGreen = Color(0xFFD6D6B6)
 
 val Orange = Color(0xFFDDA15E)
 val DarkOrange = Color(0xFFBC6C25)

@@ -26,6 +26,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.groups.GroupsScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.login.LogInScreen
+import ru.clonsaldafon.shoppinglistapp.presentation.products.AddProductScreen
+import ru.clonsaldafon.shoppinglistapp.presentation.products.ProductsScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.signup.SignUpScreen
 
 sealed class Routes(val route: String) {
@@ -33,6 +35,8 @@ sealed class Routes(val route: String) {
     data object LogIn : Routes("login")
     data object Groups : Routes("groups")
     data object Profile : Routes("profile")
+    data object Products : Routes("products")
+    data object AddProduct : Routes("add_product")
 }
 
 @Composable
@@ -42,7 +46,7 @@ fun NavGraph(
 ) {
    NavHost(
        navController = navController,
-       startDestination = Routes.Groups.route,
+       startDestination = Routes.Products.route,
        enterTransition = {
            EnterTransition.None
        },
@@ -73,6 +77,20 @@ fun NavGraph(
 
        composable(route = Routes.Profile.route) {
            ProfileScreen(
+               modifier = modifier,
+               navController = navController
+           )
+       }
+
+       composable(route = Routes.Products.route) {
+           ProductsScreen(
+               modifier = modifier,
+               navController = navController
+           )
+       }
+
+       composable(route = Routes.AddProduct.route) {
+           AddProductScreen(
                modifier = modifier,
                navController = navController
            )
