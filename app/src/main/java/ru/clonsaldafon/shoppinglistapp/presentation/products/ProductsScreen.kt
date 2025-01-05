@@ -22,6 +22,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Add
@@ -39,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -60,6 +63,7 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
 import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
+import kotlin.math.exp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -158,47 +162,48 @@ fun ProductsScreen(
                     tint = White
                 )
             }
-        },
-        content = { innerPadding ->
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(
+                    color = White
+                )
+                .padding(innerPadding)
+        ) {
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize()
-                    .background(
-                        color = White
-                    )
-                    .padding(innerPadding)
+                    .padding(
+                        vertical = 20.dp,
+                        horizontal = 40.dp
+                    ),
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(
-                            vertical = 20.dp,
-                            horizontal = 40.dp
-                        ),
-                ) {
-                    LazyColumn {
-                        item {
-                            DayList(
-                                date = "01.01.2025"
-                            )
-                        }
+                LazyColumn {
+                    item {
+                        DayList(
+                            date = "01.01.2025"
+                        )
+                    }
 
-                        item {
-                            DayList(
-                                date = "31.12.2024"
-                            )
-                        }
+                    item {
+                        DayList(
+                            date = "31.12.2024"
+                        )
                     }
                 }
             }
         }
-    )
+    }
 }
 
 @Composable
 fun DayList(
     date: String
 ) {
+    var expanded by remember { mutableStateOf(true) }
+
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -219,50 +224,54 @@ fun DayList(
             )
         )
 
-        HorizontalDivider(
-            color = DarkGreen
-        )
-
         IconButton(
             modifier = Modifier
                 .width(20.dp)
                 .height(20.dp),
-            onClick = {}
+            onClick = {
+                expanded = !expanded
+            }
         ) {
             Icon(
-                imageVector = Icons.Default.ArrowDropDown,
+                imageVector =
+                    if (expanded)
+                        Icons.Filled.KeyboardArrowUp
+                    else
+                        Icons.Filled.KeyboardArrowDown,
                 contentDescription = null,
                 tint = DarkGreen
             )
         }
     }
 
-    Column(
-        modifier = Modifier
-            .padding(
-                top = 20.dp,
-                bottom = 20.dp
-            ),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        ProductItem(
-            title = "Молоко питьевое",
-            count = 2,
-            infoVisibility = false
-        )
+    if (expanded) {
+        Column(
+            modifier = Modifier
+                .padding(
+                    top = 20.dp,
+                    bottom = 20.dp
+                ),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            ProductItem(
+                title = "Молоко питьевое",
+                count = 2,
+                infoVisibility = false
+            )
 
-        ProductItem(
-            title = "Курица",
-            count = 1
-        )
+            ProductItem(
+                title = "Курица",
+                count = 1
+            )
 
-        ProductItem(
-            title = "Мука",
-            count = 1,
-            bought = true,
-            price = 150.0,
-            infoVisibility = false
-        )
+            ProductItem(
+                title = "Мука",
+                count = 1,
+                bought = true,
+                price = 150.0,
+                infoVisibility = false
+            )
+        }
     }
 }
 
@@ -321,7 +330,11 @@ fun ProductItem(
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ArrowDropDown,
+                            imageVector =
+                                if (isInfoHidden.value)
+                                    Icons.Filled.KeyboardArrowDown
+                                else
+                                    Icons.Filled.KeyboardArrowUp,
                             contentDescription = null,
                             tint = Green
                         )

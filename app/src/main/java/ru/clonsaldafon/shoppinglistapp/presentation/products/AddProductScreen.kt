@@ -1,23 +1,31 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.products
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -34,6 +42,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +50,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
+import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,6 +104,54 @@ fun AddProductScreen(
                     )
                 },
             )
+        },
+        bottomBar = {
+            BottomAppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = White
+                    ),
+                windowInsets = WindowInsets(
+                    left = 20.dp,
+                    top = 20.dp,
+                    right = 20.dp,
+                    bottom = 20.dp
+                ),
+                containerColor = White
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .shadow(
+                                elevation = 5.dp,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .background(
+                                color = Orange,
+                                shape = RoundedCornerShape(12.dp)
+                            ),
+                        onClick = {},
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Orange,
+                            contentColor = DarkGreen
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            text = "Добавить",
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    }
+                }
+            }
         }
     ) { innerPadding ->
         Column(
@@ -115,6 +174,43 @@ fun AddProductScreen(
                 CategoriesMenu()
 
                 ProductsMenu()
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            elevation = 8.dp,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .background(
+                            color = White,
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                    value = "",
+                    onValueChange = {},
+                    label = {
+                        Text(
+                            text = "Количество",
+                            style = TextStyle(
+                                color = Green,
+                                fontSize = 14.sp
+                            )
+                        )
+                    },
+                    colors = TextFieldDefaults.colors(
+                        disabledContainerColor = White,
+                        disabledTextColor = DarkGreen,
+                        disabledIndicatorColor = Color.Transparent,
+                        unfocusedContainerColor = White,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedContainerColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        errorContainerColor = White,
+                        errorIndicatorColor = Color.Red,
+                        cursorColor = Orange
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
             }
         }
     }
@@ -126,19 +222,9 @@ fun CategoriesMenu() {
         val categories = listOf(
             "молочные продукты",
             "мясные продукты",
-            "рыбные продукты",
-            "яйцо",
-            "масложировая продукция",
-            "хлебобулочные изделия",
-            "кондитерские изделия",
-            "продукты пчеловодства",
-            "бакалейные товары",
-            "безалкогольные напитки",
-            "алкогольные напитки",
-            "табачные изделия",
-            "плодоовощная продукция",
-            "прочие продовольственные товары"
+            "рыбные продукты"
         )
+
         var expanded by remember { mutableStateOf(false) }
 
         TextField(
@@ -149,7 +235,7 @@ fun CategoriesMenu() {
                     shape = RoundedCornerShape(16.dp)
                 )
                 .background(
-                    color = White,
+                    color = LightGreen,
                     shape = RoundedCornerShape(16.dp)
                 ),
             value = "",
@@ -189,8 +275,6 @@ fun CategoriesMenu() {
                 disabledIndicatorColor = Color.Transparent,
                 unfocusedContainerColor = White,
                 unfocusedIndicatorColor = Color.Transparent,
-                focusedContainerColor = White,
-                focusedIndicatorColor = Color.Transparent,
                 errorContainerColor = White,
                 errorIndicatorColor = Color.Red
             )

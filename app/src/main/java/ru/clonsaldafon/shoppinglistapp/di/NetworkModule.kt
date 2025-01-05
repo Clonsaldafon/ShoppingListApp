@@ -15,7 +15,10 @@ object NetworkModule {
 
 //    private const val BASE_URL = ""
 //
-//    private val retrofit = Retrofit
+//    @Provides
+//    @Singleton
+//    fun provideRetrofit(): Retrofit =
+//        Retrofit
 //            .Builder()
 //            .baseUrl(BASE_URL)
 //            .addConverterFactory(GsonConverterFactory.create())
@@ -23,7 +26,7 @@ object NetworkModule {
 //
 //    @Provides
 //    @Singleton
-//    fun provideUserService(): UserService =
+//    fun provideUserService(retrofit: Retrofit): UserService =
 //        retrofit.create(UserService::class.java)
 
 }
