@@ -19,8 +19,6 @@ fun LoadingProgressBar(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        CircularProgressIndicator(
-            color = DarkOrange
-        )
+        CircularProgressIndicator(color = DarkOrange)
     }
 }

@@ -56,9 +56,7 @@ fun DayList(
             modifier = Modifier
                 .width(20.dp)
                 .height(20.dp),
-            onClick = {
-                expanded = !expanded
-            }
+            onClick = { expanded = !expanded }
         ) {
             Icon(
                 imageVector =

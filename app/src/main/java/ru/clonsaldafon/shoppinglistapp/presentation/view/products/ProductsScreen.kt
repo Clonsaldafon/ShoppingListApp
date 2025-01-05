@@ -33,11 +33,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
@@ -104,9 +106,7 @@ fun ProductsScreen(
                 actions = {
                     Box {
                         IconButton(
-                            onClick = {
-                                expanded = true
-                            }
+                            onClick = { expanded = true }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Settings,
@@ -117,19 +117,15 @@ fun ProductsScreen(
 
                         DropdownMenu(
                             modifier = Modifier
-                                .background(
-                                    color = White
-                                ),
+                                .background(color = White),
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
                             DropdownMenuItem(
                                 text = {
                                     Text(
-                                        text = "Покинуть группу",
-                                        style = TextStyle(
-                                            fontSize = 16.sp
-                                        )
+                                        text = stringResource(R.string.leave_group),
+                                        style = TextStyle(fontSize = 16.sp)
                                     )
                                 },
                                 trailingIcon = {
@@ -138,9 +134,7 @@ fun ProductsScreen(
                                         contentDescription = null
                                     )
                                 },
-                                onClick = {
-                                    expanded = false
-                                },
+                                onClick = { expanded = false },
                                 colors = MenuDefaults.itemColors(
                                     textColor = Red,
                                     trailingIconColor = Red
@@ -164,9 +158,7 @@ fun ProductsScreen(
                         color = DarkOrange,
                         shape = RoundedCornerShape(60.dp)
                     ),
-                onClick = {
-                    navController?.navigate(Routes.AddProduct.route)
-                }
+                onClick = { navController?.navigate(Routes.AddProduct.route) }
             ) {
                 Icon(
                     modifier = Modifier
@@ -182,9 +174,7 @@ fun ProductsScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(
-                    color = White
-                )
+                .background(color = White)
                 .padding(innerPadding)
         ) {
             Column(

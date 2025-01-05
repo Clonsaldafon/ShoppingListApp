@@ -1,3 +1,23 @@
 <resources>
-    <string name="app_name">ShoppingListApp</string>
+    <string name="app_name" translatable="false">ShoppingListApp</string>
+    <string name="registration">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="continue_text">Continue</string>
+    <string name="authorization">Log In</string>
+    <string name="authorize">Log In</string>
+    <string name="my_profile">My profile</string>
+    <string name="edit">Edit</string>
+    <string name="groups">Groups</string>
+    <string name="data_editing">Data editing</string>
+    <string name="new_login">New login</string>
+    <string name="save">Save</string>
+    <string name="leave_group">Leave group</string>
+    <string name="added_by">Added by:</string>
+    <string name="bought_by">Bought by:</string>
+    <string name="product_adding">Product adding</string>
+    <string name="add">Add</string>
+    <string name="quantity">Quantity</string>
+    <string name="category">Category</string>
+    <string name="product">Product</string>
 </resources>

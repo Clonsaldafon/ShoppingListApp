@@ -47,6 +47,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -113,7 +114,7 @@ fun ProfileScreen(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        text = "Мой профиль",
+                        text = stringResource(R.string.my_profile),
                         style = Typography.titleLarge
                     )
                 },
@@ -136,19 +137,15 @@ fun ProfileScreen(
 
                         DropdownMenu(
                             modifier = Modifier
-                                .background(
-                                    color = White
-                                ),
+                                .background(color = White),
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
                             DropdownMenuItem(
                                 text = {
                                     Text(
-                                        text = "Редактировать",
-                                        style = TextStyle(
-                                            fontSize = 16.sp
-                                        )
+                                        text = stringResource(R.string.edit),
+                                        style = TextStyle(fontSize = 16.sp)
                                     )
                                 },
                                 trailingIcon = {
@@ -171,9 +168,7 @@ fun ProfileScreen(
                                 text = {
                                     Text(
                                         text = "Выйти",
-                                        style = TextStyle(
-                                            fontSize = 16.sp
-                                        )
+                                        style = TextStyle(fontSize = 16.sp)
                                     )
                                 },
                                 trailingIcon = {
@@ -214,16 +209,14 @@ fun ProfileScreen(
                         modifier = Modifier
                             .width(50.dp)
                             .height(50.dp),
-                        onClick = {
-                            navController?.navigate(Routes.Groups.route)
-                        }
+                        onClick = { navController?.navigate(Routes.Groups.route) }
                     ) {
                         Image(
                             modifier = Modifier
                                 .width(40.dp)
                                 .height(40.dp),
                             bitmap = ImageBitmap.imageResource(R.drawable.groups),
-                            contentDescription = "Группы"
+                            contentDescription = stringResource(R.string.groups)
                         )
                     }
 
@@ -238,7 +231,7 @@ fun ProfileScreen(
                                 .width(40.dp)
                                 .height(40.dp),
                             bitmap = ImageBitmap.imageResource(R.drawable.profile_selected),
-                            contentDescription = "Профиль"
+                            contentDescription = stringResource(R.string.my_profile)
                         )
                     }
                 }
@@ -248,9 +241,7 @@ fun ProfileScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(
-                    color = White
-                )
+                .background(color = White)
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -268,12 +259,8 @@ fun ProfileScreen(
                         modifier = Modifier
                             .width(100.dp)
                             .height(100.dp)
-                            .clip(
-                                shape = CircleShape
-                            )
-                            .background(
-                                color = Green
-                            )
+                            .clip(shape = CircleShape)
+                            .background(color = Green)
                             .padding(10.dp),
                         imageVector = Icons.Default.Person,
                         contentDescription = null,
@@ -329,7 +316,7 @@ fun ProfileScreen(
                             verticalArrangement = Arrangement.spacedBy(20.dp)
                         ) {
                             Text(
-                                text = "Изменение данных",
+                                text = stringResource(R.string.data_editing),
                                 style = TextStyle(
                                     color = Green,
                                     fontSize = 20.sp,
@@ -352,7 +339,7 @@ fun ProfileScreen(
                                 onValueChange = {},
                                 label = {
                                     Text(
-                                        text = "Новый логин",
+                                        text = stringResource(R.string.new_login),
                                         style = TextStyle(
                                             color = Green,
                                             fontSize = 14.sp
@@ -391,7 +378,7 @@ fun ProfileScreen(
                                 shape = RoundedCornerShape(12.dp)
                             ) {
                                 Text(
-                                    text = "Сохранить",
+                                    text = stringResource(R.string.save),
                                     style = TextStyle(
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold

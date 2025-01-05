@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="registration">Регистрация</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="continue_text">Продолжить</string>
+    <string name="authorization">Вход</string>
+    <string name="authorize">Войти</string>
+    <string name="my_profile">Мой профиль</string>
+    <string name="edit">Редактировать</string>
+    <string name="groups">Группы</string>
+    <string name="data_editing">Изменение данных</string>
+    <string name="new_login">Новый логин</string>
+    <string name="save">Сохранить</string>
+    <string name="leave_group">Покинуть группу</string>
+    <string name="added_by">Добавлено:</string>
+    <string name="bought_by">Куплено:</string>
+    <string name="product_adding">Добавление продукта</string>
+    <string name="add">Добавить</string>
+    <string name="quantity">Количество</string>
+    <string name="category">Категория</string>
+    <string name="product">Продукт</string>
+</resources>

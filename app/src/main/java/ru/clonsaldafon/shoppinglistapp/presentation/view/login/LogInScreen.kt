@@ -22,6 +22,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.presentation.Routes
 import ru.clonsaldafon.shoppinglistapp.presentation.UiState
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthOutlinedTextField
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthTitle
@@ -43,7 +46,7 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 @Composable
 fun LogInScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    navController: NavHostController? = null,
     viewModel: LogInViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.observeAsState()
@@ -53,13 +56,9 @@ fun LogInScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                color = Green
-            )
+            .background(color = Green)
     ) {
-        AuthTitle(
-            text = "Вход"
-        )
+        AuthTitle(text = stringResource(R.string.authorization))
 
         Column(
             modifier = Modifier
@@ -78,9 +77,7 @@ fun LogInScreen(
                         topEnd = 30.dp
                     )
                 )
-                .padding(
-                    horizontal = 80.dp
-                ),
+                .padding(horizontal = 80.dp),
             verticalArrangement = Arrangement.Center
         ) {
             Column(
@@ -88,7 +85,7 @@ fun LogInScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 when (uiState) {
-                    is UiState.Success -> { TODO("navigation") }
+                    is UiState.Success -> { navController?.navigate(Routes.Groups.route) }
                     is UiState.Failure -> {}
                     is UiState.Loading -> { LoadingProgressBar(modifier = modifier) }
                     else -> {}
@@ -100,14 +97,14 @@ fun LogInScreen(
                     AuthOutlinedTextField(
                         value = requireNotNull(login),
                         onValueChange = viewModel::onLoginChanged,
-                        label = "Логин",
+                        label = stringResource(R.string.login),
                         leadingIcon = Icons.Default.Person
                     )
 
                     AuthOutlinedTextField(
                         value = requireNotNull(password),
                         onValueChange = viewModel::onPasswordChanged,
-                        label = "Пароль",
+                        label = stringResource(R.string.password),
                         leadingIcon = Icons.Default.Lock,
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
@@ -130,9 +127,7 @@ fun LogInScreen(
                             shape = RoundedCornerShape(12.dp)
                         ),
                     shape = RoundedCornerShape(12.dp),
-                    onClick = {
-                        viewModel.login()
-                    },
+                    onClick = { viewModel.login() },
                     enabled = !login.isNullOrEmpty() && !password.isNullOrEmpty(),
                     colors = ButtonDefaults.buttonColors(
                         disabledContainerColor = White,
@@ -142,7 +137,7 @@ fun LogInScreen(
                     )
                 ) {
                     Text(
-                        text = "Войти".uppercase(),
+                        text = stringResource(R.string.authorize).uppercase(),
                         style = TextStyle(
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,

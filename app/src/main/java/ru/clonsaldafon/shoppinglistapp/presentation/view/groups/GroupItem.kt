@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.DropdownMenu
@@ -31,17 +29,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
-import kotlin.math.exp
 
 @Composable
 fun GroupItem(
@@ -105,9 +104,7 @@ fun GroupItem(
                 modifier = Modifier
                     .height(30.dp)
                     .width(30.dp),
-                onClick = {
-                    expanded = true
-                }
+                onClick = { expanded = true }
             ) {
                 Icon(
                     modifier = Modifier
@@ -121,19 +118,15 @@ fun GroupItem(
 
             DropdownMenu(
                 modifier = Modifier
-                    .background(
-                        color = White
-                    ),
+                    .background(color = White),
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = "Покинуть группу",
-                            style = TextStyle(
-                                fontSize = 16.sp
-                            )
+                            text = stringResource(R.string.leave_group),
+                            style = TextStyle(fontSize = 16.sp)
                         )
                     },
                     trailingIcon = {
@@ -142,9 +135,7 @@ fun GroupItem(
                             contentDescription = null
                         )
                     },
-                    onClick = {
-                        expanded = false
-                    },
+                    onClick = { expanded = false },
                     colors = MenuDefaults.itemColors(
                         textColor = Red,
                         trailingIconColor = Red

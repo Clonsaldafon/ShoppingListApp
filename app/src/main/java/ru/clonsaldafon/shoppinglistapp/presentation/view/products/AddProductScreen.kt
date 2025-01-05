@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
 import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
@@ -62,9 +64,7 @@ fun AddProductScreen(
             TopAppBar(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        color = White
-                    ),
+                    .background(color = White),
                 windowInsets = WindowInsets(
                     left = 20.dp,
                     top = 20.dp,
@@ -77,9 +77,7 @@ fun AddProductScreen(
                 ),
                 navigationIcon = {
                     IconButton(
-                        onClick = {
-                            navController?.popBackStack()
-                        }
+                        onClick = { navController?.popBackStack() }
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -92,7 +90,7 @@ fun AddProductScreen(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        text = "Добавление продукта",
+                        text = stringResource(R.string.product_adding),
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -106,9 +104,7 @@ fun AddProductScreen(
             BottomAppBar(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        color = White
-                    ),
+                    .background(color = White),
                 windowInsets = WindowInsets(
                     left = 20.dp,
                     top = 20.dp,
@@ -140,7 +136,7 @@ fun AddProductScreen(
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(
-                            text = "Добавить",
+                            text = stringResource(R.string.add),
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
@@ -154,9 +150,7 @@ fun AddProductScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(
-                    color = White
-                )
+                .background(color = White)
                 .padding(innerPadding)
         ) {
             Column(
@@ -187,7 +181,7 @@ fun AddProductScreen(
                     onValueChange = {},
                     label = {
                         Text(
-                            text = "Количество",
+                            text = stringResource(R.string.quantity),
                             style = TextStyle(
                                 color = Green,
                                 fontSize = 14.sp
@@ -244,7 +238,7 @@ fun CategoriesMenu() {
             onValueChange = {},
             label = {
                 Text(
-                    text = "Категория",
+                    text = stringResource(R.string.category),
                     style = TextStyle(
                         color = Green,
                         fontSize = 14.sp
@@ -279,17 +273,13 @@ fun CategoriesMenu() {
 
         DropdownMenu(
             modifier = Modifier
-                .background(
-                    color = White
-                ),
+                .background(color = White),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
             categories.forEach { category ->
                 DropdownMenuItem(
-                    onClick = {
-                        expanded = false
-                    },
+                    onClick = { expanded = false },
                     text = {
                         Text(
                             text = category,
@@ -335,7 +325,7 @@ fun ProductsMenu() {
             onValueChange = {},
             label = {
                 Text(
-                    text = "Продукт",
+                    text = stringResource(R.string.product),
                     style = TextStyle(
                         color = Green,
                         fontSize = 14.sp
@@ -372,17 +362,13 @@ fun ProductsMenu() {
 
         DropdownMenu(
             modifier = Modifier
-                .background(
-                    color = White
-                ),
+                .background(color = White),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
             products.forEach { product ->
                 DropdownMenuItem(
-                    onClick = {
-                        expanded = false
-                    },
+                    onClick = { expanded = false },
                     text = {
                         Text(
                             text = product,

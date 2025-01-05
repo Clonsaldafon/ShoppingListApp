@@ -30,7 +30,7 @@ fun NavGraph(
 ) {
    NavHost(
        navController = navController,
-       startDestination = Routes.Products.route,
+       startDestination = Routes.Groups.route,
        enterTransition = {
            EnterTransition.None
        },
