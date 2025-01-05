@@ -1,6 +1,5 @@
-package ru.clonsaldafon.shoppinglistapp.presentation.groups
+package ru.clonsaldafon.shoppinglistapp.presentation.view.groups
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,12 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,6 +46,7 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Typography
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,11 +88,7 @@ fun GroupsScreen(
                         modifier = Modifier
                             .fillMaxWidth(),
                         text = "Группы",
-                        style = TextStyle(
-                            fontSize = 40.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
+                        style = Typography.titleLarge
                     )
                 }
             )
@@ -174,16 +168,16 @@ fun GroupsScreen(
                     tint = White
                 )
             }
-        },
-        content = { innerPadding ->
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(
-                        color = White
-                    )
-                    .padding(innerPadding)
-            ) {
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(
+                    color = White
+                )
+                .padding(innerPadding)
+        ) {
 //            Column(
 //                modifier = Modifier
 //                    .fillMaxSize(),
@@ -200,28 +194,27 @@ fun GroupsScreen(
 //                )
 //            }
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = 40.dp,
-                            vertical = 20.dp
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    GroupItem(
-                        title = "Семья",
-                        members = 4
-                    )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = 40.dp,
+                        vertical = 20.dp
+                    ),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                GroupItem(
+                    title = "Семья",
+                    members = 4
+                )
 
-                    GroupItem(
-                        title = "Друзья",
-                        members = 4
-                    )
-                }
+                GroupItem(
+                    title = "Друзья",
+                    members = 4
+                )
             }
         }
-    )
+    }
 }
 
 @Composable

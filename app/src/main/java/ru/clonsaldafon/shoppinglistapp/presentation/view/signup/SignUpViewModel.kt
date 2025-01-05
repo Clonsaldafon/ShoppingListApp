@@ -1,4 +1,4 @@
-package ru.clonsaldafon.shoppinglistapp.presentation.signup
+package ru.clonsaldafon.shoppinglistapp.presentation.view.signup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

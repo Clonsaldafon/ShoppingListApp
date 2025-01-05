@@ -1,4 +1,4 @@
-package ru.clonsaldafon.shoppinglistapp.presentation.login
+package ru.clonsaldafon.shoppinglistapp.presentation.view.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,11 +35,9 @@ import ru.clonsaldafon.shoppinglistapp.presentation.UiState
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthOutlinedTextField
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthTitle
 import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
-import ru.clonsaldafon.shoppinglistapp.presentation.signup.SignUpScreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
-import ru.clonsaldafon.shoppinglistapp.ui.theme.ShoppingListAppTheme
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @Composable
