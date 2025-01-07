@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -21,6 +23,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -77,9 +80,14 @@ fun AddProductScreen(
                 ),
                 navigationIcon = {
                     IconButton(
+                        modifier = Modifier
+                            .width(35.dp)
+                            .height(35.dp),
                         onClick = { navController?.popBackStack() }
                     ) {
                         Icon(
+                            modifier = Modifier
+                                .fillMaxSize(),
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null,
                             tint = Green
@@ -98,54 +106,43 @@ fun AddProductScreen(
                         )
                     )
                 },
+                actions = {
+                    Column(
+                        modifier = Modifier
+                            .width(35.dp)
+                            .height(35.dp)
+                    ) {}
+                }
             )
         },
-        bottomBar = {
-            BottomAppBar(
+        floatingActionButton = {
+            Button(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = White),
-                windowInsets = WindowInsets(
-                    left = 20.dp,
-                    top = 20.dp,
-                    right = 20.dp,
-                    bottom = 20.dp
-                ),
-                containerColor = White
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        modifier = Modifier
-                            .shadow(
-                                elevation = 5.dp,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .background(
-                                color = Orange,
-                                shape = RoundedCornerShape(12.dp)
-                            ),
-                        onClick = {},
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Orange,
-                            contentColor = DarkGreen
-                        ),
+                    .shadow(
+                        elevation = 5.dp,
                         shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.add),
-                            style = TextStyle(
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        )
-                    }
-                }
+                    )
+                    .background(
+                        color = Orange,
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Orange,
+                    contentColor = DarkGreen
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.add),
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
             }
-        }
+        },
+        floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         Column(
             modifier = modifier

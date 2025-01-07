@@ -1,13 +1,19 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.signup
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -15,6 +21,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,12 +29,15 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -64,7 +74,7 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .shadow(
-                    elevation = 16.dp,
+                    elevation = 30.dp,
                     shape = RoundedCornerShape(
                         topStart = 30.dp,
                         topEnd = 30.dp
@@ -122,8 +132,8 @@ fun SignUpScreen(
                         )
                         .shadow(
                             elevation =
-                                if(!login.isNullOrEmpty() && !password.isNullOrEmpty()) 4.dp
-                                else 0.dp,
+                            if(!login.isNullOrEmpty() && !password.isNullOrEmpty()) 4.dp
+                            else 0.dp,
                             shape = RoundedCornerShape(12.dp)
                         ),
                     shape = RoundedCornerShape(12.dp),
@@ -146,6 +156,31 @@ fun SignUpScreen(
                     )
                 }
             }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 80.dp),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = Modifier
+                        .width(225.dp)
+                        .height(85.dp),
+                    bitmap = ImageBitmap.imageResource(R.drawable.auth_pencil),
+                    contentDescription = null
+                )
+            }
         }
     }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true, locale = "ru"
+)
+@Composable
+fun SignUpPreview() {
+    SignUpScreen()
 }

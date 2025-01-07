@@ -20,8 +20,7 @@ fun AuthTitle(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                vertical = 70.dp,
-                horizontal = 85.dp
+                vertical = 60.dp
             ),
         text = text,
         style = TextStyle(

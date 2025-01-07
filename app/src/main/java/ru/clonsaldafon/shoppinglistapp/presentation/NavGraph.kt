@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import ru.clonsaldafon.shoppinglistapp.presentation.view.groups.GroupsScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.login.LogInScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.products.AddProductScreen
+import ru.clonsaldafon.shoppinglistapp.presentation.view.products.GroupInfoScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.products.ProductsScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.profile.ProfileScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.signup.SignUpScreen
@@ -21,6 +22,7 @@ sealed class Routes(val route: String) {
     data object Profile : Routes("profile")
     data object Products : Routes("products")
     data object AddProduct : Routes("add_product")
+    data object GroupInfo : Routes("group_info")
 }
 
 @Composable
@@ -30,7 +32,7 @@ fun NavGraph(
 ) {
    NavHost(
        navController = navController,
-       startDestination = Routes.Groups.route,
+       startDestination = Routes.SignUp.route,
        enterTransition = {
            EnterTransition.None
        },
@@ -75,6 +77,13 @@ fun NavGraph(
 
        composable(route = Routes.AddProduct.route) {
            AddProductScreen(
+               modifier = modifier,
+               navController = navController
+           )
+       }
+
+       composable(route = Routes.GroupInfo.route) {
+           GroupInfoScreen(
                modifier = modifier,
                navController = navController
            )

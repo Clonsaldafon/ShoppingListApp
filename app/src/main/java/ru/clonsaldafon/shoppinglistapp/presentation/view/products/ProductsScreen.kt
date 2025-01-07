@@ -15,7 +15,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.sharp.Info
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,8 +43,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.Routes
+import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
+import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Typography
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
@@ -86,7 +90,7 @@ fun ProductsScreen(
                 ),
                 navigationIcon = {
                     IconButton(
-                        onClick = {}
+                        onClick = { navController?.navigate(Routes.Groups.route) }
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -121,6 +125,29 @@ fun ProductsScreen(
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = "Инфо о группе",
+                                        style = TextStyle(fontSize = 16.sp)
+                                    )
+                                },
+                                trailingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Info,
+                                        contentDescription = null
+                                    )
+                                },
+                                onClick = {
+                                    expanded = false
+                                    navController?.navigate(Routes.GroupInfo.route)
+                                },
+                                colors = MenuDefaults.itemColors(
+                                    textColor = DarkGreen,
+                                    trailingIconColor = DarkGreen
+                                )
+                            )
+
                             DropdownMenuItem(
                                 text = {
                                     Text(

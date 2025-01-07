@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.sharp.ShoppingCart
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -28,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -48,15 +51,15 @@ fun GroupItem(
     members: Int
 ) {
     var expanded by remember { mutableStateOf(false) }
-
+    
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = Color.LightGray,
+            .shadow(
+                elevation = 8.dp,
                 shape = RoundedCornerShape(12.dp)
             )
+            .background(color = White)
             .padding(
                 horizontal = 20.dp,
                 vertical = 17.dp
@@ -72,19 +75,19 @@ fun GroupItem(
                 modifier = Modifier
                     .width(50.dp)
                     .height(50.dp),
-                imageVector = Icons.Filled.Star,
+                imageVector = Icons.Sharp.ShoppingCart,
                 contentDescription = null,
                 tint = Color.LightGray
             )
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(14.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
                     text = title,
                     style = TextStyle(
                         color = DarkGreen,
-                        fontSize = 24.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                 )
@@ -93,7 +96,7 @@ fun GroupItem(
                     text = "$members чел.",
                     style = TextStyle(
                         color = Green,
-                        fontSize = 20.sp
+                        fontSize = 16.sp
                     )
                 )
             }
@@ -108,8 +111,7 @@ fun GroupItem(
             ) {
                 Icon(
                     modifier = Modifier
-                        .height(30.dp)
-                        .width(30.dp),
+                        .fillMaxSize(),
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = null,
                     tint = Orange

@@ -28,9 +28,9 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                 ) { innerPadding ->
                     NavGraph(
-                        navController = navController,
                         modifier = Modifier
-                            .padding(innerPadding)
+                            .padding(innerPadding),
+                        navController = navController
                     )
                 }
             }
