@@ -2,7 +2,6 @@ package ru.clonsaldafon.shoppinglistapp.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import ru.clonsaldafon.shoppinglistapp.data.model.UserEntity
 
 @Database(
     entities = [

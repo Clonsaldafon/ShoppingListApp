@@ -1,10 +1,10 @@
 package ru.clonsaldafon.shoppinglistapp.domain
 
-import ru.clonsaldafon.shoppinglistapp.data.model.AuthRequest
-import ru.clonsaldafon.shoppinglistapp.data.model.User
+import ru.clonsaldafon.shoppinglistapp.data.model.user.SignUpRequest
+import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 
 interface SignUpUseCase {
 
-    suspend operator fun invoke(request: AuthRequest): Result<User?>
+    suspend operator fun invoke(request: SignUpRequest): Result<TokenResponse?>
 
 }

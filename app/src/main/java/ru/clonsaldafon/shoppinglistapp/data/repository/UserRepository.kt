@@ -1,12 +1,13 @@
 package ru.clonsaldafon.shoppinglistapp.data.repository
 
-import ru.clonsaldafon.shoppinglistapp.data.model.AuthRequest
-import ru.clonsaldafon.shoppinglistapp.data.model.User
+import ru.clonsaldafon.shoppinglistapp.data.model.user.LogInRequest
+import ru.clonsaldafon.shoppinglistapp.data.model.user.SignUpRequest
+import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 
 interface UserRepository {
 
-    suspend fun signup(request: AuthRequest): Result<User?>
+    suspend fun signup(request: SignUpRequest): Result<TokenResponse?>
 
-    suspend fun login(request: AuthRequest): Result<User?>
+    suspend fun login(request: LogInRequest): Result<TokenResponse?>
 
 }
