@@ -1,7 +1,6 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.groups
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.sharp.ShoppingCart
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -39,8 +37,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.clonsaldafon.shoppinglistapp.R
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
+import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
@@ -86,7 +84,7 @@ fun GroupItem(
                 Text(
                     text = title,
                     style = TextStyle(
-                        color = DarkGreen,
+                        color = Black,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -95,7 +93,7 @@ fun GroupItem(
                 Text(
                     text = "$members чел.",
                     style = TextStyle(
-                        color = Green,
+                        color = DarkGray,
                         fontSize = 16.sp
                     )
                 )

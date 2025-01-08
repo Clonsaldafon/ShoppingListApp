@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -50,8 +48,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.clonsaldafon.shoppinglistapp.R
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
+import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
@@ -76,7 +74,7 @@ fun AddProductScreen(
                 ),
                 colors = topAppBarColors(
                     containerColor = White,
-                    titleContentColor = Green
+                    titleContentColor = DarkGray
                 ),
                 navigationIcon = {
                     IconButton(
@@ -90,7 +88,7 @@ fun AddProductScreen(
                                 .fillMaxSize(),
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null,
-                            tint = Green
+                            tint = DarkGray
                         )
                     }
                 },
@@ -129,7 +127,7 @@ fun AddProductScreen(
                 onClick = {},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Orange,
-                    contentColor = DarkGreen
+                    contentColor = Black
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -180,14 +178,14 @@ fun AddProductScreen(
                         Text(
                             text = stringResource(R.string.quantity),
                             style = TextStyle(
-                                color = Green,
+                                color = DarkGray,
                                 fontSize = 14.sp
                             )
                         )
                     },
                     colors = TextFieldDefaults.colors(
                         disabledContainerColor = White,
-                        disabledTextColor = DarkGreen,
+                        disabledTextColor = Black,
                         disabledIndicatorColor = Color.Transparent,
                         unfocusedContainerColor = White,
                         unfocusedIndicatorColor = Color.Transparent,
@@ -228,7 +226,7 @@ fun CategoriesMenu() {
                 ),
             value = "",
             textStyle = TextStyle(
-                color = DarkGreen,
+                color = Black,
                 fontWeight = FontWeight.Bold
             ),
             enabled = false,
@@ -237,7 +235,7 @@ fun CategoriesMenu() {
                 Text(
                     text = stringResource(R.string.category),
                     style = TextStyle(
-                        color = Green,
+                        color = DarkGray,
                         fontSize = 14.sp
                     )
                 )
@@ -253,13 +251,13 @@ fun CategoriesMenu() {
                         else
                             Icons.Filled.KeyboardArrowDown,
                         contentDescription = null,
-                        tint = Green
+                        tint = DarkGray
                     )
                 }
             },
             colors = TextFieldDefaults.colors(
                 disabledContainerColor = White,
-                disabledTextColor = DarkGreen,
+                disabledTextColor = Black,
                 disabledIndicatorColor = Color.Transparent,
                 unfocusedContainerColor = White,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -281,7 +279,7 @@ fun CategoriesMenu() {
                         Text(
                             text = category,
                             style = TextStyle(
-                                color = Green,
+                                color = DarkGray,
                                 fontSize = 14.sp
                             )
                         )
@@ -315,7 +313,7 @@ fun ProductsMenu() {
                 ),
             value = "",
             textStyle = TextStyle(
-                color = DarkGreen,
+                color = Black,
                 fontWeight = FontWeight.Bold
             ),
             enabled = false,
@@ -324,7 +322,7 @@ fun ProductsMenu() {
                 Text(
                     text = stringResource(R.string.product),
                     style = TextStyle(
-                        color = Green,
+                        color = DarkGray,
                         fontSize = 14.sp
                     )
                 )
@@ -340,13 +338,13 @@ fun ProductsMenu() {
                         else
                             Icons.Filled.KeyboardArrowDown,
                         contentDescription = null,
-                        tint = Green
+                        tint = DarkGray
                     )
                 }
             },
             colors = TextFieldDefaults.colors(
                 disabledContainerColor = White,
-                disabledTextColor = DarkGreen,
+                disabledTextColor = Black,
                 disabledIndicatorColor = Color.Transparent,
                 unfocusedContainerColor = White,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -370,7 +368,7 @@ fun ProductsMenu() {
                         Text(
                             text = product,
                             style = TextStyle(
-                                color = Green,
+                                color = DarkGray,
                                 fontSize = 14.sp
                             )
                         )

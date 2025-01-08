@@ -17,7 +17,6 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.sharp.Info
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,10 +42,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.Routes
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
-import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
+import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Typography
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
@@ -72,7 +70,7 @@ fun ProductsScreen(
                         )
                     )
                     .background(
-                        color = Green,
+                        color = DarkGray,
                         shape = RoundedCornerShape(
                             bottomStart = 30.dp,
                             bottomEnd = 30.dp
@@ -85,7 +83,7 @@ fun ProductsScreen(
                     bottom = 20.dp
                 ),
                 colors = topAppBarColors(
-                    containerColor = Green,
+                    containerColor = DarkGray,
                     titleContentColor = White
                 ),
                 navigationIcon = {
@@ -143,8 +141,8 @@ fun ProductsScreen(
                                     navController?.navigate(Routes.GroupInfo.route)
                                 },
                                 colors = MenuDefaults.itemColors(
-                                    textColor = DarkGreen,
-                                    trailingIconColor = DarkGreen
+                                    textColor = Black,
+                                    trailingIconColor = Black
                                 )
                             )
 

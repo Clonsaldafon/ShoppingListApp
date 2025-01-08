@@ -56,8 +56,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.Routes
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
+import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
@@ -78,7 +78,6 @@ fun ProfileScreen(
         topBar = {
             TopAppBar(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .shadow(
                         elevation = 16.dp,
                         shape = RoundedCornerShape(
@@ -87,7 +86,7 @@ fun ProfileScreen(
                         )
                     )
                     .background(
-                        color = Green,
+                        color = DarkGray,
                         shape = RoundedCornerShape(
                             bottomStart = 30.dp,
                             bottomEnd = 30.dp
@@ -100,7 +99,7 @@ fun ProfileScreen(
                     bottom = 20.dp
                 ),
                 colors = topAppBarColors(
-                    containerColor = Green,
+                    containerColor = DarkGray,
                     titleContentColor = White
                 ),
                 navigationIcon = {
@@ -159,8 +158,8 @@ fun ProfileScreen(
                                     expanded = false
                                 },
                                 colors = MenuDefaults.itemColors(
-                                    textColor = DarkGreen,
-                                    trailingIconColor = DarkGreen
+                                    textColor = Black,
+                                    trailingIconColor = Black
                                 )
                             )
 
@@ -197,7 +196,7 @@ fun ProfileScreen(
                             topEnd = 30.dp
                         )
                     ),
-                containerColor = Green
+                containerColor = DarkGray
             ) {
                 Row(
                     modifier = Modifier
@@ -260,7 +259,7 @@ fun ProfileScreen(
                             .width(100.dp)
                             .height(100.dp)
                             .clip(shape = CircleShape)
-                            .background(color = Green)
+                            .background(color = DarkGray)
                             .padding(10.dp),
                         imageVector = Icons.Default.Person,
                         contentDescription = null,
@@ -270,7 +269,7 @@ fun ProfileScreen(
                     Text(
                         text = "my-login",
                         style = TextStyle(
-                            color = DarkGreen,
+                            color = Black,
                             fontSize = 24.sp
                         )
                     )
@@ -318,7 +317,7 @@ fun ProfileScreen(
                             Text(
                                 text = stringResource(R.string.data_editing),
                                 style = TextStyle(
-                                    color = Green,
+                                    color = DarkGray,
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -341,14 +340,14 @@ fun ProfileScreen(
                                     Text(
                                         text = stringResource(R.string.new_login),
                                         style = TextStyle(
-                                            color = Green,
+                                            color = DarkGray,
                                             fontSize = 14.sp
                                         )
                                     )
                                 },
                                 colors = TextFieldDefaults.colors(
                                     disabledContainerColor = White,
-                                    disabledTextColor = DarkGreen,
+                                    disabledTextColor = Black,
                                     disabledIndicatorColor = Color.Transparent,
                                     unfocusedContainerColor = White,
                                     unfocusedIndicatorColor = Color.Transparent,
@@ -373,7 +372,7 @@ fun ProfileScreen(
                                 onClick = {},
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = Orange,
-                                    contentColor = DarkGreen
+                                    contentColor = Black
                                 ),
                                 shape = RoundedCornerShape(12.dp)
                             ) {

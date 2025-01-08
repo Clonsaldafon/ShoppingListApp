@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.rounded.Add
@@ -26,7 +24,6 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuDefaults
@@ -47,18 +44,16 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.Routes
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
+import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Typography
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
@@ -82,7 +77,7 @@ fun GroupsScreen(
                         )
                     )
                     .background(
-                        color = Green,
+                        color = DarkGray,
                         shape = RoundedCornerShape(
                             bottomStart = 30.dp,
                             bottomEnd = 30.dp
@@ -93,7 +88,7 @@ fun GroupsScreen(
                     bottom = 20.dp
                 ),
                 colors = topAppBarColors(
-                    containerColor = Green,
+                    containerColor = DarkGray,
                     titleContentColor = White
                 ),
                 title = {
@@ -115,7 +110,7 @@ fun GroupsScreen(
                             topEnd = 30.dp
                         )
                     ),
-                containerColor = Green,
+                containerColor = DarkGray,
             ) {
                 Row(
                     modifier = Modifier
@@ -204,8 +199,8 @@ fun GroupsScreen(
                         },
                         onClick = { expanded = false },
                         colors = MenuDefaults.itemColors(
-                            textColor = DarkGreen,
-                            trailingIconColor = DarkGreen
+                            textColor = Black,
+                            trailingIconColor = Black
                         )
                     )
 
@@ -224,8 +219,8 @@ fun GroupsScreen(
                         },
                         onClick = { expanded = false },
                         colors = MenuDefaults.itemColors(
-                            textColor = DarkGreen,
-                            trailingIconColor = DarkGreen
+                            textColor = Black,
+                            trailingIconColor = Black
                         )
                     )
                 }

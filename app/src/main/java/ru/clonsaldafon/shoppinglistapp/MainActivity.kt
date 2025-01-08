@@ -23,16 +23,9 @@ class MainActivity : ComponentActivity() {
             ShoppingListAppTheme {
                 val navController = rememberNavController()
 
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) { innerPadding ->
-                    NavGraph(
-                        modifier = Modifier
-                            .padding(innerPadding),
-                        navController = navController
-                    )
-                }
+                NavGraph(
+                    navController = navController
+                )
             }
         }
     }

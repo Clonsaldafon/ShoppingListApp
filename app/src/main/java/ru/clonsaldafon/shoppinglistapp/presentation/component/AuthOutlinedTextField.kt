@@ -31,9 +31,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.clonsaldafon.shoppinglistapp.R
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
+import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @Composable
@@ -48,26 +48,26 @@ fun AuthOutlinedTextField(
 ) {
     var isPasswordVisibilityOn by remember { mutableStateOf(false) }
 
-    Column{
-        Text(
-            modifier = Modifier
-                .padding(bottom = 15.dp),
-            text = label,
-            style = TextStyle(
-                color = DarkGreen,
-                fontSize = 16.sp,
-                textAlign = TextAlign.End
-            )
-        )
+    Column {
+//        Text(
+//            modifier = Modifier
+//                .padding(bottom = 15.dp),
+//            text = label,
+//            style = TextStyle(
+//                color = DarkGreen,
+//                fontSize = 16.sp,
+//                textAlign = TextAlign.End
+//            )
+//        )
 
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp)
+                .height(60.dp)
                 .border(
                     width = 2.dp,
-                    color = Green,
-                    shape = RoundedCornerShape(12.dp)
+                    color = DarkGray,
+                    shape = RoundedCornerShape(15.dp)
                 ),
             value = value,
             onValueChange = { if (it.length <= maxLength) onValueChange(it) },
@@ -79,20 +79,20 @@ fun AuthOutlinedTextField(
                 cursorColor = DarkOrange
             ),
             textStyle = TextStyle(
-                color = DarkGreen,
+                color = Black,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center
             ),
             leadingIcon = {
                 Column(
                     modifier = Modifier
-                        .width(50.dp)
-                        .height(50.dp)
+                        .width(60.dp)
+                        .height(60.dp)
                         .background(
-                            color = Green,
+                            color = DarkGray,
                             shape = RoundedCornerShape(
-                                topStart = 12.dp,
-                                bottomStart = 12.dp
+                                topStart = 15.dp,
+                                bottomStart = 15.dp
                             )
                         ),
                     verticalArrangement = Arrangement.Center,
@@ -100,8 +100,8 @@ fun AuthOutlinedTextField(
                 ) {
                     Icon(
                         modifier = Modifier
-                            .width(25.dp)
-                            .height(25.dp),
+                            .width(30.dp)
+                            .height(30.dp),
                         imageVector = leadingIcon,
                         tint = White,
                         contentDescription = null
@@ -131,7 +131,7 @@ fun AuthOutlinedTextField(
                                 else
                                     ImageVector.vectorResource(R.drawable.ic_visibility_off),
                             contentDescription = null,
-                            tint = Green
+                            tint = DarkGray
                         )
                     }
                 }

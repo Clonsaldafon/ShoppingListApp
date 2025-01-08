@@ -32,8 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.clonsaldafon.shoppinglistapp.R
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Green
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
+import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
@@ -78,7 +78,7 @@ fun ProductItem(
                     Text(
                         text = title,
                         style = TextStyle(
-                            color = DarkGreen,
+                            color = Black,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -97,7 +97,7 @@ fun ProductItem(
                             else
                                 Icons.Filled.KeyboardArrowUp,
                             contentDescription = null,
-                            tint = Green
+                            tint = DarkGray
                         )
                     }
                 }
@@ -109,7 +109,7 @@ fun ProductItem(
                     Text(
                         text = "$count шт.",
                         style = TextStyle(
-                            color = Green,
+                            color = DarkGray,
                             fontSize = 11.sp
                         )
                     )
@@ -136,7 +136,7 @@ fun ProductItem(
                 checked = bought,
                 onCheckedChange = {},
                 colors = CheckboxDefaults.colors(
-                    checkedColor = Green
+                    checkedColor = DarkGray
                 )
             )
         }
@@ -158,7 +158,7 @@ fun ProductItem(
                         Text(
                             text = stringResource(R.string.added_by),
                             style = TextStyle(
-                                color = Green,
+                                color = DarkGray,
                                 fontSize = 11.sp
                             )
                         )
@@ -170,7 +170,7 @@ fun ProductItem(
                             Text(
                                 text = "Антон",
                                 style = TextStyle(
-                                    color = DarkGreen,
+                                    color = Black,
                                     fontSize = 11.sp
                                 )
                             )
@@ -193,7 +193,7 @@ fun ProductItem(
                             Text(
                                 text = stringResource(R.string.bought_by),
                                 style = TextStyle(
-                                    color = Green,
+                                    color = DarkGray,
                                     fontSize = 11.sp
                                 )
                             )
@@ -205,7 +205,7 @@ fun ProductItem(
                                 Text(
                                     text = "Антон",
                                     style = TextStyle(
-                                        color = DarkGreen,
+                                        color = Black,
                                         fontSize = 11.sp
                                     )
                                 )

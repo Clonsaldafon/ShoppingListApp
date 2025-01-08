@@ -8,8 +8,8 @@ import ru.clonsaldafon.shoppinglistapp.data.service.UserService
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val service: UserService,
-    private val dao: UserDAO
+//    private val service: UserService,
+//    private val dao: UserDAO
 ) : UserRepository {
 
     override suspend fun signup(request: SignUpRequest): Result<TokenResponse?> {

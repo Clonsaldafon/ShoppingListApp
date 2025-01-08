@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGreen
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 
 @Composable
 fun DayList(
@@ -41,13 +41,13 @@ fun DayList(
         Icon(
             imageVector = Icons.Default.DateRange,
             contentDescription = null,
-            tint = DarkGreen
+            tint = Black
         )
 
         Text(
             text = date,
             style = TextStyle(
-                color = DarkGreen,
+                color = Black,
                 fontSize = 14.sp
             )
         )
@@ -65,7 +65,7 @@ fun DayList(
                 else
                     Icons.Filled.KeyboardArrowDown,
                 contentDescription = null,
-                tint = DarkGreen
+                tint = Black
             )
         }
     }
