@@ -41,9 +41,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,9 +54,8 @@ import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
-import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Typography
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
@@ -67,22 +69,6 @@ fun GroupsScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(
-                        elevation = 16.dp,
-                        shape = RoundedCornerShape(
-                            bottomStart = 30.dp,
-                            bottomEnd = 30.dp
-                        )
-                    )
-                    .background(
-                        color = DarkGray,
-                        shape = RoundedCornerShape(
-                            bottomStart = 30.dp,
-                            bottomEnd = 30.dp
-                        )
-                    ),
                 windowInsets = WindowInsets(
                     top = 20.dp,
                     bottom = 20.dp
@@ -103,14 +89,11 @@ fun GroupsScreen(
         },
         bottomBar = {
             BottomAppBar(
-                modifier = modifier
-                    .clip(
-                        shape = RoundedCornerShape(
-                            topStart = 30.dp,
-                            topEnd = 30.dp
-                        )
-                    ),
-                containerColor = DarkGray,
+                windowInsets = WindowInsets(
+                    top = 0.dp,
+                    bottom = 15.dp
+                ),
+                containerColor = DarkGray
             ) {
                 Row(
                     modifier = Modifier
@@ -120,31 +103,31 @@ fun GroupsScreen(
                 ) {
                     IconButton(
                         modifier = Modifier
-                            .width(50.dp)
-                            .height(50.dp),
+                            .width(35.dp)
+                            .height(35.dp),
                         onClick = {}
                     ) {
-                        Image(
+                        Icon(
                             modifier = Modifier
-                                .width(40.dp)
-                                .height(40.dp),
-                            bitmap = ImageBitmap.imageResource(R.drawable.groups_selected),
-                            contentDescription = stringResource(R.string.groups)
+                                .fillMaxSize(),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_groups),
+                            contentDescription = stringResource(R.string.groups),
+                            tint = Orange
                         )
                     }
 
                     IconButton(
                         modifier = Modifier
-                            .width(50.dp)
-                            .height(50.dp),
+                            .width(35.dp)
+                            .height(35.dp),
                         onClick = { navController?.navigate(Routes.Profile.route) }
                     ) {
-                        Image(
+                        Icon(
                             modifier = Modifier
-                                .width(40.dp)
-                                .height(40.dp),
-                            bitmap = ImageBitmap.imageResource(R.drawable.profile),
-                            contentDescription = stringResource(R.string.my_profile)
+                                .fillMaxSize(),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_profile),
+                            contentDescription = stringResource(R.string.my_profile),
+                            tint = White
                         )
                     }
                 }
@@ -163,7 +146,7 @@ fun GroupsScreen(
                             shape = RoundedCornerShape(60.dp)
                         )
                         .background(
-                            color = DarkOrange,
+                            color = Orange,
                             shape = RoundedCornerShape(60.dp)
                         ),
                     onClick = { expanded = true }
@@ -180,7 +163,9 @@ fun GroupsScreen(
 
                 DropdownMenu(
                     modifier = Modifier
-                        .background(color = LightGreen),
+                        .background(
+                            color = White
+                        ),
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
@@ -228,26 +213,36 @@ fun GroupsScreen(
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .background(color = White)
+                .background(
+                    color = DarkGray
+                )
                 .padding(innerPadding)
         ) {
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxSize(),
-//                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Text(
-//                    text = "Вы еще не\nсостоите в группе",
-//                    style = TextStyle(
-//                        color = DarkGreen,
-//                        fontSize = 24.sp,
-//                        textAlign = TextAlign.Center
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = White,
+                        shape = RoundedCornerShape(15.dp)
+                    )
+            ) {
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxSize(),
+//                    verticalArrangement = Arrangement.Center,
+//                    horizontalAlignment = Alignment.CenterHorizontally
+//                ) {
+//                    Text(
+//                        text = "Вы еще не\nсостоите в группе",
+//                        style = TextStyle(
+//                            color = Black,
+//                            fontSize = 24.sp,
+//                            textAlign = TextAlign.Center
+//                        )
 //                    )
-//                )
-//            }
+//                }
 
             LazyColumn(
                 modifier = Modifier
@@ -263,10 +258,11 @@ fun GroupsScreen(
                 )
                 items(groups) { group ->
                     GroupItem(
-                        title = group,
-                        members = 1
+                        navController = navController,
+                        title = group
                     )
                 }
+            }
             }
         }
     }
@@ -274,7 +270,8 @@ fun GroupsScreen(
 
 @Preview(
     showSystemUi = true,
-    showBackground = true
+    showBackground = true,
+    locale = "ru"
 )
 @Composable
 fun MyPreview() {

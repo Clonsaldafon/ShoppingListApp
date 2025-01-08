@@ -57,8 +57,8 @@ import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthOutlinedTextField
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -256,7 +256,7 @@ fun SignUpScreen(
                             .height(60.dp)
                             .border(
                                 width = 2.dp,
-                                color = DarkOrange,
+                                color = Orange,
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .shadow(
@@ -271,7 +271,7 @@ fun SignUpScreen(
                         colors = ButtonDefaults.buttonColors(
                             disabledContainerColor = White,
                             disabledContentColor = Black,
-                            containerColor = DarkOrange,
+                            containerColor = Orange,
                             contentColor = White
                         )
                     ) {
@@ -316,7 +316,7 @@ fun SignUpScreen(
                                 .padding(2.dp),
                             text = "Войти",
                             style = TextStyle(
-                                color = DarkOrange,
+                                color = Orange,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold
                             )

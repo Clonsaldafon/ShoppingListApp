@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @Composable
@@ -76,7 +76,7 @@ fun AuthOutlinedTextField(
                 focusedBorderColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
                 focusedContainerColor = Color.Transparent,
-                cursorColor = DarkOrange
+                cursorColor = Orange
             ),
             textStyle = TextStyle(
                 color = Black,

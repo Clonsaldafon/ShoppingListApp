@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
-import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
+import ru.clonsaldafon.shoppinglistapp.ui.theme.LightOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
@@ -56,7 +56,7 @@ fun ProductItem(
                 shape = RoundedCornerShape(12.dp)
             )
             .background(
-                color = if (bought) White else LightGreen,
+                color = if (bought) White else LightOrange,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(20.dp),
@@ -114,17 +114,19 @@ fun ProductItem(
                         )
                     )
 
-                    IconButton(
-                        modifier = Modifier
-                            .width(16.dp)
-                            .height(16.dp),
-                        onClick = {}
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = null,
-                            tint = Orange
-                        )
+                    if (!bought) {
+                        IconButton(
+                            modifier = Modifier
+                                .width(16.dp)
+                                .height(16.dp),
+                            onClick = {}
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = null,
+                                tint = Orange
+                            )
+                        }
                     }
                 }
             }

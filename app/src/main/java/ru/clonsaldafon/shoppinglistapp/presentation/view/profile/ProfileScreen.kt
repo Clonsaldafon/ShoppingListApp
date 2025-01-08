@@ -1,5 +1,6 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.profile
 
+import android.graphics.ColorSpace.Rgb
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,8 +47,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,7 +61,7 @@ import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
-import ru.clonsaldafon.shoppinglistapp.ui.theme.LightGreen
+import ru.clonsaldafon.shoppinglistapp.ui.theme.LightOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Typography
@@ -77,21 +80,6 @@ fun ProfileScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                modifier = Modifier
-                    .shadow(
-                        elevation = 16.dp,
-                        shape = RoundedCornerShape(
-                            bottomStart = 30.dp,
-                            bottomEnd = 30.dp
-                        )
-                    )
-                    .background(
-                        color = DarkGray,
-                        shape = RoundedCornerShape(
-                            bottomStart = 30.dp,
-                            bottomEnd = 30.dp
-                        )
-                    ),
                 windowInsets = WindowInsets(
                     left = 20.dp,
                     top = 20.dp,
@@ -189,13 +177,10 @@ fun ProfileScreen(
         },
         bottomBar = {
             BottomAppBar(
-                modifier = modifier
-                    .clip(
-                        shape = RoundedCornerShape(
-                            topStart = 30.dp,
-                            topEnd = 30.dp
-                        )
-                    ),
+                windowInsets = WindowInsets(
+                    top = 0.dp,
+                    bottom = 15.dp
+                ),
                 containerColor = DarkGray
             ) {
                 Row(
@@ -206,31 +191,31 @@ fun ProfileScreen(
                 ) {
                     IconButton(
                         modifier = Modifier
-                            .width(50.dp)
-                            .height(50.dp),
+                            .width(35.dp)
+                            .height(35.dp),
                         onClick = { navController?.navigate(Routes.Groups.route) }
                     ) {
-                        Image(
+                        Icon(
                             modifier = Modifier
-                                .width(40.dp)
-                                .height(40.dp),
-                            bitmap = ImageBitmap.imageResource(R.drawable.groups),
-                            contentDescription = stringResource(R.string.groups)
+                                .fillMaxSize(),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_groups),
+                            contentDescription = stringResource(R.string.groups),
+                            tint = White
                         )
                     }
 
                     IconButton(
                         modifier = Modifier
-                            .width(50.dp)
-                            .height(50.dp),
+                            .width(35.dp)
+                            .height(35.dp),
                         onClick = {}
                     ) {
-                        Image(
+                        Icon(
                             modifier = Modifier
-                                .width(40.dp)
-                                .height(40.dp),
-                            bitmap = ImageBitmap.imageResource(R.drawable.profile_selected),
-                            contentDescription = stringResource(R.string.my_profile)
+                                .fillMaxSize(),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_profile),
+                            contentDescription = stringResource(R.string.my_profile),
+                            tint = Orange
                         )
                     }
                 }
@@ -238,151 +223,193 @@ fun ProfileScreen(
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .background(color = White)
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .background(
+                    color = DarkGray
+                )
+                .padding(innerPadding)
         ) {
-            Box(
+            Column(
                 modifier = Modifier
-                    .padding(40.dp),
-                contentAlignment = Alignment.Center
+                    .fillMaxSize()
+                    .background(
+                        color = White,
+                        shape = RoundedCornerShape(15.dp)
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .width(100.dp)
-                            .height(100.dp)
-                            .clip(shape = CircleShape)
-                            .background(color = DarkGray)
-                            .padding(10.dp),
-                        imageVector = Icons.Default.Person,
-                        contentDescription = null,
-                        tint = Orange
-                    )
-
-                    Text(
-                        text = "my-login",
-                        style = TextStyle(
-                            color = Black,
-                            fontSize = 24.sp
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            color =
+                            if (isEditWindowHidden) Color.Transparent
+                            else Black.copy(alpha = 0.5f),
+                            shape = RoundedCornerShape(15.dp)
                         )
-                    )
-                }
-
-                if (!isEditWindowHidden) {
-                    Column(
+                ) {
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .shadow(
-                                elevation = 16.dp,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .background(
-                                color = White,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .padding(20.dp)
+                            .fillMaxSize()
+                            .padding(40.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End
-                        ) {
-                            IconButton(
-                                modifier = Modifier
-                                    .width(25.dp)
-                                    .height(25.dp),
-                                onClick = { isEditWindowHidden = true }
-                            ) {
-                                Icon(
-                                    modifier = Modifier
-                                        .fillMaxSize(),
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = null,
-                                    tint = Red
-                                )
-                            }
-                        }
-
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(20.dp)
                         ) {
+                            Icon(
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp)
+                                    .clip(shape = CircleShape)
+                                    .background(color = DarkGray)
+                                    .padding(10.dp),
+                                imageVector = Icons.Default.Person,
+                                contentDescription = null,
+                                tint = Orange
+                            )
+
                             Text(
-                                text = stringResource(R.string.data_editing),
+                                text = "my-login",
                                 style = TextStyle(
-                                    color = DarkGray,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold
+                                    color = Black,
+                                    fontSize = 24.sp
                                 )
                             )
 
-                            TextField(
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.ic_male),
+                                    contentDescription = null,
+                                    tint = DarkGray
+                                )
+
+                                Text(
+                                    text = "Мужчина",
+                                    style = TextStyle(
+                                        color = DarkGray,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                            }
+                        }
+
+                        if (!isEditWindowHidden) {
+                            Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .shadow(
-                                        elevation = 8.dp,
-                                        shape = RoundedCornerShape(16.dp)
+                                        elevation = 16.dp,
+                                        shape = RoundedCornerShape(12.dp)
                                     )
                                     .background(
                                         color = White,
-                                        shape = RoundedCornerShape(16.dp)
-                                    ),
-                                value = "",
-                                onValueChange = {},
-                                label = {
+                                        shape = RoundedCornerShape(12.dp)
+                                    )
+                                    .padding(20.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.End
+                                ) {
+                                    IconButton(
+                                        modifier = Modifier
+                                            .width(25.dp)
+                                            .height(25.dp),
+                                        onClick = { isEditWindowHidden = true }
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier
+                                                .fillMaxSize(),
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = null,
+                                            tint = Red
+                                        )
+                                    }
+                                }
+
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                                ) {
                                     Text(
-                                        text = stringResource(R.string.new_login),
+                                        text = stringResource(R.string.data_editing),
                                         style = TextStyle(
                                             color = DarkGray,
-                                            fontSize = 14.sp
+                                            fontSize = 20.sp,
+                                            fontWeight = FontWeight.Bold
                                         )
                                     )
-                                },
-                                colors = TextFieldDefaults.colors(
-                                    disabledContainerColor = White,
-                                    disabledTextColor = Black,
-                                    disabledIndicatorColor = Color.Transparent,
-                                    unfocusedContainerColor = White,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    focusedContainerColor = LightGreen,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    errorContainerColor = White,
-                                    errorIndicatorColor = Color.Red,
-                                    cursorColor = Orange
-                                )
-                            )
 
-                            Button(
-                                modifier = Modifier
-                                    .shadow(
-                                        elevation = 5.dp,
-                                        shape = RoundedCornerShape(12.dp)
+                                    TextField(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .shadow(
+                                                elevation = 8.dp,
+                                                shape = RoundedCornerShape(16.dp)
+                                            )
+                                            .background(
+                                                color = White,
+                                                shape = RoundedCornerShape(16.dp)
+                                            ),
+                                        value = "",
+                                        onValueChange = {},
+                                        label = {
+                                            Text(
+                                                text = stringResource(R.string.new_login),
+                                                style = TextStyle(
+                                                    color = DarkGray,
+                                                    fontSize = 14.sp
+                                                )
+                                            )
+                                        },
+                                        colors = TextFieldDefaults.colors(
+                                            disabledContainerColor = White,
+                                            disabledTextColor = Black,
+                                            disabledIndicatorColor = Color.Transparent,
+                                            unfocusedContainerColor = White,
+                                            unfocusedIndicatorColor = Color.Transparent,
+                                            focusedContainerColor = LightOrange,
+                                            focusedIndicatorColor = Color.Transparent,
+                                            errorContainerColor = White,
+                                            errorIndicatorColor = Color.Red,
+                                            cursorColor = Orange
+                                        )
                                     )
-                                    .background(
-                                        color = Orange,
+
+                                    Button(
+                                        modifier = Modifier
+                                            .shadow(
+                                                elevation = 5.dp,
+                                                shape = RoundedCornerShape(12.dp)
+                                            )
+                                            .background(
+                                                color = Orange,
+                                                shape = RoundedCornerShape(12.dp)
+                                            ),
+                                        onClick = {},
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = Orange,
+                                            contentColor = Black
+                                        ),
                                         shape = RoundedCornerShape(12.dp)
-                                    ),
-                                onClick = {},
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Orange,
-                                    contentColor = Black
-                                ),
-                                shape = RoundedCornerShape(12.dp)
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.save),
-                                    style = TextStyle(
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                )
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.save),
+                                            style = TextStyle(
+                                                fontSize = 18.sp,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -394,7 +421,7 @@ fun ProfileScreen(
 
 @Preview(
     showSystemUi = true,
-    showBackground = true
+    showBackground = true, locale = "ru"
 )
 @Composable
 fun MyPreview() {

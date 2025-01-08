@@ -1,6 +1,7 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.groups
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.presentation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
@@ -45,8 +48,8 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @Composable
 fun GroupItem(
-    title: String,
-    members: Int
+    navController: NavController? = null,
+    title: String
 ) {
     var expanded by remember { mutableStateOf(false) }
     
@@ -58,14 +61,21 @@ fun GroupItem(
                 shape = RoundedCornerShape(12.dp)
             )
             .background(color = White)
-            .padding(
-                horizontal = 20.dp,
-                vertical = 17.dp
-            ),
+//            .padding(
+//                horizontal = 20.dp,
+//                vertical = 17.dp
+//            )
+            .clickable { navController?.navigate(Routes.Products.route) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
+            modifier = Modifier
+                .padding(
+                    start = 20.dp,
+                    top = 17.dp,
+                    bottom = 20.dp
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
@@ -78,29 +88,22 @@ fun GroupItem(
                 tint = Color.LightGray
             )
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text(
-                    text = title,
-                    style = TextStyle(
-                        color = Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+            Text(
+                text = title,
+                style = TextStyle(
+                    color = Black,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
                 )
-
-                Text(
-                    text = "$members чел.",
-                    style = TextStyle(
-                        color = DarkGray,
-                        fontSize = 16.sp
-                    )
-                )
-            }
+            )
         }
 
-        Box {
+        Box(
+            modifier = Modifier
+                .padding(
+                    end = 20.dp
+                )
+        ) {
             IconButton(
                 modifier = Modifier
                     .height(30.dp)
@@ -150,7 +153,6 @@ fun GroupItem(
 @Composable
 fun GroupItemPreview() {
     GroupItem(
-        title = "test",
-        members = 1
+        title = "test"
     )
 }
