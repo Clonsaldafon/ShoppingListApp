@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import ru.clonsaldafon.shoppinglistapp.R
-import ru.clonsaldafon.shoppinglistapp.presentation.Routes
+import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange

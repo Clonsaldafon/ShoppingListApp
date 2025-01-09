@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthOutlinedTextField
@@ -51,7 +52,7 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 fun LogInScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController? = null,
-    //viewModel: LogInViewModel = hiltViewModel()
+    viewModel: LogInViewModel = hiltViewModel()
 ) {
     Scaffold(
         modifier = modifier,
@@ -105,21 +106,21 @@ fun LogInScreen(
                     verticalArrangement = Arrangement.spacedBy(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    AuthOutlinedTextField(
-                        value = "",
-                        onValueChange = {},
-                        label = stringResource(R.string.login),
-                        leadingIcon = Icons.Default.Person
-                    )
-
-                    AuthOutlinedTextField(
-                        value = "",
-                        onValueChange = {},
-                        label = stringResource(R.string.password),
-                        leadingIcon = Icons.Default.Lock,
-                        visualTransformation = PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-                    )
+//                    AuthOutlinedTextField(
+//                        value = "",
+//                        onEvent = {},
+//                        label = stringResource(R.string.login),
+//                        leadingIcon = Icons.Default.Person
+//                    )
+//
+//                    AuthOutlinedTextField(
+//                        value = "",
+//                        onEvent = {},
+//                        label = stringResource(R.string.password),
+//                        leadingIcon = Icons.Default.Lock,
+//                        visualTransformation = PasswordVisualTransformation(),
+//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+//                    )
 
                     Button(
                         modifier = Modifier

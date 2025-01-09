@@ -12,6 +12,6 @@ interface UserDAO {
     suspend fun upsertUser(user: UserEntity)
 
     @Query("SELECT accessToken, refreshToken FROM user")
-    suspend fun getUser(): TokenResponse
+    suspend fun getUser(): TokenResponse?
 
 }

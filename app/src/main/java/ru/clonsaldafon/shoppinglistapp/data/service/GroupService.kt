@@ -1,6 +1,7 @@
 package ru.clonsaldafon.shoppinglistapp.data.service
 
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -12,25 +13,25 @@ import ru.clonsaldafon.shoppinglistapp.data.model.group.GroupResponse
 
 interface GroupService {
 
-    @POST("/groups")
+    @POST("groups")
     suspend fun create(
         @Header("Authorization") token: String,
-        request: CreateGroupRequest
+        @Body request: CreateGroupRequest
     ): Response<CreateGroupResponse>
 
-    @POST("/groups/join")
+    @POST("groups/join")
     suspend fun join(
         @Header("Authorization") token: String,
-        request: JoinToGroupRequest
+        @Body request: JoinToGroupRequest
     ): Response<GroupResponse>
 
-    @DELETE("/groups/{group_id}")
+    @DELETE("groups/{group_id}")
     suspend fun delete(
         @Header("Authorization") token: String,
         @Path("group_id") groupId: Int
     ): Response<GroupResponse>
 
-    @DELETE("/groups/{group_id}/leave")
+    @DELETE("groups/{group_id}/leave")
     suspend fun leave(
         @Header("Authorization") token: String,
         @Path("group_id") groupId: Int

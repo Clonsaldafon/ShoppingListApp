@@ -1,6 +1,5 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.groups
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -40,11 +39,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -54,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
-import ru.clonsaldafon.shoppinglistapp.presentation.Routes
+import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
@@ -241,41 +237,41 @@ fun GroupsScreen(
                         shape = RoundedCornerShape(15.dp)
                     )
             ) {
-//                Column(
-//                    modifier = Modifier
-//                        .fillMaxSize(),
-//                    verticalArrangement = Arrangement.Center,
-//                    horizontalAlignment = Alignment.CenterHorizontally
-//                ) {
-//                    Text(
-//                        text = "Вы еще не\nсостоите в группе",
-//                        style = TextStyle(
-//                            color = Black,
-//                            fontSize = 24.sp,
-//                            textAlign = TextAlign.Center
-//                        )
-//                    )
-//                }
-
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentPadding = PaddingValues(
-                    vertical = 20.dp,
-                    horizontal = 40.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                val groups = listOf(
-                    "test", "test", "test", "test", "test", "test", "test", "test", "test"
-                )
-                items(groups) { group ->
-                    GroupItem(
-                        navController = navController,
-                        title = group
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Вы еще не\nсостоите в группе",
+                        style = TextStyle(
+                            color = Black,
+                            fontSize = 24.sp,
+                            textAlign = TextAlign.Center
+                        )
                     )
                 }
-            }
+
+//                LazyColumn(
+//                    modifier = Modifier
+//                        .fillMaxSize(),
+//                    contentPadding = PaddingValues(
+//                        vertical = 20.dp,
+//                        horizontal = 40.dp
+//                    ),
+//                    verticalArrangement = Arrangement.spacedBy(10.dp)
+//                ) {
+//                    val groups = listOf(
+//                        "test", "test", "test", "test", "test", "test", "test", "test", "test"
+//                    )
+//                    items(groups) { group ->
+//                        GroupItem(
+//                            navController = navController,
+//                            title = group
+//                        )
+//                    }
+//                }
             }
         }
     }

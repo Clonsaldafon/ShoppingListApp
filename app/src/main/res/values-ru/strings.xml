@@ -20,4 +20,6 @@
     <string name="quantity">Количество</string>
     <string name="category">Категория</string>
     <string name="product">Продукт</string>
+    <string name="male">Мужчина</string>
+    <string name="female">Женщина</string>
 </resources>

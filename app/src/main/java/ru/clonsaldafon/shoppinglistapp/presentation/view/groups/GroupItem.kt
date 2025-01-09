@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,9 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.clonsaldafon.shoppinglistapp.R
-import ru.clonsaldafon.shoppinglistapp.presentation.Routes
+import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
-import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White

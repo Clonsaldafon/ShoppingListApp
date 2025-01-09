@@ -16,10 +16,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,52 +27,63 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.presentation.view.signup.SignUpEvent
+import ru.clonsaldafon.shoppinglistapp.presentation.view.signup.SignUpUiState
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @Composable
 fun AuthOutlinedTextField(
     value: String,
-    onValueChange: (value: String) -> Unit,
+    uiState: SignUpUiState,
+    onEvent: (SignUpEvent) -> Unit,
     label: String,
     leadingIcon: ImageVector,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    maxLength: Int = 16
+    maxLength: Int = 30
 ) {
-    var isPasswordVisibilityOn by remember { mutableStateOf(false) }
-
     Column {
-//        Text(
-//            modifier = Modifier
-//                .padding(bottom = 15.dp),
-//            text = label,
-//            style = TextStyle(
-//                color = DarkGreen,
-//                fontSize = 16.sp,
-//                textAlign = TextAlign.End
-//            )
-//        )
-
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
                 .border(
                     width = 2.dp,
-                    color = DarkGray,
+                    color = Color.Transparent,
                     shape = RoundedCornerShape(15.dp)
                 ),
+            shape = RoundedCornerShape(15.dp),
             value = value,
-            onValueChange = { if (it.length <= maxLength) onValueChange(it) },
+            onValueChange = {
+                if (it.length <= maxLength)
+                    if (visualTransformation == VisualTransformation.None)
+                        onEvent(SignUpEvent.OnLoginChanged(it))
+                    else
+                        onEvent(SignUpEvent.OnPasswordChanged(it))
+            },
+            placeholder = {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = label,
+                    style = TextStyle(
+                        color = Color.LightGray,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Center
+                    )
+                )
+            },
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Color.Transparent,
-                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = DarkGray,
+                focusedBorderColor = DarkGray,
                 unfocusedContainerColor = Color.Transparent,
                 focusedContainerColor = Color.Transparent,
-                cursorColor = Orange
+                cursorColor = Orange,
+                errorBorderColor = Red
             ),
             textStyle = TextStyle(
                 color = Black,
@@ -109,7 +116,7 @@ fun AuthOutlinedTextField(
                 }
             },
             visualTransformation =
-                if (isPasswordVisibilityOn)
+                if (!uiState.isPasswordHidden)
                     VisualTransformation.None
                 else
                     visualTransformation,
@@ -121,12 +128,14 @@ fun AuthOutlinedTextField(
                             .width(50.dp)
                             .width(50.dp),
                         onClick = {
-                            isPasswordVisibilityOn = !isPasswordVisibilityOn
+                            onEvent(
+                                SignUpEvent.OnPasswordVisibilityChanged(!uiState.isPasswordHidden)
+                            )
                         }
                     ) {
                         Icon(
                             imageVector =
-                                if (isPasswordVisibilityOn)
+                                if (!uiState.isPasswordHidden)
                                     ImageVector.vectorResource(R.drawable.ic_visibility_on)
                                 else
                                     ImageVector.vectorResource(R.drawable.ic_visibility_off),
@@ -135,24 +144,48 @@ fun AuthOutlinedTextField(
                         )
                     }
                 }
-            }
+            },
+            isError =
+                if (visualTransformation == VisualTransformation.None)
+                    uiState.isLoginInvalid
+                else
+                    uiState.isPasswordInvalid,
+            singleLine = true
         )
 
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = 5.dp,
-                    end = 5.dp
-                ),
-            text =
-            if(value.length >= maxLength - 5) "${value.length} / $maxLength"
-            else "",
-            style = TextStyle(
-                color = Color.Gray,
-                fontSize = 14.sp,
-                textAlign = TextAlign.Right
+        if (uiState.loginErrorMessage.isNotEmpty() &&
+            visualTransformation == VisualTransformation.None) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 5.dp,
+                        end = 5.dp
+                    ),
+                text = uiState.loginErrorMessage,
+                style = TextStyle(
+                    color = Red,
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center
+                )
             )
-        )
+        } else {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 5.dp,
+                        end = 5.dp
+                    ),
+                text =
+                if(value.length >= maxLength - 5) "${value.length} / $maxLength"
+                else "",
+                style = TextStyle(
+                    color = Color.Gray,
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Right
+                )
+            )
+        }
     }
 }

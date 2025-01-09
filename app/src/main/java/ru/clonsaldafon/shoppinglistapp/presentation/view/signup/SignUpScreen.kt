@@ -22,11 +22,11 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,12 +54,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.data.model.user.SignUpRequest
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthOutlinedTextField
+import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Blue
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Pink
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,11 +72,9 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController? = null,
-    //viewModel: SignUpViewModel = hiltViewModel()
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
-//    val uiState by viewModel.uiState.observeAsState()
-//    val login by viewModel.login.observeAsState()
-//    val password by viewModel.password.observeAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         modifier = modifier,
@@ -120,78 +124,92 @@ fun SignUpScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    AuthOutlinedTextField(
-                        value = "",
-                        onValueChange = {},
-                        label = stringResource(R.string.login),
-                        leadingIcon = Icons.Default.Person
+                if (uiState.isSubmitting) {
+                    CircularProgressIndicator(
+                        color = Orange
                     )
+                } else {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AuthOutlinedTextField(
+                            value = uiState.login,
+                            uiState = uiState,
+                            onEvent = viewModel::onEvent,
+                            label = stringResource(R.string.login),
+                            leadingIcon = Icons.Default.Person
+                        )
 
-                    AuthOutlinedTextField(
-                        value = "",
-                        onValueChange = {},
-                        label = stringResource(R.string.password),
-                        leadingIcon = Icons.Default.Lock,
-                        visualTransformation = PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-                    )
+                        AuthOutlinedTextField(
+                            value = uiState.password,
+                            uiState = uiState,
+                            onEvent = viewModel::onEvent,
+                            label = stringResource(R.string.password),
+                            leadingIcon = Icons.Default.Lock,
+                            visualTransformation = PasswordVisualTransformation(),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                        )
 
-                    var expanded by remember { mutableStateOf(false) }
-                    val genders = listOf("Мужчина", "Женщина")
+                        var expanded by remember { mutableStateOf(false) }
+                        val genders = listOf(
+                            stringResource(R.string.male),
+                            stringResource(R.string.female)
+                        )
 
-                    Column {
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(60.dp)
-                                .border(
-                                    width = 2.dp,
-                                    color = DarkGray,
-                                    shape = RoundedCornerShape(15.dp)
-                                ),
-                            value = "",
-                            textStyle = TextStyle(
-                                color = Black,
-                                fontSize = 16.sp,
-                                textAlign = TextAlign.Center
-                            ),
-                            enabled = false,
-                            onValueChange = {},
-                            leadingIcon = {
-                                Column(
-                                    modifier = Modifier
-                                        .width(60.dp)
-                                        .height(60.dp)
-                                        .background(
-                                            color = DarkGray,
-                                            shape = RoundedCornerShape(
-                                                topStart = 15.dp,
-                                                bottomStart = 15.dp
-                                            )
-                                        ),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Icon(
-                                        modifier = Modifier
-                                            .width(30.dp)
-                                            .height(30.dp),
-                                        imageVector = ImageVector.vectorResource(
-                                            R.drawable.ic_gender
-                                        ),
-                                        tint = White,
-                                        contentDescription = null
+                        Column {
+                            OutlinedTextField(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(60.dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = DarkGray,
+                                        shape = RoundedCornerShape(15.dp)
                                     )
-                                }
-                            },
-                            trailingIcon = {
-                                IconButton(
-                                    onClick = { expanded = !expanded }
-                                ) {
+                                    .clickable { expanded = !expanded },
+                                shape = RoundedCornerShape(15.dp),
+                                value = if (uiState.gender != "") uiState.gender else genders[0],
+                                textStyle = TextStyle(
+                                    color = Black,
+                                    fontSize = 16.sp,
+                                    textAlign = TextAlign.Center
+                                ),
+                                enabled = false,
+                                onValueChange = {
+                                    viewModel.onEvent(SignUpEvent.OnGenderChanged(it))
+                                },
+                                leadingIcon = {
+                                    Column(
+                                        modifier = Modifier
+                                            .width(60.dp)
+                                            .height(60.dp)
+                                            .background(
+                                                color = DarkGray,
+                                                shape = RoundedCornerShape(
+                                                    topStart = 15.dp,
+                                                    bottomStart = 15.dp
+                                                )
+                                            ),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier
+                                                .width(30.dp)
+                                                .height(30.dp),
+                                            imageVector =
+                                            if (uiState.gender == ""
+                                                || uiState.gender == stringResource(R.string.male))
+                                                ImageVector.vectorResource(R.drawable.ic_male)
+                                            else
+                                                ImageVector.vectorResource(R.drawable.ic_female),
+                                            tint = White,
+                                            contentDescription = null
+                                        )
+                                    }
+                                },
+                                trailingIcon = {
                                     Icon(
                                         imageVector =
                                         if (expanded)
@@ -201,248 +219,178 @@ fun SignUpScreen(
                                         contentDescription = null,
                                         tint = DarkGray
                                     )
-                                }
-                            },
-                            colors = OutlinedTextFieldDefaults.colors(
-                                unfocusedBorderColor = Color.Transparent,
-                                focusedBorderColor = Color.Transparent,
-                                unfocusedContainerColor = Color.Transparent,
-                                focusedContainerColor = Color.Transparent,
-                                disabledBorderColor = Color.Transparent
-                            )
-                        )
-
-                        DropdownMenu(
-                            modifier = Modifier
-                                .background(color = White),
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }
-                        ) {
-                            genders.forEach { gender ->
-                                DropdownMenuItem(
-                                    onClick = { expanded = false },
-                                    text = {
-                                        Text(
-                                            text = gender,
-                                            style = TextStyle(
-                                                color = DarkGray,
-                                                fontSize = 14.sp
-                                            )
-                                        )
-                                    }
+                                },
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    unfocusedBorderColor = Color.Transparent,
+                                    focusedBorderColor = Color.Transparent,
+                                    unfocusedContainerColor = Color.Transparent,
+                                    focusedContainerColor = Color.Transparent,
+                                    disabledBorderColor = Color.Transparent
                                 )
+                            )
+
+                            DropdownMenu(
+                                modifier = Modifier
+                                    .background(
+                                        color = White
+                                    ),
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false }
+                            ) {
+                                genders.forEach { gender ->
+                                    DropdownMenuItem(
+                                        onClick = {
+                                            expanded = false
+                                            viewModel.onEvent(SignUpEvent.OnGenderChanged(gender))
+                                        },
+                                        text = {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                            ) {
+                                                val imageVector =
+                                                    if (gender == stringResource(R.string.male))
+                                                        ImageVector.vectorResource(R.drawable.ic_male)
+                                                    else
+                                                        ImageVector.vectorResource(R.drawable.ic_female)
+                                                val tint =
+                                                    if (gender == stringResource(R.string.male))
+                                                        Blue
+                                                    else
+                                                        Pink
+
+                                                Icon(
+                                                    imageVector = imageVector,
+                                                    contentDescription = null,
+                                                    tint = tint
+                                                )
+
+                                                Text(
+                                                    text = gender,
+                                                    style = TextStyle(
+                                                        color = DarkGray,
+                                                        fontSize = 14.sp
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    )
+                                }
                             }
+
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        top = 5.dp,
+                                        end = 5.dp
+                                    ),
+                                text = "",
+                                style = TextStyle(
+                                    color = Color.Gray,
+                                    fontSize = 14.sp,
+                                    textAlign = TextAlign.Right
+                                )
+                            )
                         }
 
-                        Text(
+                        Button(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(
-                                    top = 5.dp,
-                                    end = 5.dp
+                                .height(60.dp)
+                                .border(
+                                    width = 2.dp,
+                                    color = Orange,
+                                    shape = RoundedCornerShape(15.dp)
+                                )
+                                .shadow(
+                                    elevation =
+                                    if(uiState.isValid) 15.dp
+                                    else 0.dp,
+                                    shape = RoundedCornerShape(15.dp)
                                 ),
-                            text = "",
-                            style = TextStyle(
-                                color = Color.Gray,
-                                fontSize = 14.sp,
-                                textAlign = TextAlign.Right
-                            )
-                        )
-                    }
+                            shape = RoundedCornerShape(15.dp),
+                            onClick = {
+                                viewModel.onEvent(
+                                    SignUpEvent.OnSubmit(
+                                        username = uiState.login,
+                                        password = uiState.password,
+                                        gender = uiState.gender
+                                    ) { tokenResponse, loginErrorMessage ->
+                                        if (tokenResponse != null)
+                                            navController?.navigate(Routes.Groups.route)
 
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp)
-                            .border(
-                                width = 2.dp,
-                                color = Orange,
-                                shape = RoundedCornerShape(12.dp)
+                                        if (!loginErrorMessage.isNullOrEmpty())
+                                            viewModel.setLoginErrorMessage(loginErrorMessage)
+                                    }
+                                )
+                            },
+                            enabled = uiState.isValid,
+                            colors = ButtonDefaults.buttonColors(
+                                disabledContainerColor = White,
+                                disabledContentColor = DarkGray,
+                                containerColor = Orange,
+                                contentColor = White
                             )
-                            .shadow(
-                                elevation = 15.dp,
-//                            if(!login.isNullOrEmpty() && !password.isNullOrEmpty()) 4.dp
-//                            else 0.dp,
-                                shape = RoundedCornerShape(12.dp)
-                            ),
-                        shape = RoundedCornerShape(12.dp),
-                        onClick = { },
-                        enabled = true,
-                        colors = ButtonDefaults.buttonColors(
-                            disabledContainerColor = White,
-                            disabledContentColor = Black,
-                            containerColor = Orange,
-                            contentColor = White
-                        )
-                    ) {
-                        Row {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(15.dp)
-                            ) {
-                                Text(
-                                    text = "Создать аккаунт".uppercase(),
-                                    style = TextStyle(
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        textAlign = TextAlign.Center
+                        ) {
+                            Row {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(15.dp)
+                                ) {
+                                    Text(
+                                        text = "Создать аккаунт".uppercase(),
+                                        style = TextStyle(
+                                            fontSize = 18.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            textAlign = TextAlign.Center
+                                        )
                                     )
-                                )
 
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                    contentDescription = null,
-                                    tint = White
-                                )
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                        contentDescription = null,
+                                        tint = if (uiState.isValid) White else DarkGray
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Text(
-                            text = "Уже есть аккаунт?",
-                            style = TextStyle(
-                                color = Black,
-                                fontSize = 14.sp
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Text(
+                                text = "Уже есть аккаунт?",
+                                style = TextStyle(
+                                    color = Black,
+                                    fontSize = 14.sp
+                                )
                             )
-                        )
 
-                        Text(
-                            modifier = Modifier
-                                .clickable {  }
-                                .padding(2.dp),
-                            text = "Войти",
-                            style = TextStyle(
-                                color = Orange,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold
+                            Text(
+                                modifier = Modifier
+                                    .clickable { navController?.navigate(Routes.LogIn.route) }
+                                    .padding(2.dp),
+                                text = "Войти",
+                                style = TextStyle(
+                                    color = Orange,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
         }
-
-//    Column(
-//        modifier = modifier
-//            .fillMaxSize()
-//            .background(color = Green)
-//    ) {
-//        AuthTitle(text = stringResource(R.string.registration))
-//
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .shadow(
-//                    elevation = 30.dp,
-//                    shape = RoundedCornerShape(
-//                        topStart = 30.dp,
-//                        topEnd = 30.dp
-//                    )
-//                )
-//                .background(
-//                    color = White,
-//                    shape = RoundedCornerShape(
-//                        topStart = 30.dp,
-//                        topEnd = 30.dp
-//                    )
-//                )
-//                .padding(horizontal = 80.dp),
-//            verticalArrangement = Arrangement.Center
-//        ) {
-//            Column(
-//                verticalArrangement = Arrangement.spacedBy(40.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                when (uiState) {
-//                    is UiState.Success -> { navController?.navigate(Routes.Groups.route) }
-//                    is UiState.Failure -> {}
-//                    is UiState.Loading -> { LoadingProgressBar(modifier = modifier) }
-//                    else -> {}
-//                }
-//
-//                Column(
-//                    verticalArrangement = Arrangement.spacedBy(10.dp)
-//                ) {
-//                    AuthOutlinedTextField(
-//                        value = requireNotNull(login),
-//                        onValueChange = viewModel::onLoginChanged,
-//                        label = stringResource(R.string.login),
-//                        leadingIcon = Icons.Default.Person
-//                    )
-//
-//                    AuthOutlinedTextField(
-//                        value = requireNotNull(password),
-//                        onValueChange = viewModel::onPasswordChanged,
-//                        label = stringResource(R.string.password),
-//                        leadingIcon = Icons.Default.Lock,
-//                        visualTransformation = PasswordVisualTransformation(),
-//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-//                    )
-//                }
-//
-//                Button(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(50.dp)
-//                        .border(
-//                            width = 2.dp,
-//                            color = DarkOrange,
-//                            shape = RoundedCornerShape(12.dp)
-//                        )
-//                        .shadow(
-//                            elevation =
-//                            if(!login.isNullOrEmpty() && !password.isNullOrEmpty()) 4.dp
-//                            else 0.dp,
-//                            shape = RoundedCornerShape(12.dp)
-//                        ),
-//                    shape = RoundedCornerShape(12.dp),
-//                    onClick = { viewModel.signup() },
-//                    enabled = !login.isNullOrEmpty() && !password.isNullOrEmpty(),
-//                    colors = ButtonDefaults.buttonColors(
-//                        disabledContainerColor = White,
-//                        disabledContentColor = DarkGreen,
-//                        containerColor = DarkOrange,
-//                        contentColor = White
-//                    )
-//                ) {
-//                    Text(
-//                        text = stringResource(R.string.continue_text).uppercase(),
-//                        style = TextStyle(
-//                            fontSize = 20.sp,
-//                            fontWeight = FontWeight.Bold,
-//                            textAlign = TextAlign.Center
-//                        )
-//                    )
-//                }
-//            }
-//
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(top = 80.dp),
-//                verticalArrangement = Arrangement.Bottom,
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Image(
-//                    modifier = Modifier
-//                        .width(225.dp)
-//                        .height(85.dp),
-//                    bitmap = ImageBitmap.imageResource(R.drawable.auth_pencil),
-//                    contentDescription = null
-//                )
-//            }
-//        }
-//    }
     }
 }
 
 @Preview(
     showBackground = true,
-    showSystemUi = true, locale = "ru"
+    showSystemUi = true,
+    locale = "ru"
 )
 @Composable
 fun SignUpPreview() {
