@@ -2,6 +2,7 @@ package ru.clonsaldafon.shoppinglistapp.presentation.view.groups
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -143,11 +145,16 @@ fun GroupsScreen(
                         .height(60.dp)
                         .shadow(
                             elevation = 4.dp,
-                            shape = RoundedCornerShape(60.dp)
+                            shape = CircleShape
                         )
                         .background(
                             color = Orange,
-                            shape = RoundedCornerShape(60.dp)
+                            shape = CircleShape
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = DarkGray,
+                            shape = CircleShape
                         ),
                     onClick = { expanded = true }
                 ) {
@@ -157,7 +164,7 @@ fun GroupsScreen(
                             .height(35.dp),
                         imageVector = Icons.Rounded.Add,
                         contentDescription = null,
-                        tint = White
+                        tint = DarkGray
                     )
                 }
 
@@ -182,7 +189,10 @@ fun GroupsScreen(
                                 contentDescription = null
                             )
                         },
-                        onClick = { expanded = false },
+                        onClick = {
+                            expanded = false
+                            navController?.navigate(Routes.CreateGroup.route)
+                        },
                         colors = MenuDefaults.itemColors(
                             textColor = Black,
                             trailingIconColor = Black
@@ -202,7 +212,10 @@ fun GroupsScreen(
                                 contentDescription = null
                             )
                         },
-                        onClick = { expanded = false },
+                        onClick = {
+                            expanded = false
+                            navController?.navigate(Routes.JoinToGroup.route)
+                        },
                         colors = MenuDefaults.itemColors(
                             textColor = Black,
                             trailingIconColor = Black

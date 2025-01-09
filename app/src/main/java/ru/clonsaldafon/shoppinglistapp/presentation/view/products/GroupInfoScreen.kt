@@ -1,17 +1,26 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.products
 
+import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -19,7 +28,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,7 +41,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Blue
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
+import ru.clonsaldafon.shoppinglistapp.ui.theme.LightOrange
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Pink
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,7 +93,7 @@ fun GroupInfoScreen(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        text = "Инфо о группе",
+                        text = "my-group",
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -81,11 +102,20 @@ fun GroupInfoScreen(
                     )
                 },
                 actions = {
-                    Column(
+                    IconButton(
                         modifier = Modifier
                             .width(35.dp)
-                            .height(35.dp)
-                    ) {}
+                            .height(35.dp),
+                        onClick = {}
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = null,
+                            tint = DarkGray
+                        )
+                    }
                 }
             )
         }
@@ -105,7 +135,119 @@ fun GroupInfoScreen(
                     ),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_description),
+                        contentDescription = null,
+                        tint = DarkGray
+                    )
 
+                    Text(
+                        text = "Lorem ipsum odor amet, consectetuer adipiscing elit. " +
+                                "Tempor cursus auctor efficitur mollis, conubia sollicitudin " +
+                                "himenaeos libero. Nam ante dictumst tempus malesuada ligula " +
+                                "natoque felis fusce. Luctus curabitur ridiculus ligula habitant " +
+                                "litora. Torquent pulvinar nascetur convallis lacus diam erat a."
+                    )
+                }
+
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(
+                            horizontal = 20.dp
+                        )
+                )
+
+                val groupMembers = listOf(
+                    "login-1",
+                    "login-2",
+                    "login-3",
+                    "login-4"
+                )
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    items(groupMembers) { login ->
+                        GroupMember(
+                            login = login,
+                            gender = "Мужчина",
+                            role = "member"
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun GroupMember(
+    login: String,
+    gender: String,
+    role: String
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .shadow(
+                    elevation = 5.dp,
+                    shape = RoundedCornerShape(15.dp)
+                )
+                .background(
+                    color = White,
+                    shape = RoundedCornerShape(15.dp)
+                )
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_profile),
+                contentDescription = null,
+                tint = DarkGray
+            )
+
+            Text(
+                text = login,
+                style = TextStyle(
+                    color = DarkGray,
+                    fontSize = 20.sp
+                )
+            )
+
+            if (gender == "Мужчина") {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_male),
+                    contentDescription = null,
+                    tint = Blue
+                )
+            } else {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_female),
+                    contentDescription = null,
+                    tint = Pink
+                )
+            }
+        }
+
+        if (role == "admin") {
+            IconButton(
+                onClick = {}
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = null,
+                    tint = Red
+                )
             }
         }
     }
@@ -113,7 +255,8 @@ fun GroupInfoScreen(
 
 @Preview(
     showBackground = true,
-    showSystemUi = true
+    showSystemUi = true,
+    locale = "ru"
 )
 @Composable
 fun GroupInfoPreview() {
