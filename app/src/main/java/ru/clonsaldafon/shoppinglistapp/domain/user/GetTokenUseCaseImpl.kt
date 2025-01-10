@@ -1,4 +1,4 @@
-package ru.clonsaldafon.shoppinglistapp.domain
+package ru.clonsaldafon.shoppinglistapp.domain.user
 
 import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 import ru.clonsaldafon.shoppinglistapp.data.repository.UserRepository
@@ -8,8 +8,7 @@ class GetTokenUseCaseImpl @Inject constructor(
     private val repository: UserRepository
 ) : GetTokenUseCase {
 
-    override suspend fun invoke(): Result<TokenResponse?> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun invoke(): Result<TokenResponse?> =
+        repository.refresh()
 
 }

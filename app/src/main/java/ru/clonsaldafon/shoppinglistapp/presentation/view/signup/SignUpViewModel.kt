@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.clonsaldafon.shoppinglistapp.data.model.user.SignUpRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
-import ru.clonsaldafon.shoppinglistapp.domain.SignUpUseCase
+import ru.clonsaldafon.shoppinglistapp.domain.user.SignUpUseCase
 import ru.clonsaldafon.shoppinglistapp.presentation.UiState
 import ru.clonsaldafon.shoppinglistapp.presentation.toUiState
 import javax.inject.Inject

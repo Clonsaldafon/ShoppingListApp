@@ -47,7 +47,10 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 @Composable
 fun GroupItem(
     navController: NavController? = null,
-    title: String
+    groupId: String,
+    groupName: String,
+    groupDescription: String,
+    code: String
 ) {
     var expanded by remember { mutableStateOf(false) }
     
@@ -59,11 +62,11 @@ fun GroupItem(
                 shape = RoundedCornerShape(12.dp)
             )
             .background(color = White)
-//            .padding(
-//                horizontal = 20.dp,
-//                vertical = 17.dp
-//            )
-            .clickable { navController?.navigate(Routes.Products.route) },
+            .clickable {
+                navController?.navigate(
+                    Routes.Products.createRoute(groupId, groupName, groupDescription, code)
+                )
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -87,7 +90,7 @@ fun GroupItem(
             )
 
             Text(
-                text = title,
+                text = groupName,
                 style = TextStyle(
                     color = Black,
                     fontSize = 20.sp,
@@ -151,6 +154,9 @@ fun GroupItem(
 @Composable
 fun GroupItemPreview() {
     GroupItem(
-        title = "test"
+        groupId = "0",
+        groupName = "test",
+        groupDescription = "test",
+        code = "test"
     )
 }

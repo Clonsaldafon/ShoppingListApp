@@ -1,4 +1,4 @@
-package ru.clonsaldafon.shoppinglistapp.domain
+package ru.clonsaldafon.shoppinglistapp.domain.user
 
 import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 

@@ -42,9 +42,10 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 fun ProductItem(
     title: String,
     count: Int,
-    bought: Boolean = false,
     price: Double = 0.0,
-    infoVisibility: Boolean = false
+    infoVisibility: Boolean = false,
+    addedBy: String,
+    boughtBy: String? = null
 ) {
     val isInfoHidden = remember { mutableStateOf(!infoVisibility) }
 
@@ -56,7 +57,7 @@ fun ProductItem(
                 shape = RoundedCornerShape(12.dp)
             )
             .background(
-                color = if (bought) White else LightOrange,
+                color = if (!boughtBy.isNullOrEmpty()) White else LightOrange,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(20.dp),
@@ -114,7 +115,7 @@ fun ProductItem(
                         )
                     )
 
-                    if (!bought) {
+                    if (boughtBy.isNullOrEmpty()) {
                         IconButton(
                             modifier = Modifier
                                 .width(16.dp)
@@ -135,7 +136,7 @@ fun ProductItem(
                 modifier = Modifier
                     .width(20.dp)
                     .height(20.dp),
-                checked = bought,
+                checked = !boughtBy.isNullOrEmpty(),
                 onCheckedChange = {},
                 colors = CheckboxDefaults.colors(
                     checkedColor = DarkGray
@@ -170,7 +171,7 @@ fun ProductItem(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Антон",
+                                text = addedBy,
                                 style = TextStyle(
                                     color = Black,
                                     fontSize = 11.sp
@@ -187,7 +188,7 @@ fun ProductItem(
                         }
                     }
 
-                    if (bought) {
+                    if (!boughtBy.isNullOrEmpty()) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                             verticalAlignment = Alignment.CenterVertically
@@ -205,7 +206,7 @@ fun ProductItem(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = "Антон",
+                                    text = boughtBy,
                                     style = TextStyle(
                                         color = Black,
                                         fontSize = 11.sp
@@ -224,7 +225,7 @@ fun ProductItem(
                     }
                 }
 
-                if (bought) {
+                if (!boughtBy.isNullOrEmpty()) {
                     Text(
                         text = "$price ₽",
                         style = TextStyle(

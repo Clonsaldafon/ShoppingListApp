@@ -27,6 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.presentation.view.login.LogInEvent
+import ru.clonsaldafon.shoppinglistapp.presentation.view.login.LogInUiState
 import ru.clonsaldafon.shoppinglistapp.presentation.view.signup.SignUpEvent
 import ru.clonsaldafon.shoppinglistapp.presentation.view.signup.SignUpUiState
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
@@ -36,10 +38,10 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @Composable
-fun AuthOutlinedTextField(
+fun LogInOutlinedTextField(
     value: String,
-    uiState: SignUpUiState,
-    onEvent: (SignUpEvent) -> Unit,
+    uiState: LogInUiState,
+    onEvent: (LogInEvent) -> Unit,
     label: String,
     leadingIcon: ImageVector,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -61,9 +63,9 @@ fun AuthOutlinedTextField(
             onValueChange = {
                 if (it.length <= maxLength)
                     if (visualTransformation == VisualTransformation.None)
-                        onEvent(SignUpEvent.OnLoginChanged(it))
+                        onEvent(LogInEvent.OnLoginChanged(it))
                     else
-                        onEvent(SignUpEvent.OnPasswordChanged(it))
+                        onEvent(LogInEvent.OnPasswordChanged(it))
             },
             placeholder = {
                 Text(
@@ -116,10 +118,10 @@ fun AuthOutlinedTextField(
                 }
             },
             visualTransformation =
-                if (!uiState.isPasswordHidden)
-                    VisualTransformation.None
-                else
-                    visualTransformation,
+            if (!uiState.isPasswordHidden)
+                VisualTransformation.None
+            else
+                visualTransformation,
             keyboardOptions = keyboardOptions,
             trailingIcon = {
                 if (visualTransformation != VisualTransformation.None) {
@@ -129,16 +131,16 @@ fun AuthOutlinedTextField(
                             .width(50.dp),
                         onClick = {
                             onEvent(
-                                SignUpEvent.OnPasswordVisibilityChanged(!uiState.isPasswordHidden)
+                                LogInEvent.OnPasswordVisibilityChanged(!uiState.isPasswordHidden)
                             )
                         }
                     ) {
                         Icon(
                             imageVector =
-                                if (!uiState.isPasswordHidden)
-                                    ImageVector.vectorResource(R.drawable.ic_visibility_on)
-                                else
-                                    ImageVector.vectorResource(R.drawable.ic_visibility_off),
+                            if (!uiState.isPasswordHidden)
+                                ImageVector.vectorResource(R.drawable.ic_visibility_on)
+                            else
+                                ImageVector.vectorResource(R.drawable.ic_visibility_off),
                             contentDescription = null,
                             tint = DarkGray
                         )
@@ -177,9 +179,7 @@ fun AuthOutlinedTextField(
                         top = 5.dp,
                         end = 5.dp
                     ),
-                text =
-                if(value.length >= maxLength - 5) "${value.length} / $maxLength"
-                else "",
+                text = uiState.passwordErrorMessage,
                 style = TextStyle(
                     color = Color.Gray,
                     fontSize = 14.sp,

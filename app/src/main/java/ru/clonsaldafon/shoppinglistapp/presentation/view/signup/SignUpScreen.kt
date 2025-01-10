@@ -57,8 +57,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
-import ru.clonsaldafon.shoppinglistapp.data.model.user.SignUpRequest
-import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthOutlinedTextField
+import ru.clonsaldafon.shoppinglistapp.presentation.component.SignUpOutlinedTextField
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Blue
@@ -133,7 +132,7 @@ fun SignUpScreen(
                         verticalArrangement = Arrangement.spacedBy(20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        AuthOutlinedTextField(
+                        SignUpOutlinedTextField(
                             value = uiState.login,
                             uiState = uiState,
                             onEvent = viewModel::onEvent,
@@ -141,7 +140,7 @@ fun SignUpScreen(
                             leadingIcon = Icons.Default.Person
                         )
 
-                        AuthOutlinedTextField(
+                        SignUpOutlinedTextField(
                             value = uiState.password,
                             uiState = uiState,
                             onEvent = viewModel::onEvent,

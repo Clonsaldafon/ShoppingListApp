@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,9 +44,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
@@ -58,9 +63,19 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 @Composable
 fun ProductsScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController? = null
+    navController: NavHostController? = null,
+    viewModel: ProductsViewModel = hiltViewModel(),
+    groupId: String?,
+    groupName: String?,
+    groupDescription: String?,
+    code: String?
 ) {
     var expanded by remember { mutableStateOf(false) }
+
+    val uiState by viewModel.uiState.collectAsState()
+
+    viewModel.setGroupId(groupId ?: "0")
+    viewModel.loadProducts()
 
     Scaffold(
         topBar = {
@@ -95,7 +110,7 @@ fun ProductsScreen(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        text = "my-group",
+                        text = groupName ?: "",
                         style = Typography.titleLarge
                     )
                 },
@@ -137,7 +152,11 @@ fun ProductsScreen(
                                 },
                                 onClick = {
                                     expanded = false
-                                    navController?.navigate(Routes.GroupInfo.route)
+                                    navController?.navigate(
+                                        Routes.GroupInfo.createRoute(
+                                            groupId, groupName, groupDescription, code
+                                        )
+                                    )
                                 },
                                 colors = MenuDefaults.itemColors(
                                     textColor = Black,
@@ -212,28 +231,58 @@ fun ProductsScreen(
                 .padding(innerPadding)
         ) {
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .background(
                         color = White,
                         shape = RoundedCornerShape(15.dp)
-                    )
-                    .padding(
-                        vertical = 20.dp,
-                        horizontal = 40.dp
-                    )
+                    ),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                LazyColumn {
-                    item {
-                        DayList(
-                            date = "01.01.2025"
-                        )
-                    }
-
-                    item {
-                        DayList(
-                            date = "31.12.2024"
-                        )
+                if (uiState.isLoading) {
+                    CircularProgressIndicator(
+                        color = Orange
+                    )
+                } else {
+                    if (uiState.products.isNullOrEmpty()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Список пуст",
+                                style = TextStyle(
+                                    color = Black,
+                                    fontSize = 24.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                            )
+                        }
+                    } else {
+                        Column(
+                            modifier = modifier
+                                .fillMaxSize()
+                                .background(
+                                    color = White,
+                                    shape = RoundedCornerShape(15.dp)
+                                )
+                                .padding(
+                                    vertical = 20.dp,
+                                    horizontal = 40.dp
+                                )
+                        ) {
+                            LazyColumn {
+                                items(uiState.products ?: listOf()) {
+                                    DayList(
+                                        date = it.createdAt ?: "01.01.1970",
+                                        products = uiState.products ?: listOf()
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -248,5 +297,10 @@ fun ProductsScreen(
 )
 @Composable
 fun MyPreview() {
-    ProductsScreen()
+    ProductsScreen(
+        groupId = "1",
+        groupName = "my-group",
+        groupDescription = "test",
+        code = "test"
+    )
 }

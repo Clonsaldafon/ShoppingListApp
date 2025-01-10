@@ -1,5 +1,6 @@
 package ru.clonsaldafon.shoppinglistapp.data.repository
 
+import ru.clonsaldafon.shoppinglistapp.data.model.Group
 import ru.clonsaldafon.shoppinglistapp.data.model.user.LogInRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.user.RefreshTokenRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.user.SignUpRequest
@@ -11,6 +12,8 @@ interface UserRepository {
 
     suspend fun login(request: LogInRequest): Result<TokenResponse?>
 
-    suspend fun refresh(request: RefreshTokenRequest): Result<TokenResponse?>
+    suspend fun refresh(): Result<TokenResponse?>
+
+    suspend fun getGroups(): Result<List<Group>?>
 
 }

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -26,6 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -41,7 +44,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
-import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthOutlinedTextField
+import ru.clonsaldafon.shoppinglistapp.presentation.component.LogInOutlinedTextField
+import ru.clonsaldafon.shoppinglistapp.presentation.component.SignUpOutlinedTextField
+import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
@@ -54,6 +59,8 @@ fun LogInScreen(
     navController: NavHostController? = null,
     viewModel: LogInViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -102,206 +109,130 @@ fun LogInScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-//                    AuthOutlinedTextField(
-//                        value = "",
-//                        onEvent = {},
-//                        label = stringResource(R.string.login),
-//                        leadingIcon = Icons.Default.Person
-//                    )
-//
-//                    AuthOutlinedTextField(
-//                        value = "",
-//                        onEvent = {},
-//                        label = stringResource(R.string.password),
-//                        leadingIcon = Icons.Default.Lock,
-//                        visualTransformation = PasswordVisualTransformation(),
-//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-//                    )
-
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp)
-                            .border(
-                                width = 2.dp,
-                                color = Orange,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .shadow(
-                                elevation = 15.dp,
-//                            if(!login.isNullOrEmpty() && !password.isNullOrEmpty()) 4.dp
-//                            else 0.dp,
-                                shape = RoundedCornerShape(12.dp)
-                            ),
-                        shape = RoundedCornerShape(12.dp),
-                        onClick = { },
-                        enabled = true,
-                        colors = ButtonDefaults.buttonColors(
-                            disabledContainerColor = White,
-                            disabledContentColor = Black,
-                            containerColor = Orange,
-                            contentColor = White
-                        )
+                if (uiState.isSubmitting) {
+                    CircularProgressIndicator(
+                        color = Orange
+                    )
+                } else {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Row {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(15.dp)
-                            ) {
-                                Text(
-                                    text = "Войти".uppercase(),
-                                    style = TextStyle(
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        textAlign = TextAlign.Center
-                                    )
-                                )
+                        LogInOutlinedTextField(
+                            value = uiState.login,
+                            uiState = uiState,
+                            onEvent = viewModel::onEvent,
+                            label = stringResource(R.string.login),
+                            leadingIcon = Icons.Default.Person
+                        )
 
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                    contentDescription = null,
-                                    tint = White
+                        LogInOutlinedTextField(
+                            value = uiState.password,
+                            uiState = uiState,
+                            onEvent = viewModel::onEvent,
+                            label = stringResource(R.string.password),
+                            leadingIcon = Icons.Default.Lock,
+                            visualTransformation = PasswordVisualTransformation(),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                        )
+
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(60.dp)
+                                .border(
+                                    width = 2.dp,
+                                    color = Orange,
+                                    shape = RoundedCornerShape(15.dp)
                                 )
+                                .shadow(
+                                    elevation = if (uiState.isValid) 15.dp else 0.dp,
+                                    shape = RoundedCornerShape(15.dp)
+                                ),
+                            shape = RoundedCornerShape(15.dp),
+                            onClick = {
+                                viewModel.onEvent(
+                                    LogInEvent.OnSubmit(
+                                        username = uiState.login,
+                                        password = uiState.password
+                                    ) { tokenResponse, loginErrorMessage, passwordErrorMessage ->
+                                        if (tokenResponse != null)
+                                            navController?.navigate(Routes.Groups.route)
+
+                                        if (!loginErrorMessage.isNullOrEmpty())
+                                            viewModel.setLoginErrorMessage(loginErrorMessage)
+
+                                        if (!passwordErrorMessage.isNullOrEmpty())
+                                            viewModel.setPasswordErrorMessage(passwordErrorMessage)
+                                    }
+                                )
+                            },
+                            enabled = uiState.isValid,
+                            colors = ButtonDefaults.buttonColors(
+                                disabledContainerColor = White,
+                                disabledContentColor = DarkGray,
+                                containerColor = Orange,
+                                contentColor = White
+                            )
+                        ) {
+                            Row {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(15.dp)
+                                ) {
+                                    Text(
+                                        text = "Войти".uppercase(),
+                                        style = TextStyle(
+                                            fontSize = 18.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    )
+
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                        contentDescription = null,
+                                        tint = if (uiState.isValid) White else DarkGray
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Text(
-                            text = "Еще нет аккаунта?",
-                            style = TextStyle(
-                                color = Black,
-                                fontSize = 14.sp
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Text(
+                                text = "Еще нет аккаунта?",
+                                style = TextStyle(
+                                    color = Black,
+                                    fontSize = 14.sp
+                                )
                             )
-                        )
 
-                        Text(
-                            modifier = Modifier
-                                .clickable {  },
-                            text = "Зарегистрироваться",
-                            style = TextStyle(
-                                color = Orange,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold
+                            Text(
+                                modifier = Modifier
+                                    .clickable { navController?.navigate(Routes.SignUp.route) }
+                                    .padding(2.dp),
+                                text = "Зарегистрироваться",
+                                style = TextStyle(
+                                    color = Orange,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
         }
-
-//    val uiState by viewModel.uiState.observeAsState()
-//    val login by viewModel.login.observeAsState()
-//    val password by viewModel.password.observeAsState()
-//
-//    Column(
-//        modifier = modifier
-//            .fillMaxSize()
-//            .background(color = Green)
-//    ) {
-//        AuthTitle(text = stringResource(R.string.authorization))
-//
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .shadow(
-//                    elevation = 16.dp,
-//                    shape = RoundedCornerShape(
-//                        topStart = 30.dp,
-//                        topEnd = 30.dp
-//                    )
-//                )
-//                .background(
-//                    color = White,
-//                    shape = RoundedCornerShape(
-//                        topStart = 30.dp,
-//                        topEnd = 30.dp
-//                    )
-//                )
-//                .padding(horizontal = 80.dp),
-//            verticalArrangement = Arrangement.Center
-//        ) {
-//            Column(
-//                verticalArrangement = Arrangement.spacedBy(40.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                when (uiState) {
-//                    is UiState.Success -> { navController?.navigate(Routes.Groups.route) }
-//                    is UiState.Failure -> {}
-//                    is UiState.Loading -> { LoadingProgressBar(modifier = modifier) }
-//                    else -> {}
-//                }
-//
-//                Column(
-//                    verticalArrangement = Arrangement.spacedBy(10.dp)
-//                ) {
-//                    AuthOutlinedTextField(
-//                        value = requireNotNull(login),
-//                        onValueChange = viewModel::onLoginChanged,
-//                        label = stringResource(R.string.login),
-//                        leadingIcon = Icons.Default.Person
-//                    )
-//
-//                    AuthOutlinedTextField(
-//                        value = requireNotNull(password),
-//                        onValueChange = viewModel::onPasswordChanged,
-//                        label = stringResource(R.string.password),
-//                        leadingIcon = Icons.Default.Lock,
-//                        visualTransformation = PasswordVisualTransformation(),
-//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-//                    )
-//                }
-//
-//                Button(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(50.dp)
-//                        .border(
-//                            width = 2.dp,
-//                            color = DarkOrange,
-//                            shape = RoundedCornerShape(12.dp)
-//                        )
-//                        .shadow(
-//                            elevation =
-//                            if(!login.isNullOrEmpty() && !password.isNullOrEmpty()) 4.dp
-//                            else 0.dp,
-//                            shape = RoundedCornerShape(12.dp)
-//                        ),
-//                    shape = RoundedCornerShape(12.dp),
-//                    onClick = { viewModel.login() },
-//                    enabled = !login.isNullOrEmpty() && !password.isNullOrEmpty(),
-//                    colors = ButtonDefaults.buttonColors(
-//                        disabledContainerColor = White,
-//                        disabledContentColor = DarkGreen,
-//                        containerColor = DarkOrange,
-//                        contentColor = White
-//                    )
-//                ) {
-//                    Text(
-//                        text = stringResource(R.string.authorize).uppercase(),
-//                        style = TextStyle(
-//                            fontSize = 20.sp,
-//                            fontWeight = FontWeight.Bold,
-//                            textAlign = TextAlign.Center
-//                        )
-//                    )
-//                }
-//            }
-//        }
-//    }
     }
 }
 
 @Preview(
     showBackground = true,
-    showSystemUi = true, locale = "ru"
+    showSystemUi = true,
+    locale = "ru"
 )
 @Composable
 fun LogInPreview() {

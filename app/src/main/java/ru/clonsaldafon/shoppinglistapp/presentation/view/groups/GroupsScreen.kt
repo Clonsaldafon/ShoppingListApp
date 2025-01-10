@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
@@ -61,8 +64,11 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 @Composable
 fun GroupsScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController? = null
+    navController: NavHostController? = null,
+    viewModel: GroupsViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -235,43 +241,53 @@ fun GroupsScreen(
                     .background(
                         color = White,
                         shape = RoundedCornerShape(15.dp)
-                    )
+                    ),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Вы еще не\nсостоите в группе",
-                        style = TextStyle(
-                            color = Black,
-                            fontSize = 24.sp,
-                            textAlign = TextAlign.Center
-                        )
+                if (uiState.isLoading) {
+                    CircularProgressIndicator(
+                        color = Orange
                     )
+                } else {
+                    if (uiState.groups.isNullOrEmpty()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Вы еще не\nсостоите в группе",
+                                style = TextStyle(
+                                    color = Black,
+                                    fontSize = 24.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                            )
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentPadding = PaddingValues(
+                                vertical = 20.dp,
+                                horizontal = 40.dp
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            items(uiState.groups ?: listOf()) { group ->
+                                GroupItem(
+                                    navController = navController,
+                                    groupId = group.id.toString(),
+                                    groupName = group.name,
+                                    groupDescription = group.description,
+                                    code = group.code
+                                )
+                            }
+                        }
+                    }
                 }
-
-//                LazyColumn(
-//                    modifier = Modifier
-//                        .fillMaxSize(),
-//                    contentPadding = PaddingValues(
-//                        vertical = 20.dp,
-//                        horizontal = 40.dp
-//                    ),
-//                    verticalArrangement = Arrangement.spacedBy(10.dp)
-//                ) {
-//                    val groups = listOf(
-//                        "test", "test", "test", "test", "test", "test", "test", "test", "test"
-//                    )
-//                    items(groups) { group ->
-//                        GroupItem(
-//                            navController = navController,
-//                            title = group
-//                        )
-//                    }
-//                }
             }
         }
     }

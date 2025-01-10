@@ -4,6 +4,7 @@ import retrofit2.HttpException
 import ru.clonsaldafon.shoppinglistapp.data.db.UserDAO
 import ru.clonsaldafon.shoppinglistapp.data.db.UserEntity
 import ru.clonsaldafon.shoppinglistapp.data.model.ApiException
+import ru.clonsaldafon.shoppinglistapp.data.model.Group
 import ru.clonsaldafon.shoppinglistapp.data.model.user.LogInRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.user.RefreshTokenRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.user.SignUpRequest
@@ -55,7 +56,7 @@ class UserRepositoryImpl @Inject constructor(
 
                     Result.success(it.body())
                 } else {
-                    Result.failure(HttpException(it))
+                    Result.failure(ApiException(it.message(), it.code()))
                 }
             },
             onFailure = {
@@ -64,8 +65,52 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun refresh(request: RefreshTokenRequest): Result<TokenResponse?> {
-        TODO("Not yet implemented")
+    override suspend fun refresh(): Result<TokenResponse?> {
+        kotlin.runCatching {
+            val user = dao.getUser()
+            val token = user?.last()?.refreshToken
+            service.refresh(
+                RefreshTokenRequest(
+                    refreshToken = token ?: ""
+                )
+            )
+        }.fold(
+            onSuccess = {
+                return if (it.isSuccessful) {
+                    dao.upsertUser(
+                        UserEntity(
+                            accessToken = it.body()?.accessToken,
+                            refreshToken = it.body()?.refreshToken
+                        )
+                    )
+
+                    Result.success(it.body())
+                } else {
+                    Result.failure(ApiException(it.message(), it.code()))
+                }
+            },
+            onFailure = {
+                return Result.failure(it)
+            }
+        )
+    }
+
+    override suspend fun getGroups(): Result<List<Group>?> {
+        kotlin.runCatching {
+            val user = dao.getUser()
+            val token = user?.last()?.accessToken
+            service.getGroups("Bearer $token")
+        }.fold(
+            onSuccess = {
+                return if (it.isSuccessful)
+                    Result.success(it.body())
+                else
+                    Result.failure(ApiException(it.message(), it.code()))
+            },
+            onFailure = {
+                return Result.failure(it)
+            }
+        )
     }
 
 }

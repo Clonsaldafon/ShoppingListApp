@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -24,11 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.clonsaldafon.shoppinglistapp.data.model.Product
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 
 @Composable
 fun DayList(
-    date: String
+    date: String,
+    products: List<Product>
 ) {
     var expanded by remember { mutableStateOf(true) }
 
@@ -79,24 +83,15 @@ fun DayList(
                 ),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            ProductItem(
-                title = "Молоко питьевое",
-                count = 2,
-                infoVisibility = false
-            )
-
-            ProductItem(
-                title = "Курица",
-                count = 1
-            )
-
-            ProductItem(
-                title = "Мука",
-                count = 1,
-                bought = true,
-                price = 150.0,
-                infoVisibility = false
-            )
+            products.forEach { product ->
+                ProductItem(
+                    title = product.productName ?: "",
+                    count = product.quantity ?: 1,
+                    price = product.price ?: 0.0,
+                    addedBy = product.addedBy ?: "",
+                    boughtBy = product.boughtBy
+                )
+            }
         }
     }
 }

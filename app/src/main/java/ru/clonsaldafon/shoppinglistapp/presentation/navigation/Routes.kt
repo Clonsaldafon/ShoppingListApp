@@ -8,7 +8,25 @@ sealed class Routes(val route: String) {
     data object CreateGroup : Routes("create_group")
     data object JoinToGroup : Routes("join_to_group")
     data object Profile : Routes("profile")
-    data object Products : Routes("products")
+    data object Products : Routes(
+        "products/{group_id}/{group_name}/{group_description}/{code}"
+    ) {
+        fun createRoute(
+            groupId: String,
+            groupName: String,
+            groupDescription: String,
+            code: String
+        ) = "products/$groupId/$groupName/$groupDescription/$code"
+    }
     data object AddProduct : Routes("add_product")
-    data object GroupInfo : Routes("group_info")
+    data object GroupInfo : Routes(
+        "group_info/{group_id}/{group_name}/{group_description}/{code}"
+    ) {
+        fun createRoute(
+            groupId: String?,
+            groupName: String?,
+            groupDescription: String?,
+            code: String?
+        ) = "group_info/$groupId/$groupName/$groupDescription/$code"
+    }
 }

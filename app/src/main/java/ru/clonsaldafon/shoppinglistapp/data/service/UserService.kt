@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import ru.clonsaldafon.shoppinglistapp.data.model.Group
 import ru.clonsaldafon.shoppinglistapp.data.model.user.LogInRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.user.RefreshTokenRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.user.SignUpRequest
@@ -26,5 +27,10 @@ interface UserService {
     suspend fun who(
         @Header("Authorization") token: String
     ): Response<UserResponse>
+
+    @GET("users/groups")
+    suspend fun getGroups(
+        @Header("Authorization") token: String
+    ): Response<List<Group>>
 
 }
