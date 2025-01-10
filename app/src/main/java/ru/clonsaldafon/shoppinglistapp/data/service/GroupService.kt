@@ -61,4 +61,11 @@ interface GroupService {
         @Body request: AddProductRequest
     ): Response<ProductResponse?>
 
+    @DELETE("groups/{group_id}/products/{product_id}")
+    suspend fun deleteProduct(
+        @Header("Authorization") token: String,
+        @Path("group_id") groupId: String,
+        @Path("product_id") productId: String
+    ): Response<GroupResponse?>
+
 }

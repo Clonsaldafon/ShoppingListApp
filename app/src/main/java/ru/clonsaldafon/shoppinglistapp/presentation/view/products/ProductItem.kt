@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
@@ -29,6 +31,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.clonsaldafon.shoppinglistapp.R
@@ -36,16 +39,20 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.LightOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
+import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @Composable
 fun ProductItem(
+    groupId: String,
+    productId: String,
     title: String,
     count: Int,
     price: Double = 0.0,
     infoVisibility: Boolean = false,
     addedBy: String,
-    boughtBy: String? = null
+    boughtBy: String? = null,
+    onEvent: (ProductsEvent) -> Unit
 ) {
     val isInfoHidden = remember { mutableStateOf(!infoVisibility) }
 
@@ -132,16 +139,36 @@ fun ProductItem(
                 }
             }
 
-            Checkbox(
-                modifier = Modifier
-                    .width(20.dp)
-                    .height(20.dp),
-                checked = !boughtBy.isNullOrEmpty(),
-                onCheckedChange = {},
-                colors = CheckboxDefaults.colors(
-                    checkedColor = DarkGray
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                Checkbox(
+                    modifier = Modifier
+                        .width(20.dp)
+                        .height(20.dp),
+                    checked = !boughtBy.isNullOrEmpty(),
+                    onCheckedChange = {},
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = DarkGray
+                    )
                 )
-            )
+
+                IconButton(
+                    modifier = Modifier
+                        .width(28.dp)
+                        .height(28.dp),
+                    onClick = { onEvent(ProductsEvent.OnProductDeleted(groupId, productId)) }
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = null,
+                        tint = Red
+                    )
+                }
+            }
         }
 
         if (!isInfoHidden.value) {
@@ -239,3 +266,13 @@ fun ProductItem(
         }
     }
 }
+
+//@Preview
+//@Composable
+//fun ProductItemPreview() {
+//    ProductItem(
+//        title = "test",
+//        count = 5,
+//        addedBy = "test1",
+//    )
+//}

@@ -299,8 +299,10 @@ fun ProductsScreen(
 
                                     if (!dates.contains(formattedDate)) {
                                         DayList(
+                                            groupId = uiState.groupId,
                                             date = formattedDate,
-                                            products = uiState.products ?: listOf()
+                                            products = uiState.products ?: listOf(),
+                                            onEvent = viewModel::onEvent
                                         )
 
                                         dates.add(formattedDate)

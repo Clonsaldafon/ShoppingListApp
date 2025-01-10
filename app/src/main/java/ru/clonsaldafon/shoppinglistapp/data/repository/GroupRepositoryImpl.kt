@@ -119,4 +119,25 @@ class GroupRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun deleteProduct(
+        groupId: String,
+        productId: String
+    ): Result<GroupResponse?> {
+        kotlin.runCatching {
+            val user = dao.getUser()
+            val token = user?.last()?.accessToken
+            service.deleteProduct("Bearer $token", groupId, productId)
+        }.fold(
+            onSuccess = {
+                return if (it.isSuccessful)
+                    Result.success(it.body())
+                else
+                    Result.failure(ApiException(it.message(), it.code()))
+            },
+            onFailure = {
+                return Result.failure(it)
+            }
+        )
+    }
+
 }

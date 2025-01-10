@@ -25,4 +25,6 @@ interface GroupRepository {
 
     suspend fun addProduct(groupId: String, request: AddProductRequest): Result<ProductResponse?>
 
+    suspend fun deleteProduct(groupId: String, productId: String): Result<GroupResponse?>
+
 }

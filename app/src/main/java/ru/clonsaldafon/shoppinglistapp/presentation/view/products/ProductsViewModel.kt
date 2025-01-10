@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.clonsaldafon.shoppinglistapp.domain.group.GetProductsUseCase
+import ru.clonsaldafon.shoppinglistapp.domain.product.DeleteProductUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetTokenUseCase
 import ru.clonsaldafon.shoppinglistapp.presentation.UiState
 import ru.clonsaldafon.shoppinglistapp.presentation.toUiState
@@ -17,12 +18,20 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductsViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
+    private val deleteProductUseCase: DeleteProductUseCase,
     private val getTokenUseCase: GetTokenUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProductsUiState())
     val uiState: StateFlow<ProductsUiState>
         get() = _uiState
+
+    fun onEvent(event: ProductsEvent) {
+        when (event) {
+            is ProductsEvent.OnProductDeleted -> deleteProduct(event.groupId, event.productId)
+            is ProductsEvent.OnProductsLoaded -> {}
+        }
+    }
 
     fun setGroupId(groupId: String) {
         _uiState.update {
@@ -66,6 +75,38 @@ class ProductsViewModel @Inject constructor(
                         isLoading = false
                     )
                 }
+            }
+        }
+    }
+
+    private fun deleteProduct(groupId: String, productId: String) {
+        viewModelScope.launch {
+            try {
+                when (val response = deleteProductUseCase(groupId, productId).toUiState()) {
+                    is UiState.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                products = it.products?.filter { product ->
+                                    product.productId.toString() != productId
+                                }
+                            )
+                        }
+                    }
+                    is UiState.Failure -> {
+                        when (response.code) {
+                            401 -> {
+                                when (val refreshResponse = getTokenUseCase().toUiState()) {
+                                    is UiState.Success -> deleteProduct(groupId, productId)
+                                    is UiState.Failure -> {}
+                                    is UiState.Loading -> {}
+                                }
+                            }
+                        }
+                    }
+                    is UiState.Loading -> {}
+                }
+            } catch (e: Exception) {
+                Log.e("error", e.message!!)
             }
         }
     }

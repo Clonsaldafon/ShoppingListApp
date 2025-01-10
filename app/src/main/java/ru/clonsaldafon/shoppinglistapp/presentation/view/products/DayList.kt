@@ -27,12 +27,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.clonsaldafon.shoppinglistapp.data.model.Product
+import ru.clonsaldafon.shoppinglistapp.presentation.UiState
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 
 @Composable
 fun DayList(
+    groupId: String,
     date: String,
-    products: List<Product>
+    products: List<Product>,
+    onEvent: (ProductsEvent) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
 
@@ -85,11 +88,14 @@ fun DayList(
         ) {
             products.forEach { product ->
                 ProductItem(
+                    groupId = groupId,
+                    productId = product.productId.toString(),
                     title = product.productName ?: "",
                     count = product.quantity ?: 1,
                     price = product.price ?: 0.0,
                     addedBy = product.addedBy ?: "",
-                    boughtBy = product.boughtBy
+                    boughtBy = product.boughtBy,
+                    onEvent = onEvent
                 )
             }
         }
