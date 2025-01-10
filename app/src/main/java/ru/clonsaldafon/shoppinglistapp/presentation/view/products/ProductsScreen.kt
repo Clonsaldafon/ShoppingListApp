@@ -118,7 +118,7 @@ fun ProductsScreen(
                             modifier = Modifier
                                 .fillMaxSize(),
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.back),
                             tint = White
                         )
                     }
@@ -143,7 +143,7 @@ fun ProductsScreen(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 imageVector = Icons.Default.MoreVert,
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.menu),
                                 tint = White
                             )
                         }
@@ -164,7 +164,7 @@ fun ProductsScreen(
                                 trailingIcon = {
                                     Icon(
                                         imageVector = Icons.Outlined.Info,
-                                        contentDescription = null
+                                        contentDescription = stringResource(R.string.info)
                                     )
                                 },
                                 onClick = {
@@ -191,7 +191,7 @@ fun ProductsScreen(
                                 trailingIcon = {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Default.ExitToApp,
-                                        contentDescription = null
+                                        contentDescription = stringResource(R.string.exit)
                                     )
                                 },
                                 onClick = { expanded = false },
@@ -231,11 +231,11 @@ fun ProductsScreen(
                     Icon(
                         modifier = Modifier,
                         imageVector = Icons.Rounded.Add,
-                        contentDescription = null
+                        contentDescription = stringResource(R.string.add)
                     )
 
                     Text(
-                        text = "Добавить",
+                        text = stringResource(R.string.add),
                         style = TextStyle(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
@@ -285,7 +285,7 @@ fun ProductsScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    text = "Список пуст",
+                                    text = stringResource(R.string.empty_list),
                                     style = TextStyle(
                                         color = Black,
                                         fontSize = 24.sp,
@@ -359,14 +359,14 @@ fun ProductsScreen(
                                             modifier = Modifier
                                                 .fillMaxSize(),
                                             imageVector = Icons.Rounded.Close,
-                                            contentDescription = null,
+                                            contentDescription = stringResource(R.string.close),
                                             tint = Red
                                         )
                                     }
                                 }
 
                                 Text(
-                                    text = "Сколько вы потратили на покупку?",
+                                    text = stringResource(R.string.how_much_spend),
                                     style = TextStyle(
                                         color = DarkGray,
                                         fontSize = 14.sp,
@@ -397,7 +397,7 @@ fun ProductsScreen(
                                         },
                                         label = {
                                             Text(
-                                                text = "Цена",
+                                                text = stringResource(R.string.price),
                                                 style = TextStyle(
                                                     color = DarkGray,
                                                     fontSize = 14.sp
@@ -453,7 +453,7 @@ fun ProductsScreen(
                                     enabled = uiState.isValid
                                 ) {
                                     Text(
-                                        text = "Сохранить",
+                                        text = stringResource(R.string.save),
                                         style = TextStyle(
                                             fontSize = 18.sp,
                                             fontWeight = FontWeight.Bold

@@ -132,7 +132,7 @@ fun ProductItem(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.edit),
                                 tint = Orange
                             )
                         }
@@ -171,7 +171,7 @@ fun ProductItem(
                         modifier = Modifier
                             .fillMaxSize(),
                         imageVector = Icons.Outlined.Delete,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.delete),
                         tint = Red
                     )
                 }
@@ -217,7 +217,7 @@ fun ProductItem(
                                     .width(20.dp)
                                     .height(20.dp),
                                 imageVector = Icons.Default.Person,
-                                contentDescription = null
+                                contentDescription = stringResource(R.string.user)
                             )
                         }
                     }
@@ -252,7 +252,7 @@ fun ProductItem(
                                         .width(20.dp)
                                         .height(20.dp),
                                     imageVector = Icons.Default.Person,
-                                    contentDescription = null
+                                    contentDescription = stringResource(R.string.user)
                                 )
                             }
                         }
@@ -273,13 +273,3 @@ fun ProductItem(
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun ProductItemPreview() {
-//    ProductItem(
-//        title = "test",
-//        count = 5,
-//        addedBy = "test1",
-//    )
-//}

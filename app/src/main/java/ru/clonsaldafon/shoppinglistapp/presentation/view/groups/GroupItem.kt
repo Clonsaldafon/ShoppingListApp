@@ -85,7 +85,7 @@ fun GroupItem(
                     .width(50.dp)
                     .height(50.dp),
                 imageVector = Icons.Sharp.ShoppingCart,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.shopping_cart),
                 tint = Color.LightGray
             )
 
@@ -115,7 +115,7 @@ fun GroupItem(
                     modifier = Modifier
                         .fillMaxSize(),
                     imageVector = Icons.Default.MoreVert,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.menu),
                     tint = Orange
                 )
             }
@@ -136,7 +136,7 @@ fun GroupItem(
                     trailingIcon = {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ExitToApp,
-                            contentDescription = null
+                            contentDescription = stringResource(R.string.exit)
                         )
                     },
                     onClick = { expanded = false },

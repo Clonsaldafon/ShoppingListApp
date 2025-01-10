@@ -80,7 +80,7 @@ fun AddProductScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Добавление продукта",
+                    text = stringResource(R.string.product_adding),
                     style = TextStyle(
                         color = DarkGray,
                         fontSize = 28.sp,
@@ -131,12 +131,12 @@ fun AddProductScreen(
                                         imageVector =ImageVector.vectorResource(
                                             R.drawable.ic_count
                                         ),
-                                        contentDescription = null,
+                                        contentDescription = stringResource(R.string.quantity),
                                         tint = DarkGray
                                     )
 
                                     Text(
-                                        text = "Количество",
+                                        text = stringResource(R.string.quantity),
                                         style = TextStyle(
                                             color = DarkGray,
                                             fontSize = 14.sp
@@ -211,7 +211,7 @@ fun AddProductScreen(
                         shape = RoundedCornerShape(15.dp)
                     ) {
                         Text(
-                            text = "Отменить",
+                            text = stringResource(R.string.cancel),
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold

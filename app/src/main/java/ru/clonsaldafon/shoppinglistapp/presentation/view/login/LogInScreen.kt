@@ -77,7 +77,7 @@ fun LogInScreen(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        text = "Вход в аккаунт",
+                        text = stringResource(R.string.authorization),
                         style = TextStyle(
                             fontSize = 40.sp,
                             fontWeight = FontWeight.Bold,
@@ -181,7 +181,7 @@ fun LogInScreen(
                                     horizontalArrangement = Arrangement.spacedBy(15.dp)
                                 ) {
                                     Text(
-                                        text = "Войти".uppercase(),
+                                        text = stringResource(R.string.authorize).uppercase(),
                                         style = TextStyle(
                                             fontSize = 18.sp,
                                             fontWeight = FontWeight.Bold,
@@ -203,7 +203,7 @@ fun LogInScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Еще нет аккаунта?",
+                                text = stringResource(R.string.no_account),
                                 style = TextStyle(
                                     color = Black,
                                     fontSize = 14.sp
@@ -214,7 +214,7 @@ fun LogInScreen(
                                 modifier = Modifier
                                     .clickable { navController?.navigate(Routes.SignUp.route) }
                                     .padding(2.dp),
-                                text = "Зарегистрироваться",
+                                text = stringResource(R.string.register),
                                 style = TextStyle(
                                     color = Orange,
                                     fontSize = 14.sp,

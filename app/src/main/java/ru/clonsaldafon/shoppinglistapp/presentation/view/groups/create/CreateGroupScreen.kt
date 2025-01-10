@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -72,7 +73,7 @@ fun CreateGroupScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Создание группы",
+                    text = stringResource(R.string.group_creation),
                     style = TextStyle(
                         color = DarkGray,
                         fontSize = 32.sp,
@@ -114,12 +115,12 @@ fun CreateGroupScreen(
                                         imageVector = ImageVector.vectorResource(
                                             R.drawable.ic_bookmark
                                         ),
-                                        contentDescription = null,
+                                        contentDescription = stringResource(R.string.name),
                                         tint = DarkGray
                                     )
 
                                     Text(
-                                        text = "Название",
+                                        text = stringResource(R.string.name),
                                         style = TextStyle(
                                             color = DarkGray,
                                             fontSize = 14.sp
@@ -212,12 +213,12 @@ fun CreateGroupScreen(
                                         imageVector = ImageVector.vectorResource(
                                             R.drawable.ic_description
                                         ),
-                                        contentDescription = null,
+                                        contentDescription = stringResource(R.string.description),
                                         tint = DarkGray
                                     )
 
                                     Text(
-                                        text = "Описание",
+                                        text = stringResource(R.string.description),
                                         style = TextStyle(
                                             color = DarkGray,
                                             fontSize = 14.sp
@@ -307,7 +308,7 @@ fun CreateGroupScreen(
                         shape = RoundedCornerShape(15.dp)
                     ) {
                         Text(
-                            text = "Отменить",
+                            text = stringResource(R.string.cancel),
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
@@ -359,7 +360,7 @@ fun CreateGroupScreen(
                         enabled = uiState.isValid
                     ) {
                         Text(
-                            text = "Создать",
+                            text = stringResource(R.string.create),
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold

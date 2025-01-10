@@ -115,7 +115,7 @@ fun ProfileScreen(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 imageVector = Icons.Default.MoreVert,
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.menu),
                                 tint = White
                             )
                         }
@@ -136,7 +136,7 @@ fun ProfileScreen(
                                 trailingIcon = {
                                     Icon(
                                         imageVector = Icons.Default.Edit,
-                                        contentDescription = null
+                                        contentDescription = stringResource(R.string.edit)
                                     )
                                 },
                                 onClick = {
@@ -152,14 +152,14 @@ fun ProfileScreen(
                             DropdownMenuItem(
                                 text = {
                                     Text(
-                                        text = "Выйти",
+                                        text = stringResource(R.string.exit),
                                         style = TextStyle(fontSize = 16.sp)
                                     )
                                 },
                                 trailingIcon = {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Default.ExitToApp,
-                                        contentDescription = null
+                                        contentDescription = stringResource(R.string.exit)
                                     )
                                 },
                                 onClick = {},
@@ -270,7 +270,7 @@ fun ProfileScreen(
                             )
 
                             Text(
-                                text = "В разработке...",
+                                text = stringResource(R.string.in_developing),
                                 style = TextStyle(
                                     color = DarkGray,
                                     fontSize = 24.sp,
@@ -348,7 +348,7 @@ fun ProfileScreen(
                                             modifier = Modifier
                                                 .fillMaxSize(),
                                             imageVector = Icons.Default.Close,
-                                            contentDescription = null,
+                                            contentDescription = stringResource(R.string.close),
                                             tint = Red
                                         )
                                     }

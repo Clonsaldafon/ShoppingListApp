@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -65,25 +66,16 @@ fun OnboardingScreen(
     ) {
         val onboardingItems = listOf(
             Onboarding(
-                title = "Вместе проще!",
-                description = "Создавайте группы с друзьями\n" +
-                        "и семьей, чтобы легко планировать\n" +
-                        "покупки и управлять финансами"
+                title = stringResource(R.string.title_onboarding_first),
+                description = stringResource(R.string.description_onboarding_first)
             ),
             Onboarding(
-                title = "Составляйте\n" +
-                        "списки покупок",
-                description = "Вносите продукты в общий список, чтобы\n" +
-                        "ничего не забыть при походе в магазин.\n" +
-                        "Удобство для всех участников группы!"
+                title = stringResource(R.string.title_onboarding_second),
+                description = stringResource(R.string.description_onboarding_second)
             ),
             Onboarding(
-                title = "Финансы\n" +
-                        "под контролем",
-                description = "Ведите совместный бюджет,\n" +
-                        "отслеживайте расходы и доходы.\n" +
-                        "Все прозрачно и доступно\n" +
-                        "каждому участнику группы",
+                title = stringResource(R.string.title_onboarding_third),
+                description = stringResource(R.string.description_onboarding_third),
             )
         )
 
@@ -143,7 +135,10 @@ fun OnboardingItem(
 
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 20.dp
+                ),
             verticalArrangement = Arrangement.spacedBy(40.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -179,7 +174,7 @@ fun OnboardingItem(
                     )
                 ) {
                     Text(
-                        text = "Начать".uppercase(),
+                        text = stringResource(R.string.start).uppercase(),
                         style = TextStyle(
                             fontSize = 16.sp
                         )

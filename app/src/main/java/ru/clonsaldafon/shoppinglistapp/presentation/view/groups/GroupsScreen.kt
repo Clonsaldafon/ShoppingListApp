@@ -165,7 +165,7 @@ fun GroupsScreen(
                             .width(35.dp)
                             .height(35.dp),
                         imageVector = Icons.Rounded.Add,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.add),
                         tint = DarkGray
                     )
                 }
@@ -188,7 +188,7 @@ fun GroupsScreen(
                         trailingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Add,
-                                contentDescription = null
+                                contentDescription = stringResource(R.string.add)
                             )
                         },
                         onClick = {
@@ -204,7 +204,7 @@ fun GroupsScreen(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = "Войти",
+                                text = stringResource(R.string.authorize),
                                 style = TextStyle(fontSize = 16.sp)
                             )
                         },

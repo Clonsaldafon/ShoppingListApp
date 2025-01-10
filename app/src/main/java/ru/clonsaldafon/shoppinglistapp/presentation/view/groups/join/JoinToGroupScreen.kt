@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -66,7 +67,7 @@ fun JoinToGroupScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Присоединиться\nк группе",
+                text = stringResource(R.string.join_to_group),
                 style = TextStyle(
                     color = DarkGray,
                     fontSize = 32.sp,
@@ -104,7 +105,7 @@ fun JoinToGroupScreen(
                             )
 
                             Text(
-                                text = "Код доступа",
+                                text = stringResource(R.string.access_code),
                                 style = TextStyle(
                                     color = DarkGray,
                                     fontSize = 14.sp
@@ -175,7 +176,7 @@ fun JoinToGroupScreen(
                     shape = RoundedCornerShape(15.dp)
                 ) {
                     Text(
-                        text = "Отменить",
+                        text = stringResource(R.string.cancel),
                         style = TextStyle(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
@@ -225,7 +226,7 @@ fun JoinToGroupScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Войти",
+                            text = stringResource(R.string.authorize),
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold

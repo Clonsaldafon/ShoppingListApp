@@ -204,7 +204,7 @@ fun SignUpScreen(
                                             else
                                                 ImageVector.vectorResource(R.drawable.ic_female),
                                             tint = White,
-                                            contentDescription = null
+                                            contentDescription = stringResource(R.string.gender)
                                         )
                                     }
                                 },
@@ -248,19 +248,21 @@ fun SignUpScreen(
                                                 horizontalArrangement = Arrangement.spacedBy(10.dp)
                                             ) {
                                                 val imageVector =
-                                                    if (gender == stringResource(R.string.male))
-                                                        ImageVector.vectorResource(R.drawable.ic_male)
-                                                    else
-                                                        ImageVector.vectorResource(R.drawable.ic_female)
+                                                if (gender == stringResource(R.string.male))
+                                                    ImageVector.vectorResource(R.drawable.ic_male)
+                                                else
+                                                    ImageVector.vectorResource(R.drawable.ic_female)
                                                 val tint =
-                                                    if (gender == stringResource(R.string.male))
-                                                        Blue
-                                                    else
-                                                        Pink
+                                                if (gender == stringResource(R.string.male))
+                                                    Blue
+                                                else
+                                                    Pink
 
                                                 Icon(
                                                     imageVector = imageVector,
-                                                    contentDescription = null,
+                                                    contentDescription = stringResource(
+                                                        R.string.gender
+                                                    ),
                                                     tint = tint
                                                 )
 
@@ -338,7 +340,7 @@ fun SignUpScreen(
                                     horizontalArrangement = Arrangement.spacedBy(15.dp)
                                 ) {
                                     Text(
-                                        text = "Создать аккаунт".uppercase(),
+                                        text = stringResource(R.string.create_account).uppercase(),
                                         style = TextStyle(
                                             fontSize = 18.sp,
                                             fontWeight = FontWeight.Bold,
@@ -348,7 +350,9 @@ fun SignUpScreen(
 
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                        contentDescription = null,
+                                        contentDescription = stringResource(
+                                            R.string.create_account
+                                        ),
                                         tint = if (uiState.isValid) White else DarkGray
                                     )
                                 }
@@ -360,7 +364,7 @@ fun SignUpScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Уже есть аккаунт?",
+                                text = stringResource(R.string.already_have_account),
                                 style = TextStyle(
                                     color = Black,
                                     fontSize = 14.sp
@@ -371,7 +375,7 @@ fun SignUpScreen(
                                 modifier = Modifier
                                     .clickable { navController?.navigate(Routes.LogIn.route) }
                                     .padding(2.dp),
-                                text = "Войти",
+                                text = stringResource(R.string.authorize),
                                 style = TextStyle(
                                     color = Orange,
                                     fontSize = 14.sp,

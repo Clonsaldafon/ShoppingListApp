@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.motionEventSpy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -97,7 +98,7 @@ fun GroupInfoScreen(
                             modifier = Modifier
                                 .fillMaxSize(),
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.back),
                             tint = DarkGray
                         )
                     }
@@ -125,7 +126,7 @@ fun GroupInfoScreen(
                             modifier = Modifier
                                 .fillMaxSize(),
                             imageVector = Icons.Default.MoreVert,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.menu),
                             tint = DarkGray
                         )
                     }
@@ -166,7 +167,7 @@ fun GroupInfoScreen(
                         ) {
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.ic_description),
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.description),
                                 tint = DarkGray
                             )
 
@@ -201,7 +202,7 @@ fun GroupInfoScreen(
                                         .width(25.dp)
                                         .height(25.dp),
                                     imageVector = ImageVector.vectorResource(R.drawable.ic_key),
-                                    contentDescription = null,
+                                    contentDescription = stringResource(R.string.key),
                                     tint = DarkGray
                                 )
 
@@ -269,7 +270,7 @@ fun GroupMember(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_profile),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.user),
                 tint = DarkGray
             )
 
@@ -284,13 +285,13 @@ fun GroupMember(
             if (gender == "MALE") {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_male),
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.male),
                     tint = Blue
                 )
             } else {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_female),
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.female),
                     tint = Pink
                 )
             }

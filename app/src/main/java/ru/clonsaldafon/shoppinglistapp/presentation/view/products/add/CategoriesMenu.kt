@@ -78,7 +78,7 @@ fun CategoriesMenu(
                             .width(15.dp)
                             .height(15.dp),
                         imageVector = ImageVector.vectorResource(R.drawable.ic_category),
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.category),
                         tint = DarkGray
                     )
 

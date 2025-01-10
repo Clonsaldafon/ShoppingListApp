@@ -77,7 +77,7 @@ fun ProductsMenu(
                             .width(15.dp)
                             .height(15.dp),
                         imageVector = ImageVector.vectorResource(R.drawable.ic_product),
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.product),
                         tint = DarkGray
                     )
 
