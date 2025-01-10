@@ -52,6 +52,7 @@ fun ProductItem(
     infoVisibility: Boolean = false,
     addedBy: String,
     boughtBy: String? = null,
+    uiState: ProductsUiState,
     onEvent: (ProductsEvent) -> Unit
 ) {
     val isInfoHidden = remember { mutableStateOf(!infoVisibility) }
@@ -148,10 +149,16 @@ fun ProductItem(
                         .width(20.dp)
                         .height(20.dp),
                     checked = !boughtBy.isNullOrEmpty(),
-                    onCheckedChange = {},
+                    onCheckedChange = {
+                        onEvent(ProductsEvent.OnCurrentProductIdUpdated(productId))
+                        onEvent(ProductsEvent.OnBuyWindowVisibilityChanged(false))
+                        onEvent(ProductsEvent.OnCurrentQuantityUpdated(count))
+                        onEvent(ProductsEvent.OnCurrentProductBought(true))
+                    },
                     colors = CheckboxDefaults.colors(
                         checkedColor = DarkGray
-                    )
+                    ),
+                    enabled = price == 0.0
                 )
 
                 IconButton(

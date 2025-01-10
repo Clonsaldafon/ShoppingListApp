@@ -1,5 +1,7 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -22,6 +24,7 @@ import ru.clonsaldafon.shoppinglistapp.presentation.view.products.ProductsScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.profile.ProfileScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.signup.SignUpScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavGraph(
     modifier: Modifier = Modifier,
@@ -30,10 +33,9 @@ fun NavGraph(
 ) {
     val token by viewModel.userEntity.observeAsState()
 
-    val startDestination = Routes.LogIn.route
-//    val startDestination =
-//        if (token == null) Routes.Onboarding.route
-//        else Routes.Groups.route
+    val startDestination =
+        if (token.isNullOrEmpty()) Routes.Onboarding.route
+        else Routes.Groups.route
 
     NavHost(
         navController = navController,

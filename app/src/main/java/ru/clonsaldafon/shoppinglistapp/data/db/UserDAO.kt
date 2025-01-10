@@ -3,7 +3,6 @@ package ru.clonsaldafon.shoppinglistapp.data.db
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 
 @Dao
 interface UserDAO {
@@ -13,5 +12,8 @@ interface UserDAO {
 
     @Query("SELECT * FROM user")
     suspend fun getUser(): List<UserEntity>?
+
+    @Query("DELETE FROM user")
+    suspend fun clear()
 
 }

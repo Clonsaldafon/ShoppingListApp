@@ -1,5 +1,6 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.profile
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -258,42 +260,63 @@ fun ProfileScreen(
                         ) {
                             Icon(
                                 modifier = Modifier
-                                    .width(100.dp)
-                                    .height(100.dp)
-                                    .clip(shape = CircleShape)
-                                    .background(color = DarkGray)
-                                    .padding(10.dp),
-                                imageVector = Icons.Default.Person,
+                                    .width(150.dp)
+                                    .height(150.dp),
+                                imageVector = ImageVector.vectorResource(
+                                    R.drawable.ic_launcher_foreground
+                                ),
                                 contentDescription = null,
                                 tint = Orange
                             )
 
                             Text(
-                                text = "my-login",
+                                text = "В разработке...",
                                 style = TextStyle(
-                                    color = Black,
-                                    fontSize = 24.sp
+                                    color = DarkGray,
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center
                                 )
                             )
 
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(R.drawable.ic_male),
-                                    contentDescription = null,
-                                    tint = DarkGray
-                                )
-
-                                Text(
-                                    text = "Мужчина",
-                                    style = TextStyle(
-                                        color = DarkGray,
-                                        fontSize = 16.sp,
-                                    )
-                                )
-                            }
+//                            Icon(
+//                                modifier = Modifier
+//                                    .width(100.dp)
+//                                    .height(100.dp)
+//                                    .clip(shape = CircleShape)
+//                                    .background(color = DarkGray)
+//                                    .padding(10.dp),
+//                                imageVector = Icons.Default.Person,
+//                                contentDescription = null,
+//                                tint = Orange
+//                            )
+//
+//                            Text(
+//                                text = "my-login",
+//                                style = TextStyle(
+//                                    color = Black,
+//                                    fontSize = 24.sp
+//                                )
+//                            )
+//
+//                            Row(
+//                                verticalAlignment = Alignment.CenterVertically,
+//                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+//                            ) {
+//                                Icon(
+//                                    imageVector = ImageVector.vectorResource(R.drawable.ic_male),
+//                                    contentDescription = null,
+//                                    tint = DarkGray
+//                                )
+//
+//                                Text(
+//                                    text = "Мужчина",
+//                                    style = TextStyle(
+//                                        color = DarkGray,
+//                                        fontSize = 16.sp,
+//                                    )
+//                                )
+//                            }
                         }
 
                         if (!isEditWindowHidden) {
@@ -417,7 +440,8 @@ fun ProfileScreen(
 
 @Preview(
     showSystemUi = true,
-    showBackground = true, locale = "ru"
+    showBackground = true,
+    locale = "ru"
 )
 @Composable
 fun MyPreview() {

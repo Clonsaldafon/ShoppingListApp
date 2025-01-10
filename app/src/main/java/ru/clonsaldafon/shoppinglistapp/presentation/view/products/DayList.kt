@@ -35,6 +35,7 @@ fun DayList(
     groupId: String,
     date: String,
     products: List<Product>,
+    uiState: ProductsUiState,
     onEvent: (ProductsEvent) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
@@ -95,6 +96,7 @@ fun DayList(
                     price = product.price ?: 0.0,
                     addedBy = product.addedBy ?: "",
                     boughtBy = product.boughtBy,
+                    uiState = uiState,
                     onEvent = onEvent
                 )
             }

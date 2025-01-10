@@ -32,6 +32,8 @@ import ru.clonsaldafon.shoppinglistapp.domain.product.GetCategoriesUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.product.GetCategoriesUseCaseImpl
 import ru.clonsaldafon.shoppinglistapp.domain.product.GetProductsByCategoryUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.product.GetProductsByCategoryUseCaseImpl
+import ru.clonsaldafon.shoppinglistapp.domain.product.UpdateProductUseCase
+import ru.clonsaldafon.shoppinglistapp.domain.product.UpdateProductUseCaseImpl
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetGroupsUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetGroupsUseCaseImpl
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetTokenUseCase
@@ -81,6 +83,9 @@ interface AppBindsModule {
 
     @Binds
     fun bindDeleteProductUseCase(useCase: DeleteProductUseCaseImpl): DeleteProductUseCase
+
+    @Binds
+    fun bindUpdateProductUseCase(useCase: UpdateProductUseCaseImpl): UpdateProductUseCase
 
     @Binds
     fun bindProductRepository(useCase: ProductRepositoryImpl): ProductRepository

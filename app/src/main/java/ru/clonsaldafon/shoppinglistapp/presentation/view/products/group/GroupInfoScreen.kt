@@ -70,6 +70,7 @@ fun GroupInfoScreen(
     viewModel.loadMembers(groupId?.toInt() ?: 0)
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 modifier = Modifier

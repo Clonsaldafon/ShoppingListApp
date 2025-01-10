@@ -23,6 +23,9 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -33,6 +36,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
@@ -43,6 +48,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -54,8 +61,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
+import ru.clonsaldafon.shoppinglistapp.presentation.view.groups.create.CreateGroupEvent
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
+import ru.clonsaldafon.shoppinglistapp.ui.theme.LightOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Typography
@@ -85,6 +94,7 @@ fun ProductsScreen(
     viewModel.loadProducts()
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 windowInsets = WindowInsets(
@@ -258,55 +268,197 @@ fun ProductsScreen(
                         color = Orange
                     )
                 } else {
-                    if (uiState.products.isNullOrEmpty()) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Список пуст",
-                                style = TextStyle(
-                                    color = Black,
-                                    fontSize = 24.sp,
-                                    textAlign = TextAlign.Center
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                vertical = 20.dp,
+                                horizontal = 40.dp
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (uiState.products.isNullOrEmpty()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "Список пуст",
+                                    style = TextStyle(
+                                        color = Black,
+                                        fontSize = 24.sp,
+                                        textAlign = TextAlign.Center
+                                    )
                                 )
-                            )
-                        }
-                    } else {
-                        Column(
-                            modifier = modifier
-                                .fillMaxSize()
-                                .background(
-                                    color = White,
-                                    shape = RoundedCornerShape(15.dp)
-                                )
-                                .padding(
-                                    vertical = 20.dp,
-                                    horizontal = 40.dp
-                                )
-                        ) {
-                            LazyColumn {
-                                val dates = mutableSetOf<String>()
-                                val formatter = DateTimeFormatter.ofPattern(
-                                    "dd.MM.yyyy"
-                                )
+                            }
+                        } else {
+                            Column(
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        color = White,
+                                        shape = RoundedCornerShape(15.dp)
+                                    )
+                            ) {
+                                LazyColumn {
+                                    val dates = mutableSetOf<String>()
+                                    val formatter = DateTimeFormatter.ofPattern(
+                                        "dd.MM.yyyy"
+                                    )
 
-                                items(uiState.products ?: listOf()) {
-                                    val date = ZonedDateTime.parse(it.createdAt)
-                                    val formattedDate = date.format(formatter)
+                                    items(uiState.products?.reversed() ?: listOf()) {
+                                        val date = ZonedDateTime.parse(it.createdAt)
+                                        val formattedDate = date.format(formatter)
 
-                                    if (!dates.contains(formattedDate)) {
-                                        DayList(
-                                            groupId = uiState.groupId,
-                                            date = formattedDate,
-                                            products = uiState.products ?: listOf(),
-                                            onEvent = viewModel::onEvent
-                                        )
+                                        if (!dates.contains(formattedDate)) {
+                                            DayList(
+                                                groupId = uiState.groupId,
+                                                date = formattedDate,
+                                                products = uiState.products ?: listOf(),
+                                                uiState = uiState,
+                                                onEvent = viewModel::onEvent
+                                            )
 
-                                        dates.add(formattedDate)
+                                            dates.add(formattedDate)
+                                        }
                                     }
+                                }
+                            }
+                        }
+
+                        if (!uiState.isBuyWindowHidden) {
+                            Column(
+                                modifier = Modifier
+                                    .shadow(
+                                        elevation = 10.dp,
+                                        shape = RoundedCornerShape(15.dp)
+                                    )
+                                    .background(
+                                        color = White,
+                                        shape = RoundedCornerShape(15.dp)
+                                    )
+                                    .padding(20.dp),
+                                verticalArrangement = Arrangement.spacedBy(20.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End
+                                ) {
+                                    IconButton(
+                                        modifier = Modifier
+                                            .width(20.dp)
+                                            .height(20.dp),
+                                        onClick = { viewModel.resetCurrentValues() }
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier
+                                                .fillMaxSize(),
+                                            imageVector = Icons.Rounded.Close,
+                                            contentDescription = null,
+                                            tint = Red
+                                        )
+                                    }
+                                }
+
+                                Text(
+                                    text = "Сколько вы потратили на покупку?",
+                                    style = TextStyle(
+                                        color = DarkGray,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center
+                                    )
+                                )
+
+                                Column {
+                                    TextField(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .shadow(
+                                                elevation = 8.dp,
+                                                shape = RoundedCornerShape(16.dp)
+                                            )
+                                            .background(
+                                                color = White,
+                                                shape = RoundedCornerShape(16.dp)
+                                            ),
+                                        value =
+                                        if (uiState.currentPrice == null) ""
+                                        else uiState.currentPrice.toString(),
+                                        onValueChange = {
+                                            viewModel.onEvent(
+                                                ProductsEvent.OnCurrentPriceUpdated(it)
+                                            )
+                                        },
+                                        label = {
+                                            Text(
+                                                text = "Цена",
+                                                style = TextStyle(
+                                                    color = DarkGray,
+                                                    fontSize = 14.sp
+                                                )
+                                            )
+                                        },
+                                        colors = TextFieldDefaults.colors(
+                                            disabledContainerColor = White,
+                                            disabledTextColor = Black,
+                                            disabledIndicatorColor = Color.Transparent,
+                                            unfocusedContainerColor = White,
+                                            unfocusedIndicatorColor = Color.Transparent,
+                                            focusedContainerColor = LightOrange,
+                                            focusedIndicatorColor = Color.Transparent,
+                                            errorContainerColor = White,
+                                            errorIndicatorColor = Color.Red,
+                                            cursorColor = Orange
+                                        ),
+                                        singleLine = true,
+                                        isError = uiState.isCurrentPriceInvalid
+                                    )
+                                }
+
+                                Button(
+                                    modifier = Modifier
+                                        .shadow(
+                                            elevation = 5.dp,
+                                            shape = RoundedCornerShape(15.dp)
+                                        )
+                                        .background(
+                                            color = if (uiState.isValid) Orange else White,
+                                            shape = RoundedCornerShape(15.dp)
+                                        )
+                                        .border(
+                                            width = 1.dp,
+                                            color = DarkGray,
+                                            shape = RoundedCornerShape(15.dp)
+                                        ),
+                                    onClick = {
+                                        viewModel.onEvent(
+                                            ProductsEvent.OnProductUpdated(
+                                                groupId!!, uiState.currentProductId
+                                            )
+                                        )
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Orange,
+                                        contentColor = DarkGray,
+                                        disabledContainerColor = White,
+                                        disabledContentColor = DarkGray
+                                    ),
+                                    shape = RoundedCornerShape(15.dp),
+                                    enabled = uiState.isValid
+                                ) {
+                                    Text(
+                                        text = "Сохранить",
+                                        style = TextStyle(
+                                            fontSize = 18.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    )
                                 }
                             }
                         }

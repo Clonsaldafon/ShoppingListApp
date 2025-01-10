@@ -10,6 +10,7 @@ import ru.clonsaldafon.shoppinglistapp.data.model.group.CreateGroupResponse
 import ru.clonsaldafon.shoppinglistapp.data.model.group.GroupResponse
 import ru.clonsaldafon.shoppinglistapp.data.model.group.JoinToGroupRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.group.ProductResponse
+import ru.clonsaldafon.shoppinglistapp.data.model.group.UpdateProductRequest
 import ru.clonsaldafon.shoppinglistapp.data.service.GroupService
 import javax.inject.Inject
 
@@ -127,6 +128,28 @@ class GroupRepositoryImpl @Inject constructor(
             val user = dao.getUser()
             val token = user?.last()?.accessToken
             service.deleteProduct("Bearer $token", groupId, productId)
+        }.fold(
+            onSuccess = {
+                return if (it.isSuccessful)
+                    Result.success(it.body())
+                else
+                    Result.failure(ApiException(it.message(), it.code()))
+            },
+            onFailure = {
+                return Result.failure(it)
+            }
+        )
+    }
+
+    override suspend fun updateProduct(
+        groupId: String,
+        productId: String,
+        request: UpdateProductRequest
+    ): Result<GroupResponse?> {
+        kotlin.runCatching {
+            val user = dao.getUser()
+            val token = user?.last()?.accessToken
+            service.updateProduct("Bearer $token", groupId, productId, request)
         }.fold(
             onSuccess = {
                 return if (it.isSuccessful)

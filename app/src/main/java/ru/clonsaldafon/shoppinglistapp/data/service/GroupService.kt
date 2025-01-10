@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import ru.clonsaldafon.shoppinglistapp.data.model.Member
@@ -15,6 +16,7 @@ import ru.clonsaldafon.shoppinglistapp.data.model.group.CreateGroupResponse
 import ru.clonsaldafon.shoppinglistapp.data.model.group.JoinToGroupRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.group.GroupResponse
 import ru.clonsaldafon.shoppinglistapp.data.model.group.ProductResponse
+import ru.clonsaldafon.shoppinglistapp.data.model.group.UpdateProductRequest
 
 interface GroupService {
 
@@ -66,6 +68,14 @@ interface GroupService {
         @Header("Authorization") token: String,
         @Path("group_id") groupId: String,
         @Path("product_id") productId: String
+    ): Response<GroupResponse?>
+
+    @PATCH("groups/{group_id}/products/{product_id}")
+    suspend fun updateProduct(
+        @Header("Authorization") token: String,
+        @Path("group_id") groupId: String,
+        @Path("product_id") productId: String,
+        @Body request: UpdateProductRequest
     ): Response<GroupResponse?>
 
 }

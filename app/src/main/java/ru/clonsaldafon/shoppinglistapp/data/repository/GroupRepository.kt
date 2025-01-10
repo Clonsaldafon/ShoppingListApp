@@ -8,6 +8,7 @@ import ru.clonsaldafon.shoppinglistapp.data.model.group.CreateGroupResponse
 import ru.clonsaldafon.shoppinglistapp.data.model.group.GroupResponse
 import ru.clonsaldafon.shoppinglistapp.data.model.group.JoinToGroupRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.group.ProductResponse
+import ru.clonsaldafon.shoppinglistapp.data.model.group.UpdateProductRequest
 
 interface GroupRepository {
 
@@ -26,5 +27,11 @@ interface GroupRepository {
     suspend fun addProduct(groupId: String, request: AddProductRequest): Result<ProductResponse?>
 
     suspend fun deleteProduct(groupId: String, productId: String): Result<GroupResponse?>
+
+    suspend fun updateProduct(
+        groupId: String,
+        productId: String,
+        request: UpdateProductRequest
+    ): Result<GroupResponse?>
 
 }
