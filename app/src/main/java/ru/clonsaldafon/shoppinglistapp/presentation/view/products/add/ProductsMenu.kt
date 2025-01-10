@@ -1,4 +1,4 @@
-package ru.clonsaldafon.shoppinglistapp.presentation.view.products
+package ru.clonsaldafon.shoppinglistapp.presentation.view.products.add
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -36,20 +35,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.clonsaldafon.shoppinglistapp.R
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
+import ru.clonsaldafon.shoppinglistapp.data.model.ProductByCategory
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
-import ru.clonsaldafon.shoppinglistapp.ui.theme.LightOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 
 @Composable
-fun CategoriesMenu() {
+fun ProductsMenu(
+    product: String,
+    products: List<ProductByCategory>,
+    onEvent: (AddProductEvent) -> Unit
+) {
     Box {
-        val categories = listOf(
-            "молочные продукты",
-            "мясные продукты",
-            "рыбные продукты"
-        )
-
         var expanded by remember { mutableStateOf(false) }
 
         TextField(
@@ -64,7 +60,7 @@ fun CategoriesMenu() {
                     shape = RoundedCornerShape(16.dp)
                 )
                 .clickable { expanded = true },
-            value = "",
+            value = product,
             textStyle = TextStyle(
                 color = DarkGray,
                 fontWeight = FontWeight.Bold
@@ -80,13 +76,13 @@ fun CategoriesMenu() {
                         modifier = Modifier
                             .width(15.dp)
                             .height(15.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_category),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_product),
                         contentDescription = null,
                         tint = DarkGray
                     )
 
                     Text(
-                        text = stringResource(R.string.category),
+                        text = stringResource(R.string.product),
                         style = TextStyle(
                             color = DarkGray,
                             fontSize = 14.sp
@@ -111,6 +107,8 @@ fun CategoriesMenu() {
                 disabledIndicatorColor = Color.Transparent,
                 unfocusedContainerColor = White,
                 unfocusedIndicatorColor = Color.Transparent,
+                focusedContainerColor = White,
+                focusedIndicatorColor = Color.Transparent,
                 errorContainerColor = White,
                 errorIndicatorColor = Color.Red
             )
@@ -124,12 +122,15 @@ fun CategoriesMenu() {
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            categories.forEach { category ->
+            products.forEach { product ->
                 DropdownMenuItem(
-                    onClick = { expanded = false },
+                    onClick = {
+                        expanded = false
+                        onEvent(AddProductEvent.OnProductChanged(product))
+                    },
                     text = {
                         Text(
-                            text = category,
+                            text = product.name ?: "",
                             style = TextStyle(
                                 color = DarkGray,
                                 fontSize = 14.sp

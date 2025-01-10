@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.clonsaldafon.shoppinglistapp.data.service.GroupService
+import ru.clonsaldafon.shoppinglistapp.data.service.ProductService
 import ru.clonsaldafon.shoppinglistapp.data.service.UserService
 import javax.inject.Singleton
 
@@ -34,5 +35,10 @@ object NetworkModule {
     @Singleton
     fun provideGroupService(retrofit: Retrofit): GroupService =
         retrofit.create(GroupService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideProductService(retrofit: Retrofit): ProductService =
+        retrofit.create(ProductService::class.java)
 
 }

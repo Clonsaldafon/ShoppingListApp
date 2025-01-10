@@ -12,6 +12,8 @@ import ru.clonsaldafon.shoppinglistapp.data.db.UserDAO
 import ru.clonsaldafon.shoppinglistapp.data.db.UserDatabase
 import ru.clonsaldafon.shoppinglistapp.data.repository.GroupRepository
 import ru.clonsaldafon.shoppinglistapp.data.repository.GroupRepositoryImpl
+import ru.clonsaldafon.shoppinglistapp.data.repository.ProductRepository
+import ru.clonsaldafon.shoppinglistapp.data.repository.ProductRepositoryImpl
 import ru.clonsaldafon.shoppinglistapp.data.repository.UserRepository
 import ru.clonsaldafon.shoppinglistapp.data.repository.UserRepositoryImpl
 import ru.clonsaldafon.shoppinglistapp.domain.group.CreateGroupUseCase
@@ -22,6 +24,12 @@ import ru.clonsaldafon.shoppinglistapp.domain.group.GetProductsUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.group.GetProductsUseCaseImpl
 import ru.clonsaldafon.shoppinglistapp.domain.group.JoinToGroupUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.group.JoinToGroupUseCaseImpl
+import ru.clonsaldafon.shoppinglistapp.domain.product.AddProductUseCase
+import ru.clonsaldafon.shoppinglistapp.domain.product.AddProductUseCaseImpl
+import ru.clonsaldafon.shoppinglistapp.domain.product.GetCategoriesUseCase
+import ru.clonsaldafon.shoppinglistapp.domain.product.GetCategoriesUseCaseImpl
+import ru.clonsaldafon.shoppinglistapp.domain.product.GetProductsByCategoryUseCase
+import ru.clonsaldafon.shoppinglistapp.domain.product.GetProductsByCategoryUseCaseImpl
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetGroupsUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetGroupsUseCaseImpl
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetTokenUseCase
@@ -65,6 +73,20 @@ interface AppBindsModule {
 
     @Binds
     fun bindGetMembersUseCase(useCase: GetMembersUseCaseImpl): GetMembersUseCase
+
+    @Binds
+    fun bindAddProductUseCase(useCase: AddProductUseCaseImpl): AddProductUseCase
+
+    @Binds
+    fun bindProductRepository(useCase: ProductRepositoryImpl): ProductRepository
+
+    @Binds
+    fun bindGetCategoriesUseCase(useCase: GetCategoriesUseCaseImpl): GetCategoriesUseCase
+
+    @Binds
+    fun bindGetProductByCategoryUseCase(
+        useCase: GetProductsByCategoryUseCaseImpl
+    ): GetProductsByCategoryUseCase
 
     companion object {
 

@@ -9,10 +9,12 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import ru.clonsaldafon.shoppinglistapp.data.model.Member
 import ru.clonsaldafon.shoppinglistapp.data.model.Product
+import ru.clonsaldafon.shoppinglistapp.data.model.group.AddProductRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.group.CreateGroupRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.group.CreateGroupResponse
 import ru.clonsaldafon.shoppinglistapp.data.model.group.JoinToGroupRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.group.GroupResponse
+import ru.clonsaldafon.shoppinglistapp.data.model.group.ProductResponse
 
 interface GroupService {
 
@@ -51,5 +53,12 @@ interface GroupService {
         @Header("Authorization") token: String,
         @Path("group_id") groupId: Int
     ): Response<List<Member>>
+
+    @POST("groups/{group_id}/products")
+    suspend fun addProduct(
+        @Header("Authorization") token: String,
+        @Path("group_id") groupId: String,
+        @Body request: AddProductRequest
+    ): Response<ProductResponse?>
 
 }

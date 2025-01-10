@@ -12,13 +12,22 @@ sealed class Routes(val route: String) {
         "products/{group_id}/{group_name}/{group_description}/{code}"
     ) {
         fun createRoute(
-            groupId: String,
-            groupName: String,
-            groupDescription: String,
-            code: String
+            groupId: String?,
+            groupName: String?,
+            groupDescription: String?,
+            code: String?
         ) = "products/$groupId/$groupName/$groupDescription/$code"
     }
-    data object AddProduct : Routes("add_product")
+    data object AddProduct : Routes(
+        "add_product/{group_id}/{group_name}/{group_description}/{code}"
+    ) {
+        fun createRoute(
+            groupId: String?,
+            groupName: String?,
+            groupDescription: String?,
+            code: String?
+        ) = "add_product/$groupId/$groupName/$groupDescription/$code"
+    }
     data object GroupInfo : Routes(
         "group_info/{group_id}/{group_name}/{group_description}/{code}"
     ) {

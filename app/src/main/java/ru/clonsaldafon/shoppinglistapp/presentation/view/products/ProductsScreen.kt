@@ -1,5 +1,7 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.products
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -58,7 +60,12 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Typography
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
+import java.text.DateFormat
+import java.time.LocalDate
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductsScreen(
@@ -196,7 +203,13 @@ fun ProductsScreen(
                         color = DarkGray,
                         shape = RoundedCornerShape(15.dp)
                     ),
-                onClick = { navController?.navigate(Routes.AddProduct.route) },
+                onClick = {
+                    navController?.navigate(
+                        Routes.AddProduct.createRoute(
+                            groupId, groupName, groupDescription, code
+                        )
+                    )
+                },
                 shape = RoundedCornerShape(15.dp),
                 containerColor = Orange,
                 contentColor = DarkGray
@@ -275,11 +288,23 @@ fun ProductsScreen(
                                 )
                         ) {
                             LazyColumn {
+                                val dates = mutableSetOf<String>()
+                                val formatter = DateTimeFormatter.ofPattern(
+                                    "dd.MM.yyyy"
+                                )
+
                                 items(uiState.products ?: listOf()) {
-                                    DayList(
-                                        date = it.createdAt ?: "01.01.1970",
-                                        products = uiState.products ?: listOf()
-                                    )
+                                    val date = ZonedDateTime.parse(it.createdAt)
+                                    val formattedDate = date.format(formatter)
+
+                                    if (!dates.contains(formattedDate)) {
+                                        DayList(
+                                            date = formattedDate,
+                                            products = uiState.products ?: listOf()
+                                        )
+
+                                        dates.add(formattedDate)
+                                    }
                                 }
                             }
                         }
@@ -290,6 +315,7 @@ fun ProductsScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(
     showBackground = true,
     showSystemUi = true,

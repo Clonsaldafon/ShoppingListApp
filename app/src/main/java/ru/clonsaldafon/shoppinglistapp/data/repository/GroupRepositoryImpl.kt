@@ -4,10 +4,12 @@ import ru.clonsaldafon.shoppinglistapp.data.db.UserDAO
 import ru.clonsaldafon.shoppinglistapp.data.model.ApiException
 import ru.clonsaldafon.shoppinglistapp.data.model.Member
 import ru.clonsaldafon.shoppinglistapp.data.model.Product
+import ru.clonsaldafon.shoppinglistapp.data.model.group.AddProductRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.group.CreateGroupRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.group.CreateGroupResponse
 import ru.clonsaldafon.shoppinglistapp.data.model.group.GroupResponse
 import ru.clonsaldafon.shoppinglistapp.data.model.group.JoinToGroupRequest
+import ru.clonsaldafon.shoppinglistapp.data.model.group.ProductResponse
 import ru.clonsaldafon.shoppinglistapp.data.service.GroupService
 import javax.inject.Inject
 
@@ -95,4 +97,26 @@ class GroupRepositoryImpl @Inject constructor(
             }
         )
     }
+
+    override suspend fun addProduct(
+        groupId: String,
+        request: AddProductRequest
+    ): Result<ProductResponse?> {
+        kotlin.runCatching {
+            val user = dao.getUser()
+            val token = user?.last()?.accessToken
+            service.addProduct("Bearer $token", groupId, request)
+        }.fold(
+            onSuccess = {
+                return if (it.isSuccessful)
+                    Result.success(it.body())
+                else
+                    Result.failure(ApiException(it.message(), it.code()))
+            },
+            onFailure = {
+                return Result.failure(it)
+            }
+        )
+    }
+
 }

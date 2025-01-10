@@ -16,7 +16,7 @@ import ru.clonsaldafon.shoppinglistapp.presentation.view.groups.GroupsScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.groups.join.JoinToGroupScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.login.LogInScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.onboarding.OnboardingScreen
-import ru.clonsaldafon.shoppinglistapp.presentation.view.products.AddProductScreen
+import ru.clonsaldafon.shoppinglistapp.presentation.view.products.add.AddProductScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.products.group.GroupInfoScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.products.ProductsScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.profile.ProfileScreen
@@ -104,8 +104,17 @@ fun NavGraph(
         }
 
         composable(route = Routes.AddProduct.route) {
+            val groupId = it.arguments?.getString("group_id")
+            val groupName = it.arguments?.getString("group_name")
+            val groupDescription = it.arguments?.getString("group_description")
+            val code = it.arguments?.getString("code")
+
             AddProductScreen(
-                navController = navController
+                navController = navController,
+                groupId = groupId,
+                groupName = groupName,
+                groupDescription = groupDescription,
+                code = code
             )
         }
 
