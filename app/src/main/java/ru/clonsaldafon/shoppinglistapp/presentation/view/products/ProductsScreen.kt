@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.data.model.Product
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.presentation.view.groups.create.CreateGroupEvent
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
@@ -304,8 +305,6 @@ fun ProductsScreen(
                                     )
                             ) {
                                 LazyColumn {
-                                    val dates = mutableSetOf<String>()
-
                                     val formatter = SimpleDateFormat(
                                         "dd.MM.yyyy",
                                         Locale.getDefault()
@@ -315,21 +314,25 @@ fun ProductsScreen(
                                         Locale.getDefault()
                                     )
 
-                                    items(uiState.products?.reversed() ?: listOf()) {
+                                    val lists = mutableMapOf<String, MutableList<Product>>()
+                                    uiState.products?.forEach {
                                         val date = inputFormat.parse(it.createdAt)
                                         val formattedDate = formatter.format(date)
 
-                                        if (!dates.contains(formattedDate)) {
-                                            DayList(
-                                                groupId = uiState.groupId,
-                                                date = formattedDate,
-                                                products = uiState.products ?: listOf(),
-                                                uiState = uiState,
-                                                onEvent = viewModel::onEvent
-                                            )
+                                        if (!lists.contains(formattedDate))
+                                            lists[formattedDate] = mutableListOf(it)
+                                        else
+                                            lists[formattedDate]?.add(it)
+                                    }
 
-                                            dates.add(formattedDate)
-                                        }
+                                    items(lists.toList().reversed()) { pair ->
+                                        DayList(
+                                            groupId = uiState.groupId,
+                                            date = pair.first,
+                                            products = pair.second.sortedBy { it.boughtBy },
+                                            uiState = uiState,
+                                            onEvent = viewModel::onEvent
+                                        )
                                     }
                                 }
                             }
