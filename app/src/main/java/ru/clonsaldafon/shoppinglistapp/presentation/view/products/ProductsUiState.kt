@@ -41,6 +41,7 @@ data class ProductsUiState(
     )
 
     val isValid: Boolean
-        get() = !isCurrentPriceInvalid
+        get() = !isCurrentPriceInvalid &&
+                currentPrice?.isNotEmpty() == true
 
 }

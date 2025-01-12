@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
@@ -54,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -401,9 +403,10 @@ fun ProductsScreen(
                                         if (uiState.currentPrice == null) ""
                                         else uiState.currentPrice.toString(),
                                         onValueChange = {
-                                            viewModel.onEvent(
-                                                ProductsEvent.OnCurrentPriceUpdated(it)
-                                            )
+                                            if (it.toDoubleOrNull() != null || it.isEmpty())
+                                                viewModel.onEvent(
+                                                    ProductsEvent.OnCurrentPriceUpdated(it)
+                                                )
                                         },
                                         label = {
                                             Text(
@@ -416,15 +419,18 @@ fun ProductsScreen(
                                         },
                                         colors = TextFieldDefaults.colors(
                                             disabledContainerColor = White,
-                                            disabledTextColor = Black,
+                                            disabledTextColor = DarkGray,
                                             disabledIndicatorColor = Color.Transparent,
                                             unfocusedContainerColor = White,
                                             unfocusedIndicatorColor = Color.Transparent,
-                                            focusedContainerColor = LightOrange,
+                                            focusedContainerColor = White,
                                             focusedIndicatorColor = Color.Transparent,
                                             errorContainerColor = White,
                                             errorIndicatorColor = Color.Red,
                                             cursorColor = Orange
+                                        ),
+                                        keyboardOptions = KeyboardOptions(
+                                            keyboardType = KeyboardType.Number
                                         ),
                                         singleLine = true,
                                         isError = uiState.isCurrentPriceInvalid
