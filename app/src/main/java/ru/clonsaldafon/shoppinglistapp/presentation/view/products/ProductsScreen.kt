@@ -64,6 +64,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.data.model.Product
+import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.presentation.view.groups.create.CreateGroupEvent
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
@@ -268,7 +269,7 @@ fun ProductsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (uiState.isLoading) {
-                    CircularProgressIndicator(
+                    LoadingProgressBar(
                         color = Orange
                     )
                 } else {

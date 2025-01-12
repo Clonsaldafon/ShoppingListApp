@@ -91,7 +91,7 @@ fun SignUpOutlinedTextField(
                 textAlign = TextAlign.Center
             ),
             leadingIcon = {
-                Column(
+                Icon(
                     modifier = Modifier
                         .width(60.dp)
                         .height(60.dp)
@@ -101,19 +101,12 @@ fun SignUpOutlinedTextField(
                                 topStart = 15.dp,
                                 bottomStart = 15.dp
                             )
-                        ),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp),
-                        imageVector = leadingIcon,
-                        tint = White,
-                        contentDescription = null
-                    )
-                }
+                        )
+                        .padding(15.dp),
+                    imageVector = leadingIcon,
+                    tint = White,
+                    contentDescription = null
+                )
             },
             visualTransformation =
                 if (!uiState.isPasswordHidden)

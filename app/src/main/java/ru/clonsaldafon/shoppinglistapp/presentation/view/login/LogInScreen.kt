@@ -44,6 +44,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthBottomText
+import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
 import ru.clonsaldafon.shoppinglistapp.presentation.component.LogInOutlinedTextField
 import ru.clonsaldafon.shoppinglistapp.presentation.component.SignUpOutlinedTextField
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
@@ -110,7 +112,7 @@ fun LogInScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (uiState.isSubmitting) {
-                    CircularProgressIndicator(
+                    LoadingProgressBar(
                         color = Orange
                     )
                 } else {
@@ -198,30 +200,11 @@ fun LogInScreen(
                             }
                         }
 
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(5.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = stringResource(R.string.no_account),
-                                style = TextStyle(
-                                    color = Black,
-                                    fontSize = 14.sp
-                                )
-                            )
-
-                            Text(
-                                modifier = Modifier
-                                    .clickable { navController?.navigate(Routes.SignUp.route) }
-                                    .padding(2.dp),
-                                text = stringResource(R.string.register),
-                                style = TextStyle(
-                                    color = Orange,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            )
-                        }
+                        AuthBottomText(
+                            text = stringResource(R.string.no_account),
+                            clickableText = stringResource(R.string.register),
+                            onClick = { navController?.navigate(Routes.SignUp.route) }
+                        )
                     }
                 }
             }

@@ -7,11 +7,12 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun LoadingProgressBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    color: Color
 ) {
     Column(
         modifier = modifier
@@ -19,6 +20,8 @@ fun LoadingProgressBar(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        CircularProgressIndicator(color = Orange)
+        CircularProgressIndicator(
+            color = color
+        )
     }
 }
