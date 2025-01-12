@@ -11,7 +11,7 @@ data class AddProductUiState(
     val products: List<ProductByCategory>? = null,
     val product: String = "",
     val productId: Int = 0,
-    val quantity: Int = 1,
+    val quantity: String = "",
     val isQuantityInvalid: Boolean = false,
     val quantityErrorMessage: String = "",
     val isLoading: Boolean = true,
@@ -27,7 +27,7 @@ data class AddProductUiState(
         products = null,
         product = "",
         productId = 0,
-        quantity = 1,
+        quantity = "",
         isQuantityInvalid = false,
         quantityErrorMessage = "",
         isLoading = true,
@@ -35,9 +35,15 @@ data class AddProductUiState(
         isSuccess = false
     )
 
+    fun resetProduct() = copy(
+        product = "",
+        productId = 0
+    )
+
     val isValid: Boolean
         get() = !isQuantityInvalid &&
                 category.isNotEmpty() &&
-                product.isNotEmpty()
+                product.isNotEmpty() &&
+                quantity.isNotEmpty()
 
 }

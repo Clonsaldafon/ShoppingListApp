@@ -103,7 +103,11 @@ fun AddProductScreen(
                         onEvent = viewModel::onEvent
                     )
 
-                    Column {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        val maxQuantity = 1000
+
                         TextField(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -115,9 +119,15 @@ fun AddProductScreen(
                                     color = White,
                                     shape = RoundedCornerShape(16.dp)
                                 ),
-                            value = uiState.quantity.toString(),
-                            onValueChange = {
-                                viewModel.onEvent(AddProductEvent.OnQuantityChanged(it))
+                            value = uiState.quantity,
+                            onValueChange = { value ->
+                                if (value.isEmpty())
+                                    viewModel.onEvent(AddProductEvent.OnQuantityChanged(value))
+                                else if (value.isNotEmpty() &&
+                                    value.all { it.isDigit() } &&
+                                    value[0] != '0' &&
+                                    value.toInt() <= maxQuantity)
+                                    viewModel.onEvent(AddProductEvent.OnQuantityChanged(value))
                             },
                             placeholder = {
                                 Row(
@@ -162,24 +172,24 @@ fun AddProductScreen(
                             singleLine = true,
                             isError = uiState.isQuantityInvalid
                         )
-                    }
 
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                top = 5.dp,
-                                end = 5.dp
-                            ),
-                        text =
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    top = 5.dp,
+                                    end = 5.dp
+                                ),
+                            text =
                             if (uiState.isQuantityInvalid) uiState.quantityErrorMessage
-                            else "",
-                        style = TextStyle(
-                            color = Red,
-                            fontSize = 14.sp,
-                            textAlign = TextAlign.Center
+                            else "не более $maxQuantity шт",
+                            style = TextStyle(
+                                color = if (uiState.isQuantityInvalid) Red else Color.LightGray,
+                                fontSize = 14.sp,
+                                textAlign = TextAlign.Center
+                            )
                         )
-                    )
+                    }
                 }
 
                 Row(

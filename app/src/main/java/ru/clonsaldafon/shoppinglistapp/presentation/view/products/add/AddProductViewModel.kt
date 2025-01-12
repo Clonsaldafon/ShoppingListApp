@@ -103,11 +103,12 @@ class AddProductViewModel @Inject constructor(
 
     private fun updateCategory(value: Category) {
         _uiState.update {
-            it.copy(
-                category = value.name!!,
-                categoryId = value.categoryId!!,
-                isLoading = true
-            )
+            it.resetProduct()
+                .copy(
+                    category = value.name!!,
+                    categoryId = value.categoryId!!,
+                    isLoading = true
+                )
         }
 
         loadProducts()
@@ -164,7 +165,7 @@ class AddProductViewModel @Inject constructor(
         val intValue = if (value.isEmpty()) 0 else value.toInt()
         _uiState.update {
             it.copy(
-                quantity = intValue,
+                quantity = value,
                 isQuantityInvalid = intValue < 1 || intValue > 1000
             )
         }
@@ -172,7 +173,7 @@ class AddProductViewModel @Inject constructor(
 
     private fun addProduct(
         productId: Int,
-        quantity: Int,
+        quantity: String,
         onComplete: (isSuccess: Boolean?,
                      quantityErrorMessage: String?) -> Unit
     ) {
@@ -188,7 +189,7 @@ class AddProductViewModel @Inject constructor(
                     groupId = _uiState.value.groupId,
                     request = AddProductRequest(
                         productNameId = _uiState.value.productId,
-                        quantity = _uiState.value.quantity
+                        quantity = _uiState.value.quantity.toInt()
                     )
                 ).toUiState()
 
