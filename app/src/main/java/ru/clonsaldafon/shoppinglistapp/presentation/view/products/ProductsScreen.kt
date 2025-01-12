@@ -1,5 +1,6 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.products
 
+import android.icu.text.SimpleDateFormat
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -73,8 +74,8 @@ import java.text.DateFormat
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductsScreen(
@@ -304,13 +305,19 @@ fun ProductsScreen(
                             ) {
                                 LazyColumn {
                                     val dates = mutableSetOf<String>()
-                                    val formatter = DateTimeFormatter.ofPattern(
-                                        "dd.MM.yyyy"
+
+                                    val formatter = SimpleDateFormat(
+                                        "dd.MM.yyyy",
+                                        Locale.getDefault()
+                                    )
+                                    val inputFormat = SimpleDateFormat(
+                                        "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
+                                        Locale.getDefault()
                                     )
 
                                     items(uiState.products?.reversed() ?: listOf()) {
-                                        val date = ZonedDateTime.parse(it.createdAt)
-                                        val formattedDate = date.format(formatter)
+                                        val date = inputFormat.parse(it.createdAt)
+                                        val formattedDate = formatter.format(date)
 
                                         if (!dates.contains(formattedDate)) {
                                             DayList(

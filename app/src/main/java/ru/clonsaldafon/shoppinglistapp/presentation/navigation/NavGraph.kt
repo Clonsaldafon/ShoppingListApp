@@ -24,7 +24,6 @@ import ru.clonsaldafon.shoppinglistapp.presentation.view.products.ProductsScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.profile.ProfileScreen
 import ru.clonsaldafon.shoppinglistapp.presentation.view.signup.SignUpScreen
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavGraph(
     modifier: Modifier = Modifier,
