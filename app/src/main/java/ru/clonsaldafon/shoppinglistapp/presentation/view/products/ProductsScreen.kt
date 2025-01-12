@@ -424,6 +424,7 @@ fun ProductsScreen(
                                             unfocusedContainerColor = White,
                                             unfocusedIndicatorColor = Color.Transparent,
                                             focusedContainerColor = White,
+                                            focusedTextColor = DarkGray,
                                             focusedIndicatorColor = Color.Transparent,
                                             errorContainerColor = White,
                                             errorIndicatorColor = Color.Red,

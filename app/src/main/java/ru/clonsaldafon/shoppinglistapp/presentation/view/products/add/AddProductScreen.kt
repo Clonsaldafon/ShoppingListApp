@@ -93,13 +93,13 @@ fun AddProductScreen(
                 ) {
                     CategoriesMenu(
                         category = uiState.category,
-                        categories = uiState.categories ?: listOf(),
+                        categories = uiState.categories?.sortedBy { it.name } ?: listOf(),
                         onEvent = viewModel::onEvent
                     )
 
                     ProductsMenu(
                         product = uiState.product,
-                        products = uiState.products ?: listOf(),
+                        products = uiState.products?.sortedBy { it.name } ?: listOf(),
                         onEvent = viewModel::onEvent
                     )
 
@@ -161,6 +161,7 @@ fun AddProductScreen(
                                 unfocusedContainerColor = White,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 focusedContainerColor = White,
+                                focusedTextColor = DarkGray,
                                 focusedIndicatorColor = Color.Transparent,
                                 errorContainerColor = White,
                                 errorIndicatorColor = Color.Red,
