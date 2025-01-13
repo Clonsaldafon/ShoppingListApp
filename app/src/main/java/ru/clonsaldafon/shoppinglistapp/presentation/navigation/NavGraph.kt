@@ -31,8 +31,12 @@ fun NavGraph(
     val token by viewModel.userEntity.observeAsState()
 
     val startDestination =
-        if (token.isNullOrEmpty()) Routes.Onboarding.route
-        else Routes.Groups.route
+        if (token.isNullOrEmpty())
+            Routes.Onboarding.route
+        else if (token!!.last().accessToken == null || token!!.last().refreshToken == null)
+            Routes.LogIn.route
+        else
+            Routes.Groups.route
 
     NavHost(
         navController = navController,

@@ -54,6 +54,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
@@ -69,7 +70,8 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.White
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController? = null
+    navController: NavHostController? = null,
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
     var expanded by remember { mutableStateOf(false) }
     var isEditWindowHidden by remember { mutableStateOf(true) }
@@ -162,7 +164,14 @@ fun ProfileScreen(
                                         contentDescription = stringResource(R.string.exit)
                                     )
                                 },
-                                onClick = {},
+                                onClick = {
+                                    viewModel.onEvent(
+                                        ProfileEvent.OnExit { isSuccess ->
+                                            if (isSuccess == true)
+                                                navController?.navigate(Routes.LogIn.route)
+                                        }
+                                    )
+                                },
                                 colors = MenuDefaults.itemColors(
                                     textColor = Red,
                                     trailingIconColor = Red

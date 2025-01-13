@@ -16,4 +16,6 @@ interface UserRepository {
 
     suspend fun getGroups(): Result<List<Group>?>
 
+    suspend fun exit(): Result<String?>
+
 }

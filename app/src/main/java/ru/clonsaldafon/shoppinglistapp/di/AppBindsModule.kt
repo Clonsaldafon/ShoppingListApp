@@ -34,6 +34,8 @@ import ru.clonsaldafon.shoppinglistapp.domain.product.GetProductsByCategoryUseCa
 import ru.clonsaldafon.shoppinglistapp.domain.product.GetProductsByCategoryUseCaseImpl
 import ru.clonsaldafon.shoppinglistapp.domain.product.UpdateProductUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.product.UpdateProductUseCaseImpl
+import ru.clonsaldafon.shoppinglistapp.domain.user.ExitUseCase
+import ru.clonsaldafon.shoppinglistapp.domain.user.ExitUseCaseImpl
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetGroupsUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetGroupsUseCaseImpl
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetTokenUseCase
@@ -59,6 +61,9 @@ interface AppBindsModule {
 
     @Binds
     fun bindGetTokenUseCase(useCase: GetTokenUseCaseImpl): GetTokenUseCase
+
+    @Binds
+    fun bindExitUseCase(useCase: ExitUseCaseImpl): ExitUseCase
 
     @Binds
     fun bindGetGroupsUseCase(useCase: GetGroupsUseCaseImpl): GetGroupsUseCase

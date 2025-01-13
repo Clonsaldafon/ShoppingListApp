@@ -113,4 +113,22 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun exit(): Result<String?> {
+        kotlin.runCatching {
+            dao.upsertUser(
+                UserEntity(
+                    accessToken = null,
+                    refreshToken = null
+                )
+            )
+        }.fold(
+            onSuccess = {
+                return Result.success("success")
+            },
+            onFailure = {
+                return Result.failure(Exception("failure"))
+            }
+        )
+    }
+
 }
