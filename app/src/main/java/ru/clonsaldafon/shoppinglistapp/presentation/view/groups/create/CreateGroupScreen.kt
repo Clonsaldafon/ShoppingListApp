@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import okhttp3.Route
 import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
@@ -64,7 +65,7 @@ fun CreateGroupScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (uiState.isSubmitting) {
-            CircularProgressIndicator(
+            LoadingProgressBar(
                 color = Orange
             )
         } else {

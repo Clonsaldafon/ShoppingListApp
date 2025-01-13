@@ -195,9 +195,11 @@ class ProductsViewModel @Inject constructor(
     }
 
     private fun updateCurrentPrice(value: String) {
+        val doubleValue = if (value.isEmpty()) 0.0 else value.toDouble()
         _uiState.update {
             it.copy(
-                currentPrice = value
+                currentPrice = value,
+                isCurrentPriceInvalid = doubleValue < 0
             )
         }
     }

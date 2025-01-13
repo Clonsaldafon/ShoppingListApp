@@ -57,6 +57,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthBottomText
+import ru.clonsaldafon.shoppinglistapp.presentation.component.GenderMenu
+import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
 import ru.clonsaldafon.shoppinglistapp.presentation.component.SignUpOutlinedTextField
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
@@ -124,7 +127,7 @@ fun SignUpScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (uiState.isSubmitting) {
-                    CircularProgressIndicator(
+                    LoadingProgressBar(
                         color = Orange
                     )
                 } else {
@@ -150,150 +153,11 @@ fun SignUpScreen(
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                         )
 
-                        var expanded by remember { mutableStateOf(false) }
-                        val genders = listOf(
-                            stringResource(R.string.male),
-                            stringResource(R.string.female)
+                        GenderMenu(
+                            value = uiState.gender,
+                            uiState = uiState,
+                            onEvent = viewModel::onEvent
                         )
-
-                        Column {
-                            OutlinedTextField(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(60.dp)
-                                    .border(
-                                        width = 1.dp,
-                                        color = DarkGray,
-                                        shape = RoundedCornerShape(15.dp)
-                                    )
-                                    .clickable { expanded = !expanded },
-                                shape = RoundedCornerShape(15.dp),
-                                value = if (uiState.gender != "") uiState.gender else genders[0],
-                                textStyle = TextStyle(
-                                    color = Black,
-                                    fontSize = 16.sp,
-                                    textAlign = TextAlign.Center
-                                ),
-                                enabled = false,
-                                onValueChange = {
-                                    viewModel.onEvent(SignUpEvent.OnGenderChanged(it))
-                                },
-                                leadingIcon = {
-                                    Column(
-                                        modifier = Modifier
-                                            .width(60.dp)
-                                            .height(60.dp)
-                                            .background(
-                                                color = DarkGray,
-                                                shape = RoundedCornerShape(
-                                                    topStart = 15.dp,
-                                                    bottomStart = 15.dp
-                                                )
-                                            ),
-                                        verticalArrangement = Arrangement.Center,
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Icon(
-                                            modifier = Modifier
-                                                .width(30.dp)
-                                                .height(30.dp),
-                                            imageVector =
-                                            if (uiState.gender == ""
-                                                || uiState.gender == stringResource(R.string.male))
-                                                ImageVector.vectorResource(R.drawable.ic_male)
-                                            else
-                                                ImageVector.vectorResource(R.drawable.ic_female),
-                                            tint = White,
-                                            contentDescription = stringResource(R.string.gender)
-                                        )
-                                    }
-                                },
-                                trailingIcon = {
-                                    Icon(
-                                        imageVector =
-                                        if (expanded)
-                                            Icons.Filled.KeyboardArrowUp
-                                        else
-                                            Icons.Filled.KeyboardArrowDown,
-                                        contentDescription = null,
-                                        tint = DarkGray
-                                    )
-                                },
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    unfocusedBorderColor = Color.Transparent,
-                                    focusedBorderColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    focusedContainerColor = Color.Transparent,
-                                    disabledBorderColor = Color.Transparent
-                                )
-                            )
-
-                            DropdownMenu(
-                                modifier = Modifier
-                                    .background(
-                                        color = White
-                                    ),
-                                expanded = expanded,
-                                onDismissRequest = { expanded = false }
-                            ) {
-                                genders.forEach { gender ->
-                                    DropdownMenuItem(
-                                        onClick = {
-                                            expanded = false
-                                            viewModel.onEvent(SignUpEvent.OnGenderChanged(gender))
-                                        },
-                                        text = {
-                                            Row(
-                                                verticalAlignment = Alignment.CenterVertically,
-                                                horizontalArrangement = Arrangement.spacedBy(10.dp)
-                                            ) {
-                                                val imageVector =
-                                                if (gender == stringResource(R.string.male))
-                                                    ImageVector.vectorResource(R.drawable.ic_male)
-                                                else
-                                                    ImageVector.vectorResource(R.drawable.ic_female)
-                                                val tint =
-                                                if (gender == stringResource(R.string.male))
-                                                    Blue
-                                                else
-                                                    Pink
-
-                                                Icon(
-                                                    imageVector = imageVector,
-                                                    contentDescription = stringResource(
-                                                        R.string.gender
-                                                    ),
-                                                    tint = tint
-                                                )
-
-                                                Text(
-                                                    text = gender,
-                                                    style = TextStyle(
-                                                        color = DarkGray,
-                                                        fontSize = 14.sp
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-
-                            Text(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        top = 5.dp,
-                                        end = 5.dp
-                                    ),
-                                text = "",
-                                style = TextStyle(
-                                    color = Color.Gray,
-                                    fontSize = 14.sp,
-                                    textAlign = TextAlign.Right
-                                )
-                            )
-                        }
 
                         Button(
                             modifier = Modifier
@@ -359,30 +223,11 @@ fun SignUpScreen(
                             }
                         }
 
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(5.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = stringResource(R.string.already_have_account),
-                                style = TextStyle(
-                                    color = Black,
-                                    fontSize = 14.sp
-                                )
-                            )
-
-                            Text(
-                                modifier = Modifier
-                                    .clickable { navController?.navigate(Routes.LogIn.route) }
-                                    .padding(2.dp),
-                                text = stringResource(R.string.authorize),
-                                style = TextStyle(
-                                    color = Orange,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            )
-                        }
+                        AuthBottomText(
+                            text = stringResource(R.string.already_have_account),
+                            clickableText = stringResource(R.string.authorize),
+                            onClick = { navController?.navigate(Routes.LogIn.route) }
+                        )
                     }
                 }
             }

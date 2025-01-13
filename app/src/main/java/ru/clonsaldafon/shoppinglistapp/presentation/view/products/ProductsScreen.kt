@@ -1,5 +1,6 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.products
 
+import android.icu.text.SimpleDateFormat
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
@@ -53,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,6 +63,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.data.model.Product
+import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.presentation.view.groups.create.CreateGroupEvent
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
@@ -73,8 +78,8 @@ import java.text.DateFormat
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductsScreen(
@@ -264,7 +269,7 @@ fun ProductsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (uiState.isLoading) {
-                    CircularProgressIndicator(
+                    LoadingProgressBar(
                         color = Orange
                     )
                 } else {
@@ -303,26 +308,35 @@ fun ProductsScreen(
                                     )
                             ) {
                                 LazyColumn {
-                                    val dates = mutableSetOf<String>()
-                                    val formatter = DateTimeFormatter.ofPattern(
-                                        "dd.MM.yyyy"
+                                    val formatter = SimpleDateFormat(
+                                        "dd.MM.yyyy",
+                                        Locale.getDefault()
+                                    )
+                                    val inputFormat = SimpleDateFormat(
+                                        "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
+                                        Locale.getDefault()
                                     )
 
-                                    items(uiState.products?.reversed() ?: listOf()) {
-                                        val date = ZonedDateTime.parse(it.createdAt)
-                                        val formattedDate = date.format(formatter)
+                                    val lists = mutableMapOf<String, MutableList<Product>>()
+                                    uiState.products?.forEach {
+                                        val date = inputFormat.parse(it.createdAt)
+                                        val formattedDate = formatter.format(date)
 
-                                        if (!dates.contains(formattedDate)) {
-                                            DayList(
-                                                groupId = uiState.groupId,
-                                                date = formattedDate,
-                                                products = uiState.products ?: listOf(),
-                                                uiState = uiState,
-                                                onEvent = viewModel::onEvent
-                                            )
+                                        if (!lists.contains(formattedDate))
+                                            lists[formattedDate] = mutableListOf(it)
+                                        else
+                                            lists[formattedDate]?.add(it)
+                                    }
 
-                                            dates.add(formattedDate)
-                                        }
+                                    val data = lists.toList().sortedByDescending { it.first }
+                                    items(data) { pair ->
+                                        DayList(
+                                            groupId = uiState.groupId,
+                                            date = pair.first,
+                                            products = pair.second.sortedBy { it.boughtBy },
+                                            uiState = uiState,
+                                            onEvent = viewModel::onEvent
+                                        )
                                     }
                                 }
                             }
@@ -391,9 +405,10 @@ fun ProductsScreen(
                                         if (uiState.currentPrice == null) ""
                                         else uiState.currentPrice.toString(),
                                         onValueChange = {
-                                            viewModel.onEvent(
-                                                ProductsEvent.OnCurrentPriceUpdated(it)
-                                            )
+                                            if (it.toDoubleOrNull() != null || it.isEmpty())
+                                                viewModel.onEvent(
+                                                    ProductsEvent.OnCurrentPriceUpdated(it)
+                                                )
                                         },
                                         label = {
                                             Text(
@@ -406,15 +421,19 @@ fun ProductsScreen(
                                         },
                                         colors = TextFieldDefaults.colors(
                                             disabledContainerColor = White,
-                                            disabledTextColor = Black,
+                                            disabledTextColor = DarkGray,
                                             disabledIndicatorColor = Color.Transparent,
                                             unfocusedContainerColor = White,
                                             unfocusedIndicatorColor = Color.Transparent,
-                                            focusedContainerColor = LightOrange,
+                                            focusedContainerColor = White,
+                                            focusedTextColor = DarkGray,
                                             focusedIndicatorColor = Color.Transparent,
                                             errorContainerColor = White,
                                             errorIndicatorColor = Color.Red,
                                             cursorColor = Orange
+                                        ),
+                                        keyboardOptions = KeyboardOptions(
+                                            keyboardType = KeyboardType.Number
                                         ),
                                         singleLine = true,
                                         isError = uiState.isCurrentPriceInvalid

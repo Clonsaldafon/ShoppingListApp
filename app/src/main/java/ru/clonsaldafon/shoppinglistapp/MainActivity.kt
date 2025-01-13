@@ -16,7 +16,6 @@ import ru.clonsaldafon.shoppinglistapp.ui.theme.ShoppingListAppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import ru.clonsaldafon.shoppinglistapp.R
+import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
@@ -71,7 +72,7 @@ fun AddProductScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (uiState.isLoading || uiState.isSubmitting) {
-            CircularProgressIndicator(
+            LoadingProgressBar(
                 color = Orange
             )
         } else {
@@ -93,17 +94,21 @@ fun AddProductScreen(
                 ) {
                     CategoriesMenu(
                         category = uiState.category,
-                        categories = uiState.categories ?: listOf(),
+                        categories = uiState.categories?.sortedBy { it.name } ?: listOf(),
                         onEvent = viewModel::onEvent
                     )
 
                     ProductsMenu(
                         product = uiState.product,
-                        products = uiState.products ?: listOf(),
+                        products = uiState.products?.sortedBy { it.name } ?: listOf(),
                         onEvent = viewModel::onEvent
                     )
 
-                    Column {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        val maxQuantity = 1000
+
                         TextField(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -115,9 +120,15 @@ fun AddProductScreen(
                                     color = White,
                                     shape = RoundedCornerShape(16.dp)
                                 ),
-                            value = uiState.quantity.toString(),
-                            onValueChange = {
-                                viewModel.onEvent(AddProductEvent.OnQuantityChanged(it))
+                            value = uiState.quantity,
+                            onValueChange = { value ->
+                                if (value.isEmpty())
+                                    viewModel.onEvent(AddProductEvent.OnQuantityChanged(value))
+                                else if (value.isNotEmpty() &&
+                                    value.all { it.isDigit() } &&
+                                    value[0] != '0' &&
+                                    value.toInt() <= maxQuantity)
+                                    viewModel.onEvent(AddProductEvent.OnQuantityChanged(value))
                             },
                             placeholder = {
                                 Row(
@@ -151,6 +162,7 @@ fun AddProductScreen(
                                 unfocusedContainerColor = White,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 focusedContainerColor = White,
+                                focusedTextColor = DarkGray,
                                 focusedIndicatorColor = Color.Transparent,
                                 errorContainerColor = White,
                                 errorIndicatorColor = Color.Red,
@@ -162,24 +174,24 @@ fun AddProductScreen(
                             singleLine = true,
                             isError = uiState.isQuantityInvalid
                         )
-                    }
 
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                top = 5.dp,
-                                end = 5.dp
-                            ),
-                        text =
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    top = 5.dp,
+                                    end = 5.dp
+                                ),
+                            text =
                             if (uiState.isQuantityInvalid) uiState.quantityErrorMessage
-                            else "",
-                        style = TextStyle(
-                            color = Red,
-                            fontSize = 14.sp,
-                            textAlign = TextAlign.Center
+                            else "не более $maxQuantity шт",
+                            style = TextStyle(
+                                color = if (uiState.isQuantityInvalid) Red else Color.LightGray,
+                                fontSize = 14.sp,
+                                textAlign = TextAlign.Center
+                            )
                         )
-                    )
+                    }
                 }
 
                 Row(

@@ -156,7 +156,11 @@ fun ProductItem(
                         onEvent(ProductsEvent.OnCurrentProductBought(true))
                     },
                     colors = CheckboxDefaults.colors(
-                        checkedColor = DarkGray
+                        checkedColor = Orange,
+                        uncheckedColor = DarkGray,
+                        checkmarkColor = White,
+                        disabledCheckedColor = DarkGray,
+                        disabledUncheckedColor = DarkGray
                     ),
                     enabled = price == 0.0
                 )
