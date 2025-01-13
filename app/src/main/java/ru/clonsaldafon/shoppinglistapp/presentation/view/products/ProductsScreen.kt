@@ -328,7 +328,8 @@ fun ProductsScreen(
                                             lists[formattedDate]?.add(it)
                                     }
 
-                                    items(lists.toList().reversed()) { pair ->
+                                    val data = lists.toList().sortedByDescending { it.first }
+                                    items(data) { pair ->
                                         DayList(
                                             groupId = uiState.groupId,
                                             date = pair.first,
