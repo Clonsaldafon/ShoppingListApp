@@ -335,7 +335,10 @@ fun ProductsScreen(
                                             date = pair.first,
                                             products = pair.second.sortedBy { it.boughtBy },
                                             uiState = uiState,
-                                            onEvent = viewModel::onEvent
+                                            onEvent = viewModel::onEvent,
+                                            areProductsVisible = pair.second.all {
+                                                !it.boughtBy.isNullOrEmpty()
+                                            }
                                         )
                                     }
                                 }

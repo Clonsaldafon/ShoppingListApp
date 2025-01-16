@@ -35,9 +35,10 @@ fun DayList(
     date: String,
     products: List<Product>,
     uiState: ProductsUiState,
-    onEvent: (ProductsEvent) -> Unit
+    onEvent: (ProductsEvent) -> Unit,
+    areProductsVisible: Boolean
 ) {
-    var expanded by remember { mutableStateOf(true) }
+    var expanded by remember { mutableStateOf(!areProductsVisible) }
 
     Row(
         modifier = Modifier
