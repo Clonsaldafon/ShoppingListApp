@@ -30,7 +30,7 @@ class GroupInfoViewModel @Inject constructor(
         get() = _uiState
 
     fun loadMembers(groupId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val value = ResponseHandler.handle(
                 request = { getMembersUseCase(groupId) },
                 onBadRequest = { onBadRequest() },
@@ -43,12 +43,12 @@ class GroupInfoViewModel @Inject constructor(
             )
 
             updateMembers(value)
-        }
 
-        _uiState.update {
-            it.copy(
-                isLoading = false
-            )
+            _uiState.update {
+                it.copy(
+                    isLoading = false
+                )
+            }
         }
     }
 

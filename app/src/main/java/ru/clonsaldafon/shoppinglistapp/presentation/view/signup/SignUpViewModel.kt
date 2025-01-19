@@ -88,13 +88,13 @@ class SignUpViewModel @Inject constructor(
     private fun signup(
         onComplete: (tokenResponse: TokenResponse?, loginErrorMessage: String?) -> Unit
     ) {
-        _uiState.update {
-            it.copy(
-                isSubmitting = true
-            )
-        }
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isSubmitting = true
+                )
+            }
 
-        viewModelScope.launch(Dispatchers.IO) {
             val gender =
                 if (_uiState.value.gender == "Мужчина" ||
                     _uiState.value.gender == "Male" ||
@@ -122,15 +122,15 @@ class SignUpViewModel @Inject constructor(
 
             updateTokens(value?.accessToken, value?.refreshToken)
 
+            _uiState.update {
+                it.copy(
+                    isSubmitting = false
+                )
+            }
+
             onComplete(
                 _uiState.value.tokenResponse,
                 _uiState.value.loginErrorMessage
-            )
-        }
-
-        _uiState.update {
-            it.copy(
-                isSubmitting = false
             )
         }
     }

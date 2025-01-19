@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import ru.clonsaldafon.shoppinglistapp.data.model.Group
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetGroupsUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetTokenUseCase
@@ -37,7 +39,7 @@ class GroupsViewModel @Inject constructor(
     }
 
     private fun loadGroups() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val value = ResponseHandler.handle(
                 request = { getGroupsUseCase() },
                 onBadRequest = { onBadRequest() },
@@ -47,12 +49,12 @@ class GroupsViewModel @Inject constructor(
             )
 
             updateGroupList(value ?: listOf())
-        }
 
-        _uiState.update {
-            it.copy(
-                isLoading = false
-            )
+            _uiState.update {
+                it.copy(
+                    isLoading = false
+                )
+            }
         }
     }
 
@@ -65,7 +67,7 @@ class GroupsViewModel @Inject constructor(
     }
 
     private fun onBadRequest() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             ResponseHandler.handle(
                 request = { logInUseCase() },
                 onBadRequest = { onBadRequest() },

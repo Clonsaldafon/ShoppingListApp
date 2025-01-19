@@ -54,7 +54,7 @@ class ProductsViewModel @Inject constructor(
     }
 
     fun loadProducts() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val value = ResponseHandler.handle(
                 request = {
                     getProductsUseCase(
@@ -70,12 +70,12 @@ class ProductsViewModel @Inject constructor(
             )
 
             updateProducts(value ?: listOf())
-        }
 
-        _uiState.update {
-            it.copy(
-                isLoading = false
-            )
+            _uiState.update {
+                it.copy(
+                    isLoading = false
+                )
+            }
         }
     }
 
@@ -94,13 +94,13 @@ class ProductsViewModel @Inject constructor(
     }
 
     private fun deleteProduct(groupId: String, productId: String) {
-        _uiState.update {
-            it.copy(
-                isLoading = true
-            )
-        }
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
-        viewModelScope.launch(Dispatchers.IO) {
             ResponseHandler.handle(
                 request = { deleteProductUseCase(groupId, productId) },
                 onBadRequest = { onBadRequest() },
@@ -110,15 +110,15 @@ class ProductsViewModel @Inject constructor(
                 onInternalServerError = { onError("На сервере произошла ошибка") },
                 onUnknownError = { onError("Не удалось подключиться к серверу") }
             )
-        }
 
-        _uiState.update {
-            it.copy(
-                products = it.products?.filter { product ->
-                    product.productId.toString() != productId
-                },
-                isLoading = false
-            )
+            _uiState.update {
+                it.copy(
+                    products = it.products?.filter { product ->
+                        product.productId.toString() != productId
+                    },
+                    isLoading = false
+                )
+            }
         }
     }
 

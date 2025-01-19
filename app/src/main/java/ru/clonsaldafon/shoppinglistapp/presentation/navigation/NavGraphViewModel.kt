@@ -21,6 +21,10 @@ class NavGraphViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            val user = dao.getUser()
+            if (user != null && user.size > 1)
+                dao.clear()
+
             _userEntity.postValue(dao.getUser())
         }
     }

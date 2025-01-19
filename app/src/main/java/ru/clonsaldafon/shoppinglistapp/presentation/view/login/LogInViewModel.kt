@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import ru.clonsaldafon.shoppinglistapp.data.model.user.LogInRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 import ru.clonsaldafon.shoppinglistapp.domain.user.LogInUseCase
@@ -90,13 +92,13 @@ class LogInViewModel @Inject constructor(
                      loginErrorMessage: String?,
                      passwordErrorMessage: String?) -> Unit
     ) {
-        _uiState.update {
-            it.copy(
-                isSubmitting = true
-            )
-        }
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isSubmitting = true
+                )
+            }
 
-        viewModelScope.launch(Dispatchers.IO) {
             val value = ResponseHandler.handle(
                 request = {
                     logInUseCase(
@@ -116,16 +118,16 @@ class LogInViewModel @Inject constructor(
 
             updateTokens(value?.accessToken, value?.refreshToken)
 
+            _uiState.update {
+                it.copy(
+                    isSubmitting = false
+                )
+            }
+
             onComplete(
                 _uiState.value.tokenResponse,
                 _uiState.value.loginErrorMessage,
                 _uiState.value.passwordErrorMessage
-            )
-        }
-
-        _uiState.update {
-            it.copy(
-                isSubmitting = false
             )
         }
     }

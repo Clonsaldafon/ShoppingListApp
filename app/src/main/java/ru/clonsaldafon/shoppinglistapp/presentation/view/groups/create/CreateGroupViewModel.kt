@@ -75,13 +75,13 @@ class CreateGroupViewModel @Inject constructor(
                      nameErrorMessage: String?,
                      descriptionErrorMessage: String?) -> Unit
     ) {
-        _uiState.update {
-            it.copy(
-                isSubmitting = true
-            )
-        }
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isSubmitting = true
+                )
+            }
 
-        viewModelScope.launch(Dispatchers.IO) {
             ResponseHandler.handle(
                 request = {
                     createGroupUseCase(
@@ -98,25 +98,23 @@ class CreateGroupViewModel @Inject constructor(
                 onUnknownError = { onError("Не удалось подключиться к серверу") }
             )
 
+            _uiState.update {
+                it.copy(
+                    isSuccess = true,
+                    isSubmitting = false
+                )
+            }
 
-        }
-
-        _uiState.update {
-            it.copy(
-                isSuccess = true,
-                isSubmitting = false
+            onComplete(
+                _uiState.value.isSuccess,
+                _uiState.value.nameErrorMessage,
+                _uiState.value.descriptionErrorMessage
             )
         }
-
-        onComplete(
-            _uiState.value.isSuccess,
-            _uiState.value.nameErrorMessage,
-            _uiState.value.descriptionErrorMessage
-        )
     }
 
     private fun onBadRequest() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             ResponseHandler.handle(
                 request = { logInUseCase() },
                 onBadRequest = { onBadRequest() },

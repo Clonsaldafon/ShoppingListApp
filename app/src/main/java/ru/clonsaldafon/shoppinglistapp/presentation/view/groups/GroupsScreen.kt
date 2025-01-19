@@ -242,7 +242,7 @@ fun GroupsScreen(
             showSnackbar = true
         }
 
-        LaunchedEffect(showSnackbar, Dispatchers.Default) {
+        LaunchedEffect(showSnackbar) {
             if (showSnackbar) {
                 snackbarHostState.showSnackbar(uiState.error)
                 showSnackbar = false

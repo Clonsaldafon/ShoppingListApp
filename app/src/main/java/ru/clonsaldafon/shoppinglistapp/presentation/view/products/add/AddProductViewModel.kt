@@ -1,16 +1,13 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.products.add
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.clonsaldafon.shoppinglistapp.data.model.Category
-import ru.clonsaldafon.shoppinglistapp.data.model.Product
 import ru.clonsaldafon.shoppinglistapp.data.model.ProductByCategory
 import ru.clonsaldafon.shoppinglistapp.data.model.group.AddProductRequest
 import ru.clonsaldafon.shoppinglistapp.domain.product.AddProductUseCase
@@ -19,8 +16,6 @@ import ru.clonsaldafon.shoppinglistapp.domain.product.GetProductsByCategoryUseCa
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetTokenUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.user.LogInUseCase
 import ru.clonsaldafon.shoppinglistapp.presentation.ResponseHandler
-import ru.clonsaldafon.shoppinglistapp.presentation.UiState
-import ru.clonsaldafon.shoppinglistapp.presentation.toUiState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,7 +62,7 @@ class AddProductViewModel @Inject constructor(
     }
 
     private fun loadCategories() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val value = ResponseHandler.handle(
                 request = { getCategoriesUseCase() },
                 onBadRequest = { onBadRequest() },
@@ -77,12 +72,12 @@ class AddProductViewModel @Inject constructor(
             )
 
             updateCategories(value)
-        }
 
-        _uiState.update {
-            it.copy(
-                isLoading = false
-            )
+            _uiState.update {
+                it.copy(
+                    isLoading = false
+                )
+            }
         }
     }
 
@@ -107,7 +102,7 @@ class AddProductViewModel @Inject constructor(
     }
 
     private fun loadProducts() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val value = ResponseHandler.handle(
                 request = {
                     getProductsByCategoryUseCase(
@@ -156,13 +151,13 @@ class AddProductViewModel @Inject constructor(
         onComplete: (isSuccess: Boolean?,
                      quantityErrorMessage: String?) -> Unit
     ) {
-        _uiState.update {
-            it.copy(
-                isSubmitting = true
-            )
-        }
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isSubmitting = true
+                )
+            }
 
-        viewModelScope.launch(Dispatchers.IO) {
             ResponseHandler.handle(
                 request = {
                     addProductUseCase(
@@ -180,23 +175,23 @@ class AddProductViewModel @Inject constructor(
                 onInternalServerError = { onError("На сервере произошла ошибка") },
                 onUnknownError = { onError("Не удалось подключиться к серверу") }
             )
-        }
 
-        _uiState.update {
-            it.copy(
-                isSuccess = true,
-                isSubmitting = false
+            _uiState.update {
+                it.copy(
+                    isSuccess = true,
+                    isSubmitting = false
+                )
+            }
+
+            onComplete(
+                _uiState.value.isSuccess,
+                _uiState.value.quantityErrorMessage
             )
         }
-
-        onComplete(
-            _uiState.value.isSuccess,
-            _uiState.value.quantityErrorMessage
-        )
     }
 
     private fun onBadRequest() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             ResponseHandler.handle(
                 request = { logInUseCase() },
                 onBadRequest = { onBadRequest() },
