@@ -4,12 +4,14 @@ import ru.clonsaldafon.shoppinglistapp.data.model.Group
 
 data class GroupsUiState(
     val groups: List<Group>? = null,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val error: String = ""
 ) {
 
     fun reset() = copy(
         groups = null,
-        isLoading = true
+        isLoading = true,
+        error = ""
     )
 
 }

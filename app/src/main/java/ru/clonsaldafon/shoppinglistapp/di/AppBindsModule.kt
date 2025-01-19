@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import ru.clonsaldafon.shoppinglistapp.data.db.MIGRATION_1_2
 import ru.clonsaldafon.shoppinglistapp.data.db.UserDAO
 import ru.clonsaldafon.shoppinglistapp.data.db.UserDatabase
 import ru.clonsaldafon.shoppinglistapp.data.repository.GroupRepository
@@ -111,11 +112,14 @@ interface AppBindsModule {
         @Provides
         @Singleton
         fun provideDb(context: Context): UserDatabase =
-            Room.databaseBuilder(
-                context,
-                UserDatabase::class.java,
-                "user.db"
-            ).build()
+            Room
+                .databaseBuilder(
+                    context,
+                    UserDatabase::class.java,
+                    "user.db"
+                )
+                .addMigrations(MIGRATION_1_2)
+                .build()
 
         @Provides
         @Singleton

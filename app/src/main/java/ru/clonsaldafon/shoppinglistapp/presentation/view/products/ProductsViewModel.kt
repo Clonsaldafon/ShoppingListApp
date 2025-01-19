@@ -4,17 +4,19 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.clonsaldafon.shoppinglistapp.data.model.Product
 import ru.clonsaldafon.shoppinglistapp.data.model.group.UpdateProductRequest
 import ru.clonsaldafon.shoppinglistapp.domain.group.GetProductsUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.product.DeleteProductUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.product.UpdateProductUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetTokenUseCase
-import ru.clonsaldafon.shoppinglistapp.presentation.UiState
-import ru.clonsaldafon.shoppinglistapp.presentation.toUiState
+import ru.clonsaldafon.shoppinglistapp.domain.user.LogInUseCase
+import ru.clonsaldafon.shoppinglistapp.presentation.ResponseHandler
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +24,8 @@ class ProductsViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
     private val updateProductUseCase: UpdateProductUseCase,
-    private val getTokenUseCase: GetTokenUseCase
+    private val getTokenUseCase: GetTokenUseCase,
+    private val logInUseCase: LogInUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProductsUiState())
@@ -51,40 +54,36 @@ class ProductsViewModel @Inject constructor(
     }
 
     fun loadProducts() {
-        viewModelScope.launch {
-            try {
-                val response = getProductsUseCase(_uiState.value.groupId.toInt()).toUiState()
-
-                when (response) {
-                    is UiState.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                products = response.value
-                            )
-                        }
-                    }
-                    is UiState.Failure -> {
-                        when (response.code) {
-                            401 -> {
-                                when (val refreshResponse = getTokenUseCase().toUiState()) {
-                                    is UiState.Success -> loadProducts()
-                                    is UiState.Failure -> {}
-                                    is UiState.Loading -> {}
-                                }
-                            }
-                        }
-                    }
-                    is UiState.Loading -> {}
-                }
-            } catch (e: Exception) {
-                Log.e("error", e.message!!)
-            } finally {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false
+        viewModelScope.launch(Dispatchers.IO) {
+            val value = ResponseHandler.handle(
+                request = {
+                    getProductsUseCase(
+                        groupId = _uiState.value.groupId.toInt()
                     )
-                }
-            }
+                },
+                onBadRequest = { onBadRequest() },
+                onUnauthorized = { getTokenUseCase() },
+                onNotFound = { onError("Группа или продукты не найдены") },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
+
+            updateProducts(value ?: listOf())
+        }
+
+        _uiState.update {
+            it.copy(
+                isLoading = false
+            )
+        }
+    }
+
+    private fun updateProducts(value: List<Product>) {
+        _uiState.update {
+            it.copy(
+                products = value
+            )
         }
     }
 
@@ -95,34 +94,31 @@ class ProductsViewModel @Inject constructor(
     }
 
     private fun deleteProduct(groupId: String, productId: String) {
-        viewModelScope.launch {
-            try {
-                when (val response = deleteProductUseCase(groupId, productId).toUiState()) {
-                    is UiState.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                products = it.products?.filter { product ->
-                                    product.productId.toString() != productId
-                                }
-                            )
-                        }
-                    }
-                    is UiState.Failure -> {
-                        when (response.code) {
-                            401 -> {
-                                when (val refreshResponse = getTokenUseCase().toUiState()) {
-                                    is UiState.Success -> deleteProduct(groupId, productId)
-                                    is UiState.Failure -> {}
-                                    is UiState.Loading -> {}
-                                }
-                            }
-                        }
-                    }
-                    is UiState.Loading -> {}
-                }
-            } catch (e: Exception) {
-                Log.e("error", e.message!!)
-            }
+        _uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            ResponseHandler.handle(
+                request = { deleteProductUseCase(groupId, productId) },
+                onBadRequest = { onBadRequest() },
+                onUnauthorized = { getTokenUseCase() },
+                onNotFound = { onError("Группа или продукт не найдены") },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
+        }
+
+        _uiState.update {
+            it.copy(
+                products = it.products?.filter { product ->
+                    product.productId.toString() != productId
+                },
+                isLoading = false
+            )
         }
     }
 
@@ -139,40 +135,27 @@ class ProductsViewModel @Inject constructor(
                 else _uiState.value.currentPrice?.toDouble()
 
             viewModelScope.launch {
-                try {
-                    val response = updateProductUseCase(
-                        groupId = groupId,
-                        productId = productId,
-                        request = UpdateProductRequest(
-                            price = doublePrice,
-                            quantity = _uiState.value.currentQuantity,
-                            status = if (_uiState.value.isCurrentBought) "closed" else "open"
+                ResponseHandler.handle(
+                    request = {
+                        updateProductUseCase(
+                            groupId = groupId,
+                            productId = productId,
+                            request = UpdateProductRequest(
+                                price = doublePrice,
+                                quantity = _uiState.value.currentQuantity,
+                                status = if (_uiState.value.isCurrentBought) "closed" else "open"
+                            )
                         )
-                    ).toUiState()
+                    },
+                    onBadRequest = { onBadRequest() },
+                    onUnauthorized = { getTokenUseCase() },
+                    onNotFound = { onError("Группа или продукт не найдены") },
+                    onUnprocessableEntity = { onError("Неверный формат данных") },
+                    onInternalServerError = { onError("На сервере произошла ошибка") },
+                    onUnknownError = { onError("Не удалось подключиться к серверу") }
+                )
 
-                    when (response) {
-                        is UiState.Success -> {
-                            loadProducts()
-                        }
-                        is UiState.Failure -> {
-                            when (response.code) {
-                                401 -> {
-                                    when (val refreshResponse = getTokenUseCase().toUiState()) {
-                                        is UiState.Success ->
-                                            updateProduct(groupId, productId)
-                                        is UiState.Failure -> {}
-                                        is UiState.Loading -> {}
-                                    }
-                                }
-                            }
-                        }
-                        is UiState.Loading -> {}
-                    }
-                } catch (e: Exception) {
-                    Log.e("error", e.message!!)
-                } finally {
-                    resetCurrentValues()
-                }
+                loadProducts()
             }
         } catch (e: NumberFormatException) {
             Log.e("error", e.message!!)
@@ -183,6 +166,12 @@ class ProductsViewModel @Inject constructor(
                     currentPriceErrorMessage = "Введите число"
                 )
             }
+        }
+
+        _uiState.update {
+            it.copy(
+                isLoading = false
+            )
         }
     }
 
@@ -224,6 +213,27 @@ class ProductsViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 currentQuantity = value
+            )
+        }
+    }
+
+    private fun onBadRequest() {
+        viewModelScope.launch(Dispatchers.IO) {
+            ResponseHandler.handle(
+                request = { logInUseCase() },
+                onBadRequest = { onBadRequest() },
+                onNotFound = {  },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
+        }
+    }
+
+    private fun onError(message: String) {
+        _uiState.update {
+            it.copy(
+                error = message
             )
         }
     }

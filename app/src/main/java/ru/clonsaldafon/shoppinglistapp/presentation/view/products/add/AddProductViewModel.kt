@@ -4,17 +4,21 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.clonsaldafon.shoppinglistapp.data.model.Category
+import ru.clonsaldafon.shoppinglistapp.data.model.Product
 import ru.clonsaldafon.shoppinglistapp.data.model.ProductByCategory
 import ru.clonsaldafon.shoppinglistapp.data.model.group.AddProductRequest
 import ru.clonsaldafon.shoppinglistapp.domain.product.AddProductUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.product.GetCategoriesUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.product.GetProductsByCategoryUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetTokenUseCase
+import ru.clonsaldafon.shoppinglistapp.domain.user.LogInUseCase
+import ru.clonsaldafon.shoppinglistapp.presentation.ResponseHandler
 import ru.clonsaldafon.shoppinglistapp.presentation.UiState
 import ru.clonsaldafon.shoppinglistapp.presentation.toUiState
 import javax.inject.Inject
@@ -24,7 +28,8 @@ class AddProductViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val getProductsByCategoryUseCase: GetProductsByCategoryUseCase,
     private val addProductUseCase: AddProductUseCase,
-    private val getTokenUseCase: GetTokenUseCase
+    private val getTokenUseCase: GetTokenUseCase,
+    private val logInUseCase: LogInUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddProductUiState())
@@ -40,11 +45,7 @@ class AddProductViewModel @Inject constructor(
             is AddProductEvent.OnCategoryChanged -> updateCategory(event.value)
             is AddProductEvent.OnProductChanged -> updateProduct(event.value)
             is AddProductEvent.OnQuantityChanged -> updateQuantity(event.value)
-            is AddProductEvent.OnSubmit -> addProduct(
-                productId = event.productId,
-                quantity = event.quantity,
-                onComplete = event.onComplete
-            )
+            is AddProductEvent.OnSubmit -> addProduct(event.onComplete)
         }
     }
 
@@ -66,38 +67,22 @@ class AddProductViewModel @Inject constructor(
     }
 
     private fun loadCategories() {
-        viewModelScope.launch {
-            try {
-                when (val response = getCategoriesUseCase().toUiState()) {
-                    is UiState.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                categories = response.value
-                            )
-                        }
-                    }
-                    is UiState.Failure -> {
-                        when (response.code) {
-                            401 -> {
-                                when (val refreshResponse = getTokenUseCase().toUiState()) {
-                                    is UiState.Success -> loadCategories()
-                                    is UiState.Failure -> {}
-                                    is UiState.Loading -> {}
-                                }
-                            }
-                        }
-                    }
-                    is UiState.Loading -> {}
-                }
-            } catch (e: Exception) {
-                Log.e("error", e.message!!)
-            } finally {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false
-                    )
-                }
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            val value = ResponseHandler.handle(
+                request = { getCategoriesUseCase() },
+                onBadRequest = { onBadRequest() },
+                onUnauthorized = { getTokenUseCase() },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
+
+            updateCategories(value)
+        }
+
+        _uiState.update {
+            it.copy(
+                isLoading = false
+            )
         }
     }
 
@@ -106,49 +91,37 @@ class AddProductViewModel @Inject constructor(
             it.resetProduct()
                 .copy(
                     category = value.name!!,
-                    categoryId = value.categoryId!!,
-                    isLoading = true
+                    categoryId = value.categoryId!!
                 )
         }
 
         loadProducts()
     }
 
-    private fun loadProducts() {
-        viewModelScope.launch {
-            try {
-                val response = getProductsByCategoryUseCase(_uiState.value.categoryId).toUiState()
+    private fun updateCategories(value: List<Category>?) {
+        _uiState.update {
+            it.copy(
+                categories = value
+            )
+        }
+    }
 
-                when (response) {
-                    is UiState.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                products = response.value
-                            )
-                        }
-                    }
-                    is UiState.Failure -> {
-                        when (response.code) {
-                            401 -> {
-                                when (val refreshResponse = getTokenUseCase().toUiState()) {
-                                    is UiState.Success -> loadProducts()
-                                    is UiState.Failure -> {}
-                                    is UiState.Loading -> {}
-                                }
-                            }
-                        }
-                    }
-                    is UiState.Loading -> {}
-                }
-            } catch (e: Exception) {
-                Log.e("error", e.message!!)
-            } finally {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false
+    private fun loadProducts() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val value = ResponseHandler.handle(
+                request = {
+                    getProductsByCategoryUseCase(
+                        categoryId = _uiState.value.categoryId
                     )
-                }
-            }
+                },
+                onBadRequest = { onBadRequest() },
+                onUnauthorized = { getTokenUseCase() },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
+
+            updateProducts(value)
         }
     }
 
@@ -157,6 +130,14 @@ class AddProductViewModel @Inject constructor(
             it.copy(
                 product = value.name!!,
                 productId = value.productNameId!!
+            )
+        }
+    }
+
+    private fun updateProducts(value: List<ProductByCategory>?) {
+        _uiState.update {
+            it.copy(
+                products = value
             )
         }
     }
@@ -172,8 +153,6 @@ class AddProductViewModel @Inject constructor(
     }
 
     private fun addProduct(
-        productId: Int,
-        quantity: String,
         onComplete: (isSuccess: Boolean?,
                      quantityErrorMessage: String?) -> Unit
     ) {
@@ -183,52 +162,57 @@ class AddProductViewModel @Inject constructor(
             )
         }
 
-        viewModelScope.launch {
-            try {
-                val response = addProductUseCase(
-                    groupId = _uiState.value.groupId,
-                    request = AddProductRequest(
-                        productNameId = _uiState.value.productId,
-                        quantity = _uiState.value.quantity.toInt()
+        viewModelScope.launch(Dispatchers.IO) {
+            ResponseHandler.handle(
+                request = {
+                    addProductUseCase(
+                        groupId = _uiState.value.groupId,
+                        request = AddProductRequest(
+                            productNameId = _uiState.value.productId,
+                            quantity = _uiState.value.quantity.toInt()
+                        )
                     )
-                ).toUiState()
+                },
+                onBadRequest = { onBadRequest() },
+                onUnauthorized = { getTokenUseCase() },
+                onNotFound = { onError("Группа не найдена") },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
+        }
 
-                when (response) {
-                    is UiState.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                isSuccess = true
-                            )
-                        }
-                    }
-                    is UiState.Failure -> {
-                        when (response.code) {
-                            401 -> {
-                                when (val refreshResponse = getTokenUseCase().toUiState()) {
-                                    is UiState.Success ->
-                                        addProduct(productId, quantity, onComplete)
-                                    is UiState.Failure -> {}
-                                    is UiState.Loading -> {}
-                                }
-                            }
-                        }
-                    }
-                    is UiState.Loading -> {}
-                }
-            } catch (e: Exception) {
-                Log.e("error", e.message!!)
-            } finally {
-                onComplete(
-                    _uiState.value.isSuccess,
-                    _uiState.value.quantityErrorMessage
-                )
+        _uiState.update {
+            it.copy(
+                isSuccess = true,
+                isSubmitting = false
+            )
+        }
 
-                _uiState.update {
-                    it.copy(
-                        isSubmitting = false
-                    )
-                }
-            }
+        onComplete(
+            _uiState.value.isSuccess,
+            _uiState.value.quantityErrorMessage
+        )
+    }
+
+    private fun onBadRequest() {
+        viewModelScope.launch(Dispatchers.IO) {
+            ResponseHandler.handle(
+                request = { logInUseCase() },
+                onBadRequest = { onBadRequest() },
+                onNotFound = {  },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
+        }
+    }
+
+    private fun onError(message: String) {
+        _uiState.update {
+            it.copy(
+                error = message
+            )
         }
     }
 

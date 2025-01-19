@@ -16,7 +16,8 @@ data class AddProductUiState(
     val quantityErrorMessage: String = "",
     val isLoading: Boolean = true,
     val isSubmitting: Boolean = false,
-    val isSuccess: Boolean = false
+    val isSuccess: Boolean = false,
+    val error: String = ""
 ) {
 
     fun reset() = copy(
@@ -32,7 +33,8 @@ data class AddProductUiState(
         quantityErrorMessage = "",
         isLoading = true,
         isSubmitting = false,
-        isSuccess = false
+        isSuccess = false,
+        error = ""
     )
 
     fun resetProduct() = copy(

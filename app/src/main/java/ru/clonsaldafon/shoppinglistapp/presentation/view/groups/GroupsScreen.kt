@@ -30,10 +30,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.Dispatchers
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
@@ -69,6 +73,9 @@ fun GroupsScreen(
     viewModel: GroupsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    var showSnackbar by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = modifier,
@@ -226,8 +233,22 @@ fun GroupsScreen(
                     )
                 }
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { innerPadding ->
+        if (uiState.error.isNotEmpty()) {
+            showSnackbar = true
+        }
+
+        LaunchedEffect(showSnackbar, Dispatchers.Default) {
+            if (showSnackbar) {
+                snackbarHostState.showSnackbar(uiState.error)
+                showSnackbar = false
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()

@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
     entities = [
         UserEntity::class
     ],
-    version = 1
+    version = 2
 )
 abstract class UserDatabase : RoomDatabase() {
 

@@ -8,7 +8,8 @@ data class CreateGroupUiState(
     val nameErrorMessage: String = "",
     val descriptionErrorMessage: String = "",
     val isSubmitting: Boolean = false,
-    val isSuccess: Boolean = false
+    val isSuccess: Boolean = false,
+    val error: String = ""
 ) {
 
     fun reset() = copy(
@@ -19,7 +20,8 @@ data class CreateGroupUiState(
         nameErrorMessage = "",
         descriptionErrorMessage = "",
         isSubmitting = false,
-        isSuccess = false
+        isSuccess = false,
+        error = ""
     )
 
     val isValid: Boolean

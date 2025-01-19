@@ -8,8 +8,6 @@ sealed class AddProductEvent {
     data class OnProductChanged(val value: ProductByCategory) : AddProductEvent()
     data class OnQuantityChanged(val value: String) : AddProductEvent()
     data class OnSubmit(
-        val productId: Int,
-        val quantity: String,
         val onComplete: (isSuccess: Boolean?,
                          quantityErrorMessage: String?) -> Unit
     ) : AddProductEvent()

@@ -2,7 +2,6 @@ package ru.clonsaldafon.shoppinglistapp.presentation.view.signup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,29 +10,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,10 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -60,14 +52,13 @@ import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.presentation.component.AuthBottomText
 import ru.clonsaldafon.shoppinglistapp.presentation.component.GenderMenu
 import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
+import ru.clonsaldafon.shoppinglistapp.presentation.component.RememberMe
 import ru.clonsaldafon.shoppinglistapp.presentation.component.SignUpOutlinedTextField
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Blue
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
-import ru.clonsaldafon.shoppinglistapp.ui.theme.Pink
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,6 +68,9 @@ fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    var showSnackbar by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = modifier,
@@ -103,8 +97,22 @@ fun SignUpScreen(
                     )
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { innerPadding ->
+        if (uiState.error.isNotEmpty()) {
+            showSnackbar = true
+        }
+
+        LaunchedEffect(showSnackbar) {
+            if (showSnackbar) {
+                snackbarHostState.showSnackbar(uiState.error)
+                showSnackbar = false
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -159,6 +167,13 @@ fun SignUpScreen(
                             onEvent = viewModel::onEvent
                         )
 
+                        RememberMe(
+                            checked = uiState.remember,
+                            onCheckedChange = {
+                                viewModel.onEvent(SignUpEvent.OnRememberChanged(it))
+                            }
+                        )
+
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -177,12 +192,8 @@ fun SignUpScreen(
                             shape = RoundedCornerShape(15.dp),
                             onClick = {
                                 viewModel.onEvent(
-                                    SignUpEvent.OnSubmit(
-                                        username = uiState.login,
-                                        password = uiState.password,
-                                        gender = uiState.gender
-                                    ) { tokenResponse, loginErrorMessage ->
-                                        if (tokenResponse != null)
+                                    SignUpEvent.OnSubmit { tokenResponse, loginErrorMessage ->
+                                        if (tokenResponse?.accessToken != null)
                                             navController?.navigate(Routes.Groups.route)
 
                                         if (!loginErrorMessage.isNullOrEmpty())

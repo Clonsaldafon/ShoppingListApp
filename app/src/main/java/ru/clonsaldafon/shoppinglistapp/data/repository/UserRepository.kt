@@ -8,9 +8,11 @@ import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 
 interface UserRepository {
 
-    suspend fun signup(request: SignUpRequest): Result<TokenResponse?>
+    suspend fun signup(request: SignUpRequest, remember: Boolean): Result<TokenResponse?>
 
-    suspend fun login(request: LogInRequest): Result<TokenResponse?>
+    suspend fun login(request: LogInRequest, remember: Boolean): Result<TokenResponse?>
+
+    suspend fun login(): Result<TokenResponse?>
 
     suspend fun refresh(): Result<TokenResponse?>
 

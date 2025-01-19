@@ -1,25 +1,25 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.groups.create
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.clonsaldafon.shoppinglistapp.data.model.group.CreateGroupRequest
-import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 import ru.clonsaldafon.shoppinglistapp.domain.group.CreateGroupUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetTokenUseCase
-import ru.clonsaldafon.shoppinglistapp.presentation.UiState
-import ru.clonsaldafon.shoppinglistapp.presentation.toUiState
+import ru.clonsaldafon.shoppinglistapp.domain.user.LogInUseCase
+import ru.clonsaldafon.shoppinglistapp.presentation.ResponseHandler
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateGroupViewModel @Inject constructor(
     private val createGroupUseCase: CreateGroupUseCase,
-    private val getTokenUseCase: GetTokenUseCase
+    private val getTokenUseCase: GetTokenUseCase,
+    private val logInUseCase: LogInUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateGroupUiState())
@@ -30,7 +30,7 @@ class CreateGroupViewModel @Inject constructor(
         when (event) {
             is CreateGroupEvent.OnNameChanged -> updateName(event.value)
             is CreateGroupEvent.OnDescriptionChanged -> updateDescription(event.value)
-            is CreateGroupEvent.OnSubmit -> create(event.name, event.description, event.onComplete)
+            is CreateGroupEvent.OnSubmit -> create(event.onComplete)
         }
     }
 
@@ -71,8 +71,6 @@ class CreateGroupViewModel @Inject constructor(
     }
 
     private fun create(
-        name: String,
-        description: String,
         onComplete: (isSuccess: Boolean?,
                      nameErrorMessage: String?,
                      descriptionErrorMessage: String?) -> Unit
@@ -83,51 +81,58 @@ class CreateGroupViewModel @Inject constructor(
             )
         }
 
-        viewModelScope.launch {
-            try {
-                val response = createGroupUseCase(
-                    CreateGroupRequest(
-                        name = name,
-                        description = description
+        viewModelScope.launch(Dispatchers.IO) {
+            ResponseHandler.handle(
+                request = {
+                    createGroupUseCase(
+                        CreateGroupRequest(
+                            name = _uiState.value.name,
+                            description = _uiState.value.description
+                        )
                     )
-                ).toUiState()
+                },
+                onBadRequest = { onBadRequest() },
+                onUnauthorized = { getTokenUseCase() },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
 
-                when (response) {
-                    is UiState.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                isSuccess = true
-                            )
-                        }
-                    }
-                    is UiState.Failure -> {
-                        when (response.code) {
-                            401 -> {
-                                when (val refreshResponse = getTokenUseCase().toUiState()) {
-                                    is UiState.Success -> create(name, description, onComplete)
-                                    is UiState.Failure -> {}
-                                    is UiState.Loading -> {}
-                                }
-                            }
-                        }
-                    }
-                    is UiState.Loading -> {}
-                }
-            } catch (e: Exception) {
-                Log.e("error", e.message!!)
-            } finally {
-                onComplete(
-                    _uiState.value.isSuccess,
-                    _uiState.value.nameErrorMessage,
-                    _uiState.value.descriptionErrorMessage
-                )
 
-                _uiState.update {
-                    it.copy(
-                        isSubmitting = false
-                    )
-                }
-            }
+        }
+
+        _uiState.update {
+            it.copy(
+                isSuccess = true,
+                isSubmitting = false
+            )
+        }
+
+        onComplete(
+            _uiState.value.isSuccess,
+            _uiState.value.nameErrorMessage,
+            _uiState.value.descriptionErrorMessage
+        )
+    }
+
+    private fun onBadRequest() {
+        viewModelScope.launch(Dispatchers.IO) {
+            ResponseHandler.handle(
+                request = { logInUseCase() },
+                onBadRequest = { onBadRequest() },
+                onNotFound = {  },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
+        }
+    }
+
+    private fun onError(message: String) {
+        _uiState.update {
+            it.copy(
+                error = message
+            )
         }
     }
 

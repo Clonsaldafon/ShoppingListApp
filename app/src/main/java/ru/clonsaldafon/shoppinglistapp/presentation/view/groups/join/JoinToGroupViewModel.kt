@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -12,6 +13,8 @@ import ru.clonsaldafon.shoppinglistapp.data.model.group.JoinToGroupRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 import ru.clonsaldafon.shoppinglistapp.domain.group.JoinToGroupUseCase
 import ru.clonsaldafon.shoppinglistapp.domain.user.GetTokenUseCase
+import ru.clonsaldafon.shoppinglistapp.domain.user.LogInUseCase
+import ru.clonsaldafon.shoppinglistapp.presentation.ResponseHandler
 import ru.clonsaldafon.shoppinglistapp.presentation.UiState
 import ru.clonsaldafon.shoppinglistapp.presentation.toUiState
 import javax.inject.Inject
@@ -19,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class JoinToGroupViewModel @Inject constructor(
     private val joinToGroupUseCase: JoinToGroupUseCase,
-    private val getTokenUseCase: GetTokenUseCase
+    private val getTokenUseCase: GetTokenUseCase,
+    private val logInUseCase: LogInUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(JoinToGroupUiState())
@@ -29,7 +33,7 @@ class JoinToGroupViewModel @Inject constructor(
     fun onEvent(event: JoinToGroupEvent) {
         when (event) {
             is JoinToGroupEvent.OnCodeChanged -> updateCode(event.value)
-            is JoinToGroupEvent.OnSubmit -> join(event.code, event.onComplete)
+            is JoinToGroupEvent.OnSubmit -> join(event.onComplete)
         }
     }
 
@@ -51,7 +55,6 @@ class JoinToGroupViewModel @Inject constructor(
     }
 
     private fun join(
-        code: String,
         onComplete: (isSuccess: Boolean?,
                      codeErrorMessage: String?) -> Unit
     ) {
@@ -61,45 +64,54 @@ class JoinToGroupViewModel @Inject constructor(
             )
         }
 
-        viewModelScope.launch {
-            try {
-                val response = joinToGroupUseCase(JoinToGroupRequest(code = code)).toUiState()
-
-                when (response) {
-                    is UiState.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                isSuccess = true
-                            )
-                        }
-                    }
-                    is UiState.Failure -> {
-                        when (response.code) {
-                            401 -> {
-                                when (val refreshResponse = getTokenUseCase().toUiState()) {
-                                    is UiState.Success -> join(code, onComplete)
-                                    is UiState.Failure -> {}
-                                    is UiState.Loading -> {}
-                                }
-                            }
-                        }
-                    }
-                    is UiState.Loading -> {}
-                }
-            } catch (e: Exception) {
-                Log.e("error", e.message!!)
-            } finally {
-                onComplete(
-                    _uiState.value.isSuccess,
-                    _uiState.value.codeErrorMessage
-                )
-
-                _uiState.update {
-                    it.copy(
-                        isSubmitting = false
+        viewModelScope.launch(Dispatchers.IO) {
+            ResponseHandler.handle(
+                request = {
+                    joinToGroupUseCase(
+                        JoinToGroupRequest(_uiState.value.code)
                     )
-                }
-            }
+                },
+//                onBadRequest = { TODO("refresh token expired or incorrect code") },
+                onBadRequest = { onBadRequest() },
+                onUnauthorized = { getTokenUseCase() },
+                onConflict = { onError("Вы уже состоите в этой группе") },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
+        }
+
+        _uiState.update {
+            it.copy(
+                isSuccess = true,
+                isSubmitting = false
+            )
+        }
+
+        onComplete(
+            _uiState.value.isSuccess,
+            _uiState.value.codeErrorMessage
+        )
+    }
+
+    private fun onBadRequest() {
+        viewModelScope.launch(Dispatchers.IO) {
+            ResponseHandler.handle(
+                request = { logInUseCase() },
+                onBadRequest = { onBadRequest() },
+                onNotFound = {  },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
+        }
+    }
+
+    private fun onError(message: String) {
+        _uiState.update {
+            it.copy(
+                error = message
+            )
         }
     }
 

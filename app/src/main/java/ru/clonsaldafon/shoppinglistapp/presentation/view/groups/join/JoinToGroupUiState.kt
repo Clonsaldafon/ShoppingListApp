@@ -5,7 +5,8 @@ data class JoinToGroupUiState(
     val codeErrorMessage: String = "",
     val isCodeInvalid: Boolean = false,
     val isSubmitting: Boolean = false,
-    val isSuccess: Boolean = false
+    val isSuccess: Boolean = false,
+    val error: String = ""
 ) {
 
     fun reset() = copy(
@@ -13,7 +14,8 @@ data class JoinToGroupUiState(
         codeErrorMessage = "",
         isCodeInvalid = false,
         isSubmitting = false,
-        isSuccess = false
+        isSuccess = false,
+        error = ""
     )
 
     val isValid: Boolean

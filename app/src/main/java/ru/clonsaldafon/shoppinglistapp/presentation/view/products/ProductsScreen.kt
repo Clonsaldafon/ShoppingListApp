@@ -28,7 +28,6 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,12 +36,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,22 +64,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.Dispatchers
 import ru.clonsaldafon.shoppinglistapp.R
 import ru.clonsaldafon.shoppinglistapp.data.model.Product
 import ru.clonsaldafon.shoppinglistapp.presentation.component.LoadingProgressBar
 import ru.clonsaldafon.shoppinglistapp.presentation.navigation.Routes
-import ru.clonsaldafon.shoppinglistapp.presentation.view.groups.create.CreateGroupEvent
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Black
 import ru.clonsaldafon.shoppinglistapp.ui.theme.DarkGray
-import ru.clonsaldafon.shoppinglistapp.ui.theme.LightOrange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Orange
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Red
 import ru.clonsaldafon.shoppinglistapp.ui.theme.Typography
 import ru.clonsaldafon.shoppinglistapp.ui.theme.White
-import java.text.DateFormat
-import java.time.LocalDate
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,6 +91,9 @@ fun ProductsScreen(
     var expanded by remember { mutableStateOf(false) }
 
     val uiState by viewModel.uiState.collectAsState()
+
+    var showSnackbar by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     viewModel.setGroupId(groupId ?: "0")
     viewModel.loadProducts()
@@ -248,8 +248,22 @@ fun ProductsScreen(
                     )
                 }
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { innerPadding ->
+        if (uiState.error.isNotEmpty()) {
+            showSnackbar = true
+        }
+
+        LaunchedEffect(showSnackbar, Dispatchers.Default) {
+            if (showSnackbar) {
+                snackbarHostState.showSnackbar(uiState.error)
+                showSnackbar = false
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()

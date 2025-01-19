@@ -5,6 +5,6 @@ import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 
 interface SignUpUseCase {
 
-    suspend operator fun invoke(request: SignUpRequest): Result<TokenResponse?>
+    suspend operator fun invoke(request: SignUpRequest, remember: Boolean): Result<TokenResponse?>
 
 }

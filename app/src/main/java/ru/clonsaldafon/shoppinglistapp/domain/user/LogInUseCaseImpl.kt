@@ -9,7 +9,10 @@ class LogInUseCaseImpl @Inject constructor(
     private val repository: UserRepository
 ) : LogInUseCase {
 
-    override suspend fun invoke(request: LogInRequest): Result<TokenResponse?> =
-        repository.login(request)
+    override suspend fun invoke(request: LogInRequest, remember: Boolean): Result<TokenResponse?> =
+        repository.login(request, remember)
+
+    override suspend fun invoke(): Result<TokenResponse?> =
+        repository.login()
 
 }

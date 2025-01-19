@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -164,7 +165,8 @@ fun LogInOutlinedTextField(
                     textAlign = TextAlign.Center
                 )
             )
-        } else {
+        } else if (uiState.passwordErrorMessage.isNotEmpty() &&
+                   visualTransformation == PasswordVisualTransformation()) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -174,7 +176,7 @@ fun LogInOutlinedTextField(
                     ),
                 text = uiState.passwordErrorMessage,
                 style = TextStyle(
-                    color = Color.Gray,
+                    color = Red,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Right
                 )

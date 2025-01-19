@@ -13,7 +13,8 @@ data class ProductsUiState(
     val isCurrentBought: Boolean = false,
     val isCurrentPriceInvalid: Boolean = false,
     val currentPriceErrorMessage: String = "",
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val error: String = ""
 ) {
 
     fun reset() = copy(
@@ -26,7 +27,8 @@ data class ProductsUiState(
         isCurrentBought = false,
         isCurrentPriceInvalid = false,
         currentPriceErrorMessage = "",
-        isLoading = true
+        isLoading = true,
+        error = ""
     )
 
     fun resetCurrentValues() = copy(
@@ -37,7 +39,8 @@ data class ProductsUiState(
         isCurrentPriceInvalid = false,
         currentPriceErrorMessage = "",
         isBuyWindowHidden = true,
-        isLoading = false
+        isLoading = false,
+        error = ""
     )
 
     val isValid: Boolean

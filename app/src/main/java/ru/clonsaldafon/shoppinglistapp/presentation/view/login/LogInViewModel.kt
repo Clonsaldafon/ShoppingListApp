@@ -1,9 +1,9 @@
 package ru.clonsaldafon.shoppinglistapp.presentation.view.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -11,8 +11,7 @@ import kotlinx.coroutines.launch
 import ru.clonsaldafon.shoppinglistapp.data.model.user.LogInRequest
 import ru.clonsaldafon.shoppinglistapp.data.model.user.TokenResponse
 import ru.clonsaldafon.shoppinglistapp.domain.user.LogInUseCase
-import ru.clonsaldafon.shoppinglistapp.presentation.UiState
-import ru.clonsaldafon.shoppinglistapp.presentation.toUiState
+import ru.clonsaldafon.shoppinglistapp.presentation.ResponseHandler
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,12 +27,9 @@ class LogInViewModel @Inject constructor(
         when (event) {
             is LogInEvent.OnLoginChanged -> updateLogin(event.value)
             is LogInEvent.OnPasswordChanged -> updatePassword(event.value)
+            is LogInEvent.OnRememberChanged -> updateRemember(event.value)
             is LogInEvent.OnPasswordVisibilityChanged -> updatePasswordVisibility(event.value)
-            is LogInEvent.OnSubmit -> login(
-                username = event.username,
-                password = event.password,
-                onComplete = event.onComplete
-            )
+            is LogInEvent.OnSubmit -> login(event.onComplete)
         }
     }
 
@@ -58,7 +54,8 @@ class LogInViewModel @Inject constructor(
     private fun updateLogin(value: String) {
         _uiState.update {
             it.copy(
-                login = value
+                login = value,
+                isLoginInvalid = value.length < 3 || value.length > 30
             )
         }
     }
@@ -66,7 +63,16 @@ class LogInViewModel @Inject constructor(
     private fun updatePassword(value: String) {
         _uiState.update {
             it.copy(
-                password = value
+                password = value,
+                isPasswordInvalid = value.length < 8
+            )
+        }
+    }
+
+    private fun updateRemember(value: Boolean) {
+        _uiState.update {
+            it.copy(
+                remember = value
             )
         }
     }
@@ -80,8 +86,6 @@ class LogInViewModel @Inject constructor(
     }
 
     private fun login(
-        username: String,
-        password: String,
         onComplete: (tokenResponse: TokenResponse?,
                      loginErrorMessage: String?,
                      passwordErrorMessage: String?) -> Unit
@@ -92,46 +96,74 @@ class LogInViewModel @Inject constructor(
             )
         }
 
-        viewModelScope.launch {
-            try {
-                val response = logInUseCase(
-                    LogInRequest(
-                        username = username,
-                        password = password
+        viewModelScope.launch(Dispatchers.IO) {
+            val value = ResponseHandler.handle(
+                request = {
+                    logInUseCase(
+                        request = LogInRequest(
+                            username = _uiState.value.login,
+                            password = _uiState.value.password
+                        ),
+                        remember = _uiState.value.remember
                     )
-                ).toUiState()
+                },
+                onBadRequest = { onBadRequest() },
+                onNotFound = { onNotFound() },
+                onUnprocessableEntity = { onError("Неверный формат данных") },
+                onInternalServerError = { onError("На сервере произошла ошибка") },
+                onUnknownError = { onError("Не удалось подключиться к серверу") }
+            )
 
-                when (response) {
-                    is UiState.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                tokenResponse = TokenResponse(
-                                    accessToken = response.value?.accessToken,
-                                    refreshToken = response.value?.refreshToken
-                                )
-                            )
-                        }
-                    }
-                    is UiState.Failure -> {
+            updateTokens(value?.accessToken, value?.refreshToken)
 
-                    }
-                    is UiState.Loading -> {}
-                }
-            } catch (e: Exception) {
-                Log.e("error", e.message!!)
-            } finally {
-                onComplete(
-                    _uiState.value.tokenResponse,
-                    _uiState.value.loginErrorMessage,
-                    _uiState.value.passwordErrorMessage
+            onComplete(
+                _uiState.value.tokenResponse,
+                _uiState.value.loginErrorMessage,
+                _uiState.value.passwordErrorMessage
+            )
+        }
+
+        _uiState.update {
+            it.copy(
+                isSubmitting = false
+            )
+        }
+    }
+
+    private fun updateTokens(accessToken: String?, refreshToken: String?) {
+        _uiState.update {
+            it.copy(
+                tokenResponse = TokenResponse(
+                    accessToken = accessToken,
+                    refreshToken = refreshToken
                 )
+            )
+        }
+    }
 
-                _uiState.update {
-                    it.copy(
-                        isSubmitting = false
-                    )
-                }
-            }
+    private fun onBadRequest() {
+        _uiState.update {
+            it.copy(
+                passwordErrorMessage = "Неверный пароль",
+                isPasswordInvalid = true
+            )
+        }
+    }
+
+    private fun onNotFound() {
+        _uiState.update {
+            it.copy(
+                loginErrorMessage = "Такого пользователя не существует",
+                isLoginInvalid = true
+            )
+        }
+    }
+
+    private fun onError(message: String) {
+        _uiState.update {
+            it.copy(
+                error = message
+            )
         }
     }
 
